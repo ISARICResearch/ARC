@@ -1,6 +1,6 @@
 # ARC - Analysis and Research Compendium
 
-ARC is a comprehensive machine-readable document in CSV format that contains a library of questions to be used in Clinical Report Forms (CRFs) during disease outbreaks. It covers a wide range of patient-related information, including demographics, comorbidities, signs and symptoms, medications, outcomes, and more. Each question in ARC has a variable name with specific guidelines and relevant parameters, such as coded answers, minimum and maximum limits, data types, skip logic, and more.
+ARC is a comprehensive machine-readable document in CSV format that contains a library of questions to be used in Case Report Forms (CRFs) during disease outbreaks. It covers a wide range of patient-related information, including demographics, comorbidities, signs and symptoms, medications, outcomes, and more. Each question in ARC has a variable name with specific guidelines and relevant parameters, such as coded answers, minimum and maximum limits, data types, skip logic, and more.
 
 ## About ARC
 
