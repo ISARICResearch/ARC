@@ -24,11 +24,11 @@ ARChetype CRFs are an important subset of our library of Templates. Templates ar
 ARC Version 1.0.1 contains a library of questions to be used in Case Report Forms (CRFs) tailored for outbreak responses for COVID-19, Dengue, Mpox and H5Nx. The CRFs are grouped into five forms, ‘presentation’, ‘daily’, ‘medication’, ‘pathogen testing’, and ‘outcome’, which contain several sections including questions about inclusion and exclusion criteria, hospital admission, patient demographics, travel history, exposure history, pregnancy- and infant-related questions, comorbidities and risk factors, past medical history, medication (drug) history, vaccination history, vital signs assessment, signs and symptoms, clinical assessment, treatment and interventions, laboratory results, imaging results, pathogen testing as well as complications. The questions comprehensively capture the relevant information from the time of presentation to the health facility, daily assessment during admission and at the discharge from the health facility. 
 
 ARC Version 1.0.1 contains the following ARChetype CRFs and Templates, each grouped within the forms and sections described above:
-   - **COVID-19 ARChetype CRF:** In ARC Version 1.0.1, this contains 319 questions for COVID-19 outbreak responses. 
-   - **Dengue ARChetype CRF:** In ARC Version 1.0.1, this contains 358 questions for Dengue outbreak responses.
-   - **Mpox ARChetype CRF:** In ARC Version 1.0.1, this contains 413 questions for Mpox outbreak responses. This ARChetype CRF has a section on skin and mucosal assessment for Mpox lesions. 
-   - **H5Nx ARChetype CRF:** In ARC Version 1.0.1, this contains 401 question for Influenza H5Nx outbreak responses.
-   - **Oropouche Template:** This is a user-generated set of questions for Oropouche outbreak responses. In ARC Version 1.0.1, this contains xxx questions.
+   - **COVID-19 ARChetype CRF:** In ARC Version 1.0.1, this contains 391 questions for COVID-19 outbreak responses. 
+   - **Dengue ARChetype CRF:** In ARC Version 1.0.1, this contains 430 questions for Dengue outbreak responses.
+   - **Mpox ARChetype CRF:** In ARC Version 1.0.1, this contains 546 questions for Mpox outbreak responses. This ARChetype CRF has a section on skin and mucosal assessment for Mpox lesions. 
+   - **H5Nx ARChetype CRF:** In ARC Version 1.0.1, this contains 503 question for Influenza H5Nx outbreak responses.
+   - **Oropouche Template:** This is a user-generated set of questions for Oropouche outbreak responses. In ARC Version 1.0.1, this contains 191 questions.
 
 ## Files
 
