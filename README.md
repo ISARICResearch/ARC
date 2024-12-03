@@ -1,6 +1,6 @@
 # ARC - Analysis and Research Compendium
 
-ARC is a comprehensive machine-readable document in CSV format that contains a library of questions to be used in Clinical Report Forms (CRFs) during disease outbreaks. It covers a wide range of patient-related information, including demographics, comorbidities, signs and symptoms, medications, outcomes, and more. Each question in ARC has a variable name with specific guidelines and relevant parameters, such as coded answers, minimum and maximum limits, data types, skip logic, and more.
+ISARIC ARC is a comprehensive library of questions that can be used to rapidly build standardised Case Report Forms (CRFs) for disease outbreaks. It covers a wide range of patient-related information, including demographics, comorbidities, signs and symptoms, medications, outcomes, and more. Each question in ARC has specific guidelines and relevant parameters, such as definitions, answer options, units, minimum and maximum limits, data types, skip logic, and more. 
 
 ## About ARC
 
@@ -8,18 +8,27 @@ ARC (Analysis and Research Compendium) is designed to serve as a resource for re
 
 - **Machine-Readable**: ARC is provided in CSV format, making it easy for automated systems to read and process the data.
 
-- **Version Control**: We maintain a comprehensive history of changes made to ARC using GitHub's version control. This ensures document integrity, traceability of changes, and seamless collaboration among researchers.
-
 - **Open Access**: ARC is made openly available for the research community. While contributions are limited to authorized individuals, the document can be freely accessed and utilized by others.
+
+- **Version Control**: We continue to improve ARC by adding new questions and implementing structural changes. We maintain a comprehensive history of changes made to ARC using GitHub's version control. This ensures document integrity, traceability of changes, and seamless collaboration among researchers. Previous ARC versions may be accessed via this [repository’s releases](https://github.com/ISARICResearch/ARC/releases). Additional questions can be added to future ARC versions by contacting us at: [data@isaric.org](mailto:data@isaric.org).
+
+- **Integration with the Clinical Epidemiology Platform**: ARC is integrated into [BRIDGE](https://github.com/ISARICResearch/BRIDGE), our software tool for CRF generation.
+
+## ARChetype CRFs and Templates
+
+ISARIC works closely with experts around the world to create CRFs for priority emerging and infectious diseases and outbreak-related syndromes. These CRFs address key clinical research questions that can improve patient outcomes. We call these ARChetype CRFs.
+
+ARChetype CRFs are an important subset of our library of Templates. Templates are sets of ARC questions that we have curated for other outbreak-related contexts, such as clinical severity scores and core outcome sets. The library of Templates is openly available for use and adaptation by the research community. More information about how to download an ARChetype CRF can be found in our [Downloading an ARChetype CRF Guide](https://isaricresearch.github.io/Training/bridge_template_link).
 
 ## ARC Version 1.0.1
 ARC Version 1.0.1 contains a library of questions to be used in Case Report Forms (CRFs) tailored for outbreak responses for COVID-19, Dengue, Mpox and H5Nx. The CRFs are grouped into five forms, ‘presentation’, ‘daily’, ‘medication’, ‘pathogen testing’, and ‘outcome’, which contain several sections including questions about inclusion and exclusion criteria, hospital admission, patient demographics, travel history, exposure history, pregnancy- and infant-related questions, comorbidities and risk factors, past medical history, medication (drug) history, vaccination history, vital signs assessment, signs and symptoms, clinical assessment, treatment and interventions, laboratory results, imaging results, pathogen testing as well as complications. The questions comprehensively capture the relevant information from the time of presentation to the health facility, daily assessment during admission and at the discharge from the health facility. 
-- **COVID-19 Template:** The COVID-19 template of ARC Version 1.0.0 contains 319 questions to be used for CRFs for COVID-19 outbreak responses, grouped within the forms and sections described above. 
-- **Dengue Template:** The Dengue template of ARC Version 1.0.0 contains 358 questions to be used for CRFs for Dengue outbreak responses, grouped within the forms and sections described above.
-- **Mpox Preset:** The Mpox template of ARC Version 1.0.0 contains 413 questions to be used for CRFs for Mpox outbreak responses, grouped within the forms and sections described above. This preset has a section on skin and mucosal assessment for Mpox lesions. 
-- **H5Nx Template:** The H5Nx template of ARC Version 1.0.0 contains 401 questions to be used for CRFs for Influenza H5Nx outbreak responses, grouped within the forms and sections described above.
-- **Oropouche Questions:**
-- Added user-generated questions for Oropouche, created as a preset called **User Generated**.
+
+ARC Version 1.0.1 contains the following ARChetype CRFs and Templates, each grouped within the forms and sections described above:
+   - **COVID-19 ARChetype CRF:** In ARC Version 1.0.1, this contains 319 questions for COVID-19 outbreak responses. 
+   - **Dengue ARChetype CRF:** In ARC Version 1.0.1, this contains 358 questions for Dengue outbreak responses.
+   - **Mpox ARChetype CRF:** In ARC Version 1.0.1, this contains 413 questions for Mpox outbreak responses. This ARChetype CRF has a section on skin and mucosal assessment for Mpox lesions. 
+   - **H5Nx ARChetype CRF:** In ARC Version 1.0.1, this contains 401 question for Influenza H5Nx outbreak responses.
+   - **Oropouche Template:** This is a user-generated set of questions for Oropouche outbreak responses. In ARC Version 1.0.1, this contains xxx questions.
 
 ## Files
 
@@ -49,9 +58,9 @@ If you want to use ARC for your research or study, follow these steps:
 
 1. **Access ARC**: You can download the latest version of ARC from this GitHub repository.
 
-2. **Contributions**: While contributions to the document are limited to authorized users, you can open issues or discussions for questions, suggestions, or clarifications.
+2. **Integration with BRIDGE**: If you use the [BRIDGE](https://github.com/ISARICResearch/BRIDGE) software tool, it connects to this GitHub repository to access all releases of ARC for CRF generation.
 
-3. **Integration with BRIDGE**: If you're using the BRIDGE software tool, it connects to this GitHub repository to access the latest version of ARC for CRF generation.
+3. **Contributions**: While contributions to the document are limited to authorized users, you can open issues or discussions for questions, suggestions, or clarifications.
 
 ## Contributors
 
@@ -74,10 +83,3 @@ If you want to use ARC for your research or study, follow these steps:
 ---
 
 **Note**: ARC is maintained by ISARIC. For inquiries, support, or collaboration, please [contact us](mailto:data@isaric.org).
-
-### Complications Section
-- Removed the question on “Pleural effusion / ascites”.
-- Added a new question on “Ascites”.
-
-### SNOMED and UMLS Codes Update
-- Updated SNOMED and UMLS codes for several variables.
