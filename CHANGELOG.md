@@ -1,55 +1,66 @@
-# ARC Version 1.0.1 Change Log
+# Description of Changes in ARC v1.0.1  
 
-ARC Version 1.0.1 contains a library of questions to be used in Case Report Forms (CRFs) tailored for outbreak responses for COVID-19, Dengue, Mpox, H5Nx, and includes a user-generated set of questions for Oropouche. The changes in this version with respect to version 1.0.0 are:
+## Overview  
+The ARC v1.0.1 update introduces several enhancements and refinements across various sections of the system, including new variables, revised categories, and additional presets.  
 
-## Description of Changes
+## Key Updates  
 
-### Oropouche Questions
-- Added user-generated questions for Oropouche, created as a preset called **User Generated**.
-  
-### Inclusion of Additional Units
-- Added more units for physical and laboratory measured variables:
-  - Height
-  - Weight
-  - Eosinophil count
-  - Albumin
-  - Random blood glucose
-  - CD4 count
-  - Ferritin
-  - Total Protein (TP)
-  
-### Revision of Animal Contact Questions
-- Revised questions in the **Exposure History** section regarding contact with animals.
-- Specific animal types are now categorized into five groups:
-  - Livestock
-  - Non-human primates
-  - Rodents
-  - Pets
-  - Bats (newly included in ARC v1.0.1)
-- Added a question on the type of contact for each animal group.
-- Removed:
-  - "Contact with skinned, dressed or eaten wild game" (captured in 'Type of Contact' answer options).
-  - "Contact with wildlife".
+### Physical and Laboratory Variables  
+- Added more units for measured variables:  
+  - **Height**  
+  - **Weight**  
+  - **Eosinophil count**  
+  - **Albumin**  
+  - **Random blood glucose**  
+  - **CD4 count**  
+  - **Ferritin**  
+  - **Total Protein (TP)**  
 
-### Household Contact Questions
-- Added four questions regarding household contact in the **Exposure History** section.
+### Oropouche Preset  
+- Added a new preset of questions for Oropouche Case Report Forms.  
 
-### Assessment Section
-- Created a new **Assessment** section for the Presentation form, mirroring questions from the Daily form.
-- Moved the following questions from **Signs and Symptoms** to the **Assessment** section:
-  - Pharyngitis / tonsillitis
-  - Mastitis
+### Exposure History - Contact with Animals  
+- Revised questions related to animal contact:  
+  - Categorized animals into five groups:  
+    - **Livestock**  
+    - **Non-human primates**  
+    - **Rodents**  
+    - **Pets**  
+    - **Bats** (newly added)  
+  - Included questions on the type of contact for each animal group.  
+  - Removed:  
+    - "Contact with skinned, dressed, or eaten wild game" (now covered in "Type of Contact" options).  
+    - "Contact with wildlife."  
 
-### Critical Care Section
-- Created a new **Critical Care Interventions** section for the Daily and Outcome forms.
-- This section includes questions previously found in the **Treatments & Interventions** section.
+### Exposure History - Household Contact  
+- Added four new questions about household contact.  
 
-### Laboratory Results Section
-- Added new questions in the **Laboratory Results** section:
-  - Erythrocyte mean corpuscular volume
-  - Erythrocyte mean corpuscular hemoglobin concentration
-  - Erythrocyte mean corpuscular hemoglobin (pg)
-  - Group for Cerebrospinal Fluid analysis
+### Assessment Section  
+- Created an **Assessment** section for the Presentation form, mirroring the Daily form's questions.  
+- Moved the following from "Signs and Symptoms" to "Assessment":  
+  - **Pharyngitis / tonsillitis**  
+  - **Mastitis**  
 
-### Imaging Section
-- Added three questions regarding Electrocardiogram findings.
+### Critical Care Section  
+- Introduced a new **Critical Care Interventions** section in the Daily and Outcome forms.  
+- Moved related questions from the "Treatments & Interventions" section.  
+
+### Laboratory Results Section  
+- Added questions for:  
+  - **Erythrocyte mean corpuscular volume**  
+  - **Erythrocyte mean corpuscular haemoglobin concentration**  
+  - **Erythrocyte mean corpuscular haemoglobin (pg)**  
+  - **Cerebrospinal Fluid analysis group**  
+
+### Imaging Section  
+- Added three new questions regarding **Electrocardiogram findings**.  
+
+### Complications Section  
+- Changes include:  
+  - Replaced "Pleural effusion / ascites" with a standalone **"Ascites"** question.  
+  - Added **"Urinary Tract Infection."**  
+
+### SNOMED and UMLS Codes  
+- Updated **SNOMED** and **UMLS** codes for multiple variables.  
+
+
