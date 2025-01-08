@@ -1,66 +1,20 @@
-# Description of Changes in ARC v1.0.1  
+# Description of Changes in ARC v1.0.2  
 
 ## Overview  
-The ARC v1.0.1 update introduces several enhancements and refinements across various sections of the system, including new variables, revised categories, and additional presets.  
+The ARC v1.0.2 update introduces focused improvements aimed at standardizing variable naming conventions, reorganizing groups, and enhancing consistency across the system. These changes are part of ongoing efforts to streamline data collection and improve clarity for users.
 
 ## Key Updates  
 
-### Physical and Laboratory Variables  
-- Added more units for measured variables:  
-  - **Height**  
-  - **Weight**  
-  - **Eosinophil count**  
-  - **Albumin**  
-  - **Random blood glucose**  
-  - **CD4 count**  
-  - **Ferritin**  
-  - **Total Protein (TP)**  
+**Standardization of Date Variables**  
+  - Variable names related to dates have been standardized to ensure consistency and better alignment with naming conventions.
 
-### Oropouche Preset  
-- Added a new preset of questions for Oropouche Case Report Forms.  
+**Creation of New Groups**  
+  - Certain variables have been reorganized into newly created groups to improve the logical structure of the forms and facilitate easier data navigation.
 
-### Exposure History - Contact with Animals  
-- Revised questions related to animal contact:  
-  - Categorized animals into five groups:  
-    - **Livestock**  
-    - **Non-human primates**  
-    - **Rodents**  
-    - **Pets**  
-    - **Bats** (newly added)  
-  - Included questions on the type of contact for each animal group.  
-  - Removed:  
-    - "Contact with skinned, dressed, or eaten wild game" (now covered in "Type of Contact" options).  
-    - "Contact with wildlife."  
+**Variable Name Updates**  
+  - Specific variable names were updated to adhere to a unified naming standard, reducing ambiguity and improving interpretability.
 
-### Exposure History - Household Contact  
-- Added four new questions about household contact.  
-
-### Assessment Section  
-- Created an **Assessment** section for the Presentation form, mirroring the Daily form's questions.  
-- Moved the following from "Signs and Symptoms" to "Assessment":  
-  - **Pharyngitis / tonsillitis**  
-  - **Mastitis**  
-
-### Critical Care Section  
-- Introduced a new **Critical Care Interventions** section in the Daily and Outcome forms.  
-- Moved related questions from the "Treatments & Interventions" section.  
-
-### Laboratory Results Section  
-- Added questions for:  
-  - **Erythrocyte mean corpuscular volume**  
-  - **Erythrocyte mean corpuscular haemoglobin concentration**  
-  - **Erythrocyte mean corpuscular haemoglobin (pg)**  
-  - **Cerebrospinal Fluid analysis group**  
-
-### Imaging Section  
-- Added three new questions regarding **Electrocardiogram findings**.  
-
-### Complications Section  
-- Changes include:  
-  - Replaced "Pleural effusion / ascites" with a standalone **"Ascites"** question.  
-  - Added **"Urinary Tract Infection."**  
-
-### SNOMED and UMLS Codes  
-- Updated **SNOMED** and **UMLS** codes for multiple variables.  
+## Summary  
+The changes in ARC v1.0.2 are designed to enhance the system’s usability and ensure a more coherent structure for data entry and analysis. Users are encouraged to review their workflows and adjust any scripts or processes to reflect the updated variable names and group structures.
 
 
