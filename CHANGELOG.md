@@ -1,21 +1,19 @@
-# Description of Changes in ARC v1.0.2  
+# Description of Changes in ARC v1.0.3  
 
 ## Overview  
-The ARC v1.0.2 update introduces focused improvements aimed at standardizing variable naming conventions, reorganizing groups, and enhancing consistency across the system. These changes are part of ongoing efforts to streamline data collection and improve clarity for users.
+The ARC v1.0.3 update introduces focused improvements aimed at standardizing variable naming conventions.
 
 ## Key Updates  
 
-**Standardization of Date Variables**  
-   - Variable names related to dates have been standardized to ensure consistency and better alignment with naming conventions.
+**Renaming of Variables**  
+   - Some variables have been renamed to fix inconsistencies and ensure better alignment with naming conventions.
 
-**Creation of New Groups**  
-   - Certain variables have been reorganized into newly created groups to improve the logical structure of the forms and facilitate easier data navigation.
+**Updates to Answer Choices**  
+   - The test_biospecimentype variable had its answer options updated, to include more options.
 
-**Variable Name Updates**  
-   - Specific variable names were updated to adhere to a unified naming standard, reducing ambiguity and improving interpretability.
+**Deletion of Admission Vital Signs Data**  
+   -  The vital sign variables under VITAL SIGNS & ASSESSMENTS ON ADMISSION were removed, the vitals signs recorded in the first 24 hours of admision should be recorderd in day 1 form.
 
-**Inclusion of Photography Module**  
-   - A new photography module has been included to allow for the integration of image-based data, enhancing the scope and functionality of the system.
 
 ## Summary  
-The changes in ARC v1.0.2 are designed to enhance the system’s usability and ensure a more coherent structure for data entry and analysis. Users are encouraged to review their workflows and adjust any scripts or processes to reflect the updated variable names and group structures.
+The changes in ARC v1.0.3 are designed to enhance the system’s usability and ensure a more coherent structure for data entry and analysis. Users are encouraged to review their workflows and adjust any scripts or processes to reflect the updated variable names and group structures.
