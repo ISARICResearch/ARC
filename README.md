@@ -20,15 +20,15 @@ ISARIC works closely with experts around the world to create CRFs for priority e
 
 ARChetype CRFs are an important subset of our library of Templates. Templates are sets of ARC questions that we have curated for other outbreak-related contexts, such as clinical severity scores and core outcome sets. The library of Templates is openly available for use and adaptation by the research community. More information about how to download an ARChetype CRF can be found in our [Downloading an ARChetype CRF Guide](https://isaricresearch.github.io/Training/bridge_template_link).
 
-## ARC Version 1.0.3
-ARC Version 1.0.3 contains a library of questions to be used in Case Report Forms (CRFs) tailored for outbreak responses for COVID-19, Dengue, Mpox and H5Nx. The CRFs are grouped into seven forms, ‘presentation’, ‘daily’, ‘medication’, ‘pathogen testing’, ‘outcome’,‘follow up’ and ‘withdrawal’ which contain several sections including questions about inclusion and exclusion criteria, hospital admission, patient demographics, travel history, exposure history, pregnancy- and infant-related questions, comorbidities and risk factors, past medical history, medication (drug) history, vaccination history, vital signs assessment, signs and symptoms, clinical assessment, treatment and interventions, laboratory results, imaging results, pathogen testing as well as complications. The questions comprehensively capture the relevant information from the time of presentation to the health facility, daily assessment during admission and at the discharge from the health facility. 
+## ARC Version 1.0.4
+ARC Version 1.0.4 contains a library of questions to be used in Case Report Forms (CRFs) tailored for outbreak responses for COVID-19, Dengue, Mpox and H5Nx. The CRFs are grouped into seven forms, ‘presentation’, ‘daily’, ‘medication’, ‘pathogen testing’, ‘outcome’,‘follow up’ and ‘withdrawal’ which contain several sections including questions about inclusion and exclusion criteria, hospital admission, patient demographics, travel history, exposure history, pregnancy- and infant-related questions, comorbidities and risk factors, past medical history, medication (drug) history, vaccination history, vital signs assessment, signs and symptoms, clinical assessment, treatment and interventions, laboratory results, imaging results, pathogen testing as well as complications. The questions comprehensively capture the relevant information from the time of presentation to the health facility, daily assessment during admission and at the discharge from the health facility. 
 
-ARC Version 1.0.3 contains the following ARChetype CRFs and Templates, each grouped within the forms and sections described above:
-   - **COVID-19 ARChetype CRF:** In ARC Version 1.0.3, this contains 388 questions for COVID-19 outbreak responses. 
-   - **Dengue ARChetype CRF:** In ARC Version 1.0.3, this contains 427 questions for Dengue outbreak responses.
-   - **Mpox ARChetype CRF:** In ARC Version 1.0.3, this contains 567 questions for Mpox outbreak responses. This ARChetype CRF has a section on skin and mucosal assessment for Mpox lesions. 
-   - **H5Nx ARChetype CRF:** In ARC Version 1.0.3, this contains 504 question for Influenza H5Nx outbreak responses.
-   - **Oropouche User-Generated CRF:** This is a user-generated set of questions for Oropouche outbreak responses. In ARC Version 1.0.3, this contains 186 questions.
+ARC Version 1.0.4 contains the following ARChetype CRFs and Templates, each grouped within the forms and sections described above:
+   - **COVID-19 ARChetype CRF:** In ARC Version 1.0.4, this contains 388 questions for COVID-19 outbreak responses. 
+   - **Dengue ARChetype CRF:** In ARC Version 1.0.4, this contains 427 questions for Dengue outbreak responses.
+   - **Mpox ARChetype CRF:** In ARC Version 1.0.4, this contains 567 questions for Mpox outbreak responses. This ARChetype CRF has a section on skin and mucosal assessment for Mpox lesions. 
+   - **H5Nx ARChetype CRF:** In ARC Version 1.0.4, this contains 504 question for Influenza H5Nx outbreak responses.
+   - **Oropouche User-Generated CRF:** This is a user-generated set of questions for Oropouche outbreak responses. In ARC Version 1.0.4, this contains 186 questions.
 
 ## Files
 
