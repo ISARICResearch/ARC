@@ -73,7 +73,7 @@ If you want to use ARC for your research or study, follow these steps:
 - Amanda Rojek - [amanda.rojek@ndm.ox.ac.uk](mailto:amanda.rojek@ndm.ox.ac.uk)
 - Jake Dunning - [jake.dunning@ndm.ox.ac.uk](mailto:jake.dunning@ndm.ox.ac.uk)
 - Gail Carson - [gail.carson@ndm.ox.ac.uk](mailto:gail.carson@ndm.ox.ac.uk)
-- Luis Felipe Reyes - [gail.carson@ndm.ox.ac.uk](mailto:luis.reyes@ndm.ox.ac.uk)
+- Luis Felipe Reyes - [luis.reyes@ndm.ox.ac.uk](mailto:luis.reyes@ndm.ox.ac.uk)
 - Claudia Figueiredo Mello - [claudia.mello@emilioribas.sp.gov.br](mailto:claudia.mello@emilioribas.sp.gov.br)
 
 ### Technical Expertise
