@@ -25,8 +25,12 @@ def attrs_with_enums(arc, types: list[str], all_types: list[str]):
     arc_long_with_enums = arc[arc["Type"].isin(types)]
 
     for options, group in arc_long_with_enums.groupby("Answer Options"):
+        if len(group) == 1:
+            name = {"const": group.Variable.iloc[0]}
+        else:
+            name = {"enum": group.Variable.tolist()}
         rule = {
-            "properties": {"attribute": {"enum": group.Variable.tolist()}},
+            "properties": {"attribute": name},
             "required": ["value"],
         }
         rule["properties"]["value"] = {"type": "string"}
@@ -47,8 +51,12 @@ def attrs_with_lists(arc, types: list[str], all_types: list[str]):
     arc_long_lists = arc[arc["Type"].isin(types)]
 
     for list_file, group in arc_long_lists.groupby("List"):
+        if len(group) == 1:
+            name = {"const": group.Variable.iloc[0]}
+        else:
+            name = {"enum": group.Variable.tolist()}
         rule = {
-            "properties": {"attribute": {"const": group.Variable.tolist()}},
+            "properties": {"attribute": name},
             "required": ["value"],
         }
         file_name = (list_file + ".csv").split("_")
@@ -70,8 +78,12 @@ def numeric_attrs(arc, types: list[str], all_types: list[str]):
 
     for min_max, group in arc_long_numeric.groupby(["Minimum", "Maximum"]):
         min, max = min_max
+        if len(group) == 1:
+            name = {"const": group.Variable.iloc[0]}
+        else:
+            name = {"enum": group.Variable.tolist()}
         rule = {
-            "properties": {"attribute": {"const": group.Variable.tolist()}},
+            "properties": {"attribute": name},
             "required": ["value_num", "attribute_unit"],
         }
         rule["properties"]["value_num"] = {
@@ -90,8 +102,12 @@ def date_attrs(arc, types: list[str], all_types: list[str]):
     arc_long_dates = arc[arc["Type"].isin(types)]
 
     for input_type, group in arc_long_dates.groupby("Type"):
+        if len(group) == 1:
+            name = {"const": group.Variable.iloc[0]}
+        else:
+            name = {"enum": group.Variable.tolist()}
         rule = {
-            "properties": {"attribute": {"const": group.Variable.tolist()}},
+            "properties": {"attribute": name},
             "required": ["value"],
         }
         if input_type == "date_dmy":
@@ -107,9 +123,7 @@ def date_attrs(arc, types: list[str], all_types: list[str]):
 def generic_str_attrs(arc, types: list[str], all_types: list[str]):
     arc_long_other_str = arc[arc["Type"].isin(types)]
 
-    rule = {
-        "properties": {"attribute": {"const": arc_long_other_str.Variable.tolist()}}
-    }
+    rule = {"properties": {"attribute": {"enum": arc_long_other_str.Variable.tolist()}}}
     rule["properties"]["value"] = {"type": "string"}
     rule["required"] = ["value"]
 
