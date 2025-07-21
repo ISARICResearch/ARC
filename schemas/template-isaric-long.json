@@ -1,0 +1,122 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "ISARIC Long Schema",
+    "additionalProperties": false,
+    "type": "object",
+    "properties": {
+        "subjid": {
+            "type": "string",
+            "description": "Patient Identification Number (PIN). May not uniquely identify a patient."
+        },
+        "dataset_id": {
+            "type": "string",
+            "description": "Study ID that patient belongs to."
+        },
+        "phase": {
+            "type": "string",
+            "enum": [
+                "presentation",
+                "pre_observation",
+                "during_observation",
+                "followup",
+                "outcome"
+            ],
+            "description": "Healthcare encounter phase"
+        },
+        "attribute": {
+            "type": "string",
+            "description": "Name of the attribute/event being recorded (e.g. temperature, blood pressure, etc.).  Where an attribute with the same or substantially similar semantics exist in ARC, that attribute name must be used."
+        },
+        "attribute_unit": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "Unit of the attribute being recorded (e.g. 'mg/dL'). Null if the attribute has no unit."
+        },
+        "arcver": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "ARC version used to generate the CRF. Null if not generated from ARC."
+        },
+        "value": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "String data associated with the attribute."
+        },
+        "value_bool": {
+            "type": [
+                "boolean",
+                "null"
+            ],
+            "description": "Use for Yes/No attributes."
+        },
+        "value_num": {
+            "type": [
+                "number",
+                "null"
+            ],
+            "description": "Value of numerical measurements, e.g. temperature, BP."
+        },
+        "reldate_adm": {
+            "type": [
+                "integer",
+                "null"
+            ],
+            "description": "Relative day since admission."
+        },
+        "reldate_adm_end": {
+            "type": [
+                "integer",
+                "null"
+            ],
+            "description": "Relative day since admission, end of period starting from reldate_adm. Should be Null if event spans <= 1 day."
+        },
+        "date": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "format": "datetime",
+            "description": "Date of event."
+        },
+        "duration": {
+            "type": [
+                "integer",
+                "null"
+            ],
+            "description": "Duration of the event in days."
+        }
+    },
+    "oneOf": [
+        {
+            "required": [
+                "value"
+            ]
+        },
+        {
+            "required": [
+                "value_bool"
+            ]
+        },
+        {
+            "required": [
+                "value_num"
+            ]
+        }
+    ],
+    "required": [
+        "subjid",
+        "dataset_id",
+        "phase",
+        "attribute",
+        "arcver",
+        "reldate_adm",
+        "date",
+        "duration"
+    ]
+}
