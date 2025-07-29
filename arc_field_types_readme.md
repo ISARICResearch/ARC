@@ -20,7 +20,7 @@ These are interpreted and transformed into REDCap-compatible fields when generat
 ## 1. `user_list`
 
 ### Description
-A `user_list` is a structured field type that references a predefined list of options from an external file, where the user has marked some values as *selected* (i.e., shown as default radio options) and others as optional extensions.
+A `user_list` is a structured field type that references a predefined list of options from an external file, where the user has marked some values as *selected* or *preset_* (i.e., shown as default radio options) and others as optional extensions.
 
 ### Example
 Variable: `inclu_disease`\
