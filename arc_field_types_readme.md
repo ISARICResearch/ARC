@@ -11,7 +11,7 @@ Most fields in ARC use standard REDCap field types such as `text`, `radio`, `che
 - `user_list`
 - `list`
 - `multi_list`
-- `select units`
+-  Blank field (`select units` in Question)
 
 These are interpreted and transformed into REDCap-compatible fields when generating a data dictionary.
 
@@ -20,22 +20,18 @@ These are interpreted and transformed into REDCap-compatible fields when generat
 ## 1. `user_list`
 
 ### Description
-
 A `user_list` is a structured field type that references a predefined list of options from an external file, where the user has marked some values as *selected* (i.e., shown as default radio options) and others as optional extensions.
 
 ### Example
-
 Variable: `inclu_disease`\
 List source: `Lists/inclusion/Diseases.csv`
 
 ### Transformation
-
 - `radio` field with *Selected = 1* options
 - `dropdown` (`otherl2`) to show extended values if user selects "Other"
 - `text` field (`otherl3`) to specify unlisted values
 
 ### Derived Variables
-
 - `inclu_disease_otherl2`
 - `inclu_disease_otherl3`
 
@@ -44,49 +40,43 @@ List source: `Lists/inclusion/Diseases.csv`
 ## 2. `list`
 
 ### Description
-
-`list` is used for fields that support **multiple repeated selections** from a predefined value set.
+`list` is used for fields that support **multiple repeated selections** from a predefined value set. Like `user_list`, the options for `list` fields are loaded from external CSV files in the ARC GitHub repository.
 
 ### Example
-
-Used for treatments, comorbidities, or exposures where multiple entries may apply.
+Variable: `comor_unlisted`\
+List source: `Lists/conditions/Comorbidities.csv`
 
 ### Transformation
-
 - Multiple `dropdown` entries: `0item`, `1item`, ..., `nitem`
 - Each followed by:
   - `text` field for "Other" entries: `0otherl2`, etc.
   - `radio` field asking if there's an additional entry: `0addi`, etc.
 
 ### Derived Variables
-
-- `treat_drug_0item`, `treat_drug_1item`, ...
-- `treat_drug_0otherl2`
-- `treat_drug_0addi`
+- `comor_unlisted_0item`, `comor_unlisted_1item`, ...
+- `comor_unlisted_0otherl2`
+- `comor_unlisted_0addi`
 
 ---
 
 ## 3. `multi_list`
 
 ### Description
-
-`multi_list` represents a multiselect list where several options can be checked simultaneously.
+`multi_list` represents a multiselect list where several options can be checked simultaneously. Like `list`, its options are also loaded from external CSV files.
 
 ### Example
-
-Used for symptoms, diagnoses, or any scenario where multiple answers may apply.
+Variable: `demog_race`\
+List source: `Lists/demographics/Race.csv`
 
 ### Transformation
-
 - A `checkbox` group with selected options
 - If value `88` (Other) is selected:
   - Show `dropdown` with less common values (`otherl2`)
   - Show `text` field for specification (`otherl3`)
 
 ### Derived Variables
-
-- `symptoms`: base checkbox
-- `symptoms_otherl2`, `symptoms_otherl3`
+- `demog_race`: base checkbox
+- `demog_race_otherl2`, `demog_race_otherl3`
 
 ---
 
@@ -94,34 +84,37 @@ Used for symptoms, diagnoses, or any scenario where multiple answers may apply.
 
 ### Description
 
-This is a structural pattern rather than an explicit type. Fields requiring both a **value** and a **unit** are inferred from questions containing phrases like "(select units)".
+This is a structural pattern rather than an explicit type. It applies to clinical measurements (e.g., height, weight, temperature) that may be recorded in more than one unit (e.g., cm/in, kg/lb, °C/°F). The core variable usually includes "(select units)" in its question text and is linked to two or more variants defined with specific units tha share teh same prefix.
 
-### Detection
+### Example
 
-- Identified by parsing the `Question` text
-- Applies to variables that appear in multiple unit-specific variants
+- Base question: `demog_height` → "Height (select units)"
+- Variants:
+  - `demog_height_cm`: numeric field in centimeters
+  - `demog_height_in`: numeric field in inches
+
+- Base question: `demog_weight` → "Weight (select units)"
+- Variants:
+  - `demog_weight_kg`: numeric field in kilograms
+  - `demog_weight_lb`: numeric field in pounds
 
 ### Transformation
 
-- One `text` field for the value (numeric)
-- One `radio` field for unit selection
+- A unified `text` field (e.g., `demog_height`) for the value
+- A companion `radio` field (e.g., `demog_height_units`) to select which unit is used
 
 ### Derived Variables
 
-- `vital_temp` (numeric input)
-- `vital_temp_units` (unit selector)
+- `demog_height`: unified height input
+- `demog_height_units`: unit selector (e.g., cm/in)
+- `demog_weight`: unified weight input
+- `demog_weight_units`: unit selector (e.g., kg/lb)
+
+This approach reduces redundancy, improves clarity, and ensures that unit selection is explicit and standardized.
+
+Moreover, this design enables CRF customization in the BRIDGE tool: users can choose which unit(s) to display when configuring the form for a specific data collection setting. This allows alignment with local clinical practices (e.g., countries preferring cm/in or kg/lb) while maintaining a unified structure in the backend.
 
 ---
-
-## Naming Conventions
-
-| Purpose                                            | Pattern                 |
-| -------------------------------------------------- | ----------------------- |
-| Repeated entries (`list`)                          | `<base>_0item`, `1item` |
-| Additional question                                | `<base>_0addi`          |
-| Other dropdown (`list`, `user_list`, `multi_list`) | `<base>_otherl2`        |
-| Free-text other                                    | `<base>_otherl3`        |
-| Units field (`select units`)                       | `<base>_units`          |
 
 ---
 
@@ -153,8 +146,6 @@ select units
 ---
 
 ## Notes
-
 - Lists are stored in the ARC GitHub repo under `/Lists/...`
-- The transformation is handled automatically during CRF export
+- The transformation is handled automatically during CRF export from BRIDGE
 - These structures support modular, scalable, and interoperable CRFs
-
