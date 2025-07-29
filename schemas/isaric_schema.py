@@ -76,7 +76,9 @@ def numeric_attrs(arc, types: list[str], all_types: list[str]):
     rules = []
     arc_long_numeric = arc[arc["Type"].isin(types)]
 
-    for min_max, group in arc_long_numeric.groupby(["Minimum", "Maximum"]):
+    for min_max, group in arc_long_numeric.groupby(
+        ["Minimum", "Maximum"], dropna=False
+    ):
         min, max = min_max
         if len(group) == 1:
             name = {"const": group.Variable.iloc[0]}
@@ -86,11 +88,11 @@ def numeric_attrs(arc, types: list[str], all_types: list[str]):
             "properties": {"attribute": name},
             "required": ["value_num", "attribute_unit"],
         }
-        rule["properties"]["value_num"] = {
-            "type": "number",
-            "minimum": float(min),
-            "maximum": float(max),
-        }
+        rule["properties"]["value_num"] = {"type": "number"}
+        if not pd.isna(min):
+            rule["properties"]["value_num"]["minimum"] = float(min)
+        if not pd.isna(max):
+            rule["properties"]["value_num"]["maximum"] = float(max)
 
         rules.append(rule)
     all_types = [t for t in all_types if t not in types]
