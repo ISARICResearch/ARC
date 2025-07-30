@@ -114,7 +114,7 @@ This is a structural pattern rather than an explicit type. It applies to clinica
 
 This approach reduces redundancy, improves clarity, and ensures that unit selection is explicit and standardized.
 
-Moreover, this design enables CRF customization in the BRIDGE tool: users can choose which unit(s) to display when configuring the form for a specific data collection setting. This allows alignment with local clinical practices (e.g., countries preferring cm/in or kg/lb) while maintaining a unified structure in the backend.
+Moreover, this design enables CRF customization in [ISARIC BRIDGE](https://bridge.isaric.org/): users can choose which unit(s) to display when configuring the form for a specific data collection setting. This allows alignment with local clinical practices (e.g., countries preferring cm/in or kg/lb) while maintaining a unified structure in the backend.
 
 ---
 
@@ -126,7 +126,8 @@ Below is a simplified flowchart of how each ARC type expands into REDCap-compati
 
 ```
 user_list
-  └── radio field (Selected options)
+  └── radio field (Selected options) if Selected options < 15
+  └── dropdown field (Selected options) if Selected options >= 15 
       └── dropdown (Other options)
           └── text (Specify other)
 
@@ -148,6 +149,6 @@ select units
 ---
 
 ## Notes
-- Lists are stored in the ARC GitHub repo under `/Lists/...`
-- The transformation is handled automatically during CRF export from BRIDGE
+- Lists are stored in the ARC GitHub repo under [/Lists/...](https://github.com/ISARICResearch/ARC/tree/main/Lists)
+- The transformation is handled automatically during CRF genration from [ISARIC BRIDGE](https://bridge.isaric.org/)
 - These structures support modular, scalable, and interoperable CRFs
