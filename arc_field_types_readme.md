@@ -64,7 +64,7 @@ List source: [Lists/conditions/Comorbidities.csv](https://github.com/ISARICResea
 ## 3. `multi_list`
 
 ### Description
-`multi_list` represents a multiselect list where several options can be checked simultaneously. Like `list`, its options are also loaded from external CSV files.
+`multi_list` represents a multiselect list where several options can be checked simultaneously. Like `user_list`, its options are also loaded from external CSV files.
 
 ### Example
 Variable: `demog_race`\
@@ -86,7 +86,7 @@ List source: [Lists/demographics/Race.csv](https://github.com/ISARICResearch/ARC
 
 ### Description
 
-This is a structural pattern rather than an explicit type. It applies to clinical measurements (e.g., height, weight, temperature) that may be recorded in more than one unit (e.g., cm/in, kg/lb, °C/°F). The core variable usually includes "(select units)" in its question text and is linked to two or more variants defined with specific units tha share teh same prefix.
+This is a structural pattern rather than an explicit type. It applies to clinical measurements (e.g., height, weight, temperature) that may be recorded in more than one unit (e.g., cm/in, kg/lb, °C/°F). The core variable usually includes "(select units)" in its question text and is linked to two or more variants defined with specific units tha share the same prefix.
 
 ### Example
 
