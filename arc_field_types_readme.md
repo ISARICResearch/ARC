@@ -24,7 +24,7 @@ A `user_list` is a structured field type that references a predefined list of op
 
 ### Example
 Variable: `inclu_disease`\
-List source: `Lists/inclusion/Diseases.csv`
+List source: [Lists/inclusion/Diseases.csv](https://github.com/ISARICResearch/ARC/blob/main/Lists/inclusion/Diseases.csv)
 
 ### Transformation
 - `radio` field with *Selected = 1* options
@@ -44,7 +44,7 @@ List source: `Lists/inclusion/Diseases.csv`
 
 ### Example
 Variable: `comor_unlisted`\
-List source: `Lists/conditions/Comorbidities.csv`
+List source: [Lists/conditions/Comorbidities.csv](https://github.com/ISARICResearch/ARC/blob/main/Lists/conditions/Comorbidities.csv)
 
 ### Transformation
 - Multiple `dropdown` entries: `0item`, `1item`, ..., `nitem`
@@ -66,7 +66,7 @@ List source: `Lists/conditions/Comorbidities.csv`
 
 ### Example
 Variable: `demog_race`\
-List source: `Lists/demographics/Race.csv`
+List source: [Lists/demographics/Race.csv](https://github.com/ISARICResearch/ARC/blob/main/Lists/demographics/Race.csv)
 
 ### Transformation
 - A `checkbox` group with selected options
