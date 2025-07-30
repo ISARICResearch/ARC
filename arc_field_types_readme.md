@@ -48,7 +48,7 @@ List source: [Lists/inclusion/Diseases.csv](https://github.com/ISARICResearch/AR
 Variable: `comor_unlisted`\
 List source: [Lists/conditions/Comorbidities.csv](https://github.com/ISARICResearch/ARC/blob/main/Lists/conditions/Comorbidities.csv)
 
-### Transformation
+### BRIDGE Transformation
 - Multiple `dropdown` entries: `0item`, `1item`, ..., `nitem`
 - Each followed by:
   - `text` field for "Other" entries: `0otherl2`, etc.
@@ -70,7 +70,7 @@ List source: [Lists/conditions/Comorbidities.csv](https://github.com/ISARICResea
 Variable: `demog_race`\
 List source: [Lists/demographics/Race.csv](https://github.com/ISARICResearch/ARC/blob/main/Lists/demographics/Race.csv)
 
-### Transformation
+### BRIDGE Transformation
 - A `checkbox` group with selected options
 - If value `88` (Other) is selected:
   - Show `dropdown` with less common values (`otherl2`)
@@ -100,7 +100,7 @@ This is a structural pattern rather than an explicit type. It applies to clinica
   - `demog_weight_kg`: numeric field in kilograms
   - `demog_weight_lb`: numeric field in pounds
 
-### Transformation
+### BRIDGE Transformation
 
 - A unified `text` field (e.g., `demog_height`) for the value
 - A companion `radio` field (e.g., `demog_height_units`) to select which unit is used
