@@ -20,14 +20,16 @@ These are interpreted and transformed into REDCap-compatible fields when generat
 ## 1. `user_list`
 
 ### Description
-A `user_list` is a structured field type that references a predefined list of options from an external file, where the user has marked some values as *selected* or *preset_* (i.e., shown as default radio options) and others as optional extensions.
+A  is a structured field type that references a predefined list of options from an external file, where the user has marked some values as *selected* or *preset_* (i.e., shown as default radio options) and others as optional extensions.
+A `user_list` is a structured field type that references a predefined list of options from an external file, which the user can modify to include the pertinent options for their particular context. This links to specific functionality in [ISARIC BRIDGE](https://bridge.isaric.org/), where users can select the options they wish to include for a given question. Additionally, each version of ARC includes  pre-selected options in the form of presets, which are shown by default, while other options remain available as optional extensions.
 
 ### Example
 Variable: `inclu_disease`\
 List source: [Lists/inclusion/Diseases.csv](https://github.com/ISARICResearch/ARC/blob/main/Lists/inclusion/Diseases.csv)
 
-### Transformation
-- `radio` field with *Selected = 1* options
+### BRIDGE Transformation
+- `radio` field with checked values as options: if the number of checked values < 15
+- `dropdown` field with checked values as options: if the number of checked values  >= 15
 - `dropdown` (`otherl2`) to show extended values if user selects "Other"
 - `text` field (`otherl3`) to specify unlisted values
 
