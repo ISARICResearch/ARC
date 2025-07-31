@@ -76,6 +76,16 @@ If you want to use ARC for your research or study, follow these steps:
 - Gail Carson - [gail.carson@ndm.ox.ac.uk](mailto:gail.carson@ndm.ox.ac.uk)
 - Luis Felipe Reyes - [luis.reyes@ndm.ox.ac.uk](mailto:luis.reyes@ndm.ox.ac.uk)
 - Claudia Figueiredo Mello - [claudia.mello@emilioribas.sp.gov.br](mailto:claudia.mello@emilioribas.sp.gov.br)
+- Lauren Sauer - [lsauer@unmc.edu](mailto:lsauer@unmc.edu)
+- Mattew Cummings - [mjc2244@cumc.columbia.edu](mailto:mjc2244@cumc.columbia.edu)
+- Peter Horby - [peter.horby@ndm.ox.ac.uk](mailto:peter.horby@ndm.ox.ac.uk)
+- Janet Diaz (WHO) - [diazj@who.int](mailto:diazj@who.int)
+- Jamie Rylance (WHO) - [rylancej@who.int](mailto:rylancej@who.int)
+- Calum Semple - [M.G.Semple@liverpool.ac.uk](mailto:M.G.Semple@liverpool.ac.uk)
+- Lim Wei Shen - [WeiShen.Lim@nuh.nhs.uk](mailto:WeiShen.Lim@nuh.nhs.uk)
+- Srin Murthy - [srinivas.murthy@cw.bc.ca](mailto:srinivas.murthy@cw.bc.ca)
+- Antonia Ho - [antonia.ho@glasgow.ac.uk](mailto:antonia.ho@glasgow.ac.uk)
+- Tim Uyeki - [tmu0@cdc.gov](mailto:tmu0@cdc.gov)
 
 ### Technical Expertise
 - Sara Duque-Vallejo - [sara.duquevallejo@ndm.ox.ac.uk](mailto:sara.duquevallejo@ndm.ox.ac.uk)
