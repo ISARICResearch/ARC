@@ -1,4 +1,3 @@
-
 # ARC Variable Naming Conventions
 
 This document describes the variable naming conventions used in ARC, which support consistent structure, clarity, and integration with data collection and harmonization tools like BRIDGE and VERTEX.
@@ -53,6 +52,22 @@ Below are common suffixes that reflect variable function or logic. All examples 
 | `_pcnt`  | Percent value                                              | `vital_fio2spo2_pcnt`, `comor_hba1c_pcnt`         |
 | `_yn`    | Yes/No binary question                                    | `expo14_yn`, `test_yn`                            |
 
+### Numbered Suffixes for Repeated Instances
+
+Some suffixes include numbers (e.g., `_date1`, `_type2`) to capture repeated events or values, especially useful for vaccines, medications, and other longitudinal data.
+
+| Suffix     | Description                                      | Example Variables                     |
+|------------|--------------------------------------------------|----------------------------------------|
+| `_date1`   | First date of event                              | `vacci_covid19_date1`, `vacci_dengue_date1` |
+| `_date2`   | Second instance (e.g., second dose)              | `vacci_mpox_date2`                     |
+| `_date3`   | Third instance                                   | `vacci_covid19_date3`                  |
+| `_type1`   | First categorical instance                       | `vacci_dengue_type1`                   |
+| `_type2`   | Second instance                                  | `vacci_covid19_type2`                  |
+| `_type3`   | Third instance                                   | `vacci_dengue_type3`                   |
+| `_spec1`   | Specification field for first entry              | `medi_offlab_spec1`                    |
+
+These suffixes are used in parallel and are crucial for distinguishing multiple entries of the same concept within a participant record.
+
 ---
 
 ## 4. Section Mapping
@@ -71,7 +86,6 @@ Suffixes like `_oth`, `_spec`, `_ongoing`, `_dur`, and `_site` often imply **con
 
 These dependencies must be respected in CRF tools like BRIDGE to ensure logical flow and data consistency.
 
-
 ---
 
 ## 6. Variable Types
@@ -84,7 +98,7 @@ ARC uses various variable types to capture structured, semi-structured, and free
 | `user_list`     | A list of options drawn from an external source, modifiable by the user     |
 | `radio`         | Single choice from a set of predefined options                              |
 | `checkbox`      | Multiple selections allowed from a list                                     |
-| `list`          | Multiple repeated selections from a predefined value set.                     |
+| `list`          | Similar to `radio`, may be used for dropdown selection                      |
 | `multi_list`    | Like `user_list`, but allows multiple selections                            |
 | `date_dmy`      | Date field (day-month-year format)                                          |
 | `datetime_dmy`  | Date and time field in DMY format                                           |
@@ -109,11 +123,10 @@ Some numeric variables are associated with **"Select Units"** fields. These allo
 | Temperature     | °C, °F                           |
 | Blood pressure  | mmHg                             |
 
-
 ### Structure:
 These are typically implemented as **paired fields**, for example:
 
 - `demog_weight` → select unit (radio/dropdown)
 - `demog_weight_kg`, `demog_weight_lb` → numeric input fields (conditional on unit)
 
-Such fields allow flexibility across settings while preserving data harmonization. The recommended unit (standardized) is often **pre-selected** via presets in BRIDGE (see [ARC Special Field Types Documentation]( https://github.com/ISARICResearch/ARC/blob/main/arc_field_types_readme.md))
+Such fields allow flexibility across settings while preserving data harmonization. The recommended unit (standardized) is often **pre-selected** via presets in BRIDGE.
