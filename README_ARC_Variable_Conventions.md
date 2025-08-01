@@ -84,7 +84,7 @@ ARC uses various variable types to capture structured, semi-structured, and free
 | `user_list`     | A list of options drawn from an external source, modifiable by the user     |
 | `radio`         | Single choice from a set of predefined options                              |
 | `checkbox`      | Multiple selections allowed from a list                                     |
-| `list`          | Similar to `radio`, may be used for dropdown selection                      |
+| `list`          | Multiple repeated selections from a predefined value set.                     |
 | `multi_list`    | Like `user_list`, but allows multiple selections                            |
 | `date_dmy`      | Date field (day-month-year format)                                          |
 | `datetime_dmy`  | Date and time field in DMY format                                           |
@@ -116,4 +116,4 @@ These are typically implemented as **paired fields**, for example:
 - `demog_weight` → select unit (radio/dropdown)
 - `demog_weight_kg`, `demog_weight_lb` → numeric input fields (conditional on unit)
 
-Such fields allow flexibility across settings while preserving data harmonization. The recommended unit (standardized) is often **pre-selected** via presets in BRIDGE.
+Such fields allow flexibility across settings while preserving data harmonization. The recommended unit (standardized) is often **pre-selected** via presets in BRIDGE (see [ARC Special Field Types Documentation]( https://github.com/ISARICResearch/ARC/blob/main/arc_field_types_readme.md))
