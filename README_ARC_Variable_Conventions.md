@@ -108,7 +108,7 @@ Some numeric variables are associated with **"Select Units"** fields. These allo
 | Weight          | kg, pounds                       |
 | Temperature     | °C, °F                           |
 | Blood pressure  | mmHg                             |
-| Oxygen          | %FiO₂, mmHg                      |
+
 
 ### Structure:
 These are typically implemented as **paired fields**, for example:
