@@ -1,7 +1,7 @@
 
-# ARCH Variable Naming Conventions
+# ARC Variable Naming Conventions
 
-This document describes the variable naming conventions used in the ARCH system, which support consistent structure, clarity, and integration with data collection and harmonization tools like ARC and BRIDGE.
+This document describes the variable naming conventions used in ARC, which support consistent structure, clarity, and integration with data collection and harmonization tools like BRIDGE and VERTEX.
 
 ---
 
@@ -23,7 +23,7 @@ Variable names follow a modular convention using underscores (`_`) to separate c
 
 ---
 
-## 2. Hierarchy Depth
+## 2. HierARCy Depth
 
 Variable names contain varying numbers of underscores to reflect their specificity:
 
@@ -76,7 +76,7 @@ These dependencies must be respected in CRF tools like BRIDGE to ensure logical 
 
 ## 6. Variable Types
 
-ARCH uses various variable types to capture structured, semi-structured, and free-text data. Each type implies specific data constraints and rendering logic:
+ARC uses various variable types to capture structured, semi-structured, and free-text data. Each type implies specific data constraints and rendering logic:
 
 | Type            | Description                                                                 |
 |-----------------|-----------------------------------------------------------------------------|
