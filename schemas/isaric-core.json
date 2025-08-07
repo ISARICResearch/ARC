@@ -1,5 +1,5 @@
 {
-    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$schema": "http://json-schema.org/draft-07/schema",
     "title": "ISARIC Core Wide Schema",
     "type": "object",
     "properties": {
@@ -39,12 +39,30 @@
             "description": "ISO 3166-1 alpha-3 country code"
         },
         "pres_adm": {
-            "type": "boolean",
-            "description": "Admitted to hospital"
+            "type": "string",
+            "description": "Admitted to hospital",
+            "enum": [
+                "unknown",
+                "yes",
+                "no"
+            ]
         },
         "pres_date": {
             "type": "string",
-            "format": "datetime",
+            "anyOf": [
+                {
+                    "format": "date-time"
+                },
+                {
+                    "format": "date"
+                },
+                {
+                    "pattern": "^[0-9]{4}-[0-9]{2}$"
+                },
+                {
+                    "pattern": "^[0-9]{4}$"
+                }
+            ],
             "description": "Most recent presentation/admission date at this facility"
         },
         "outco_outcome": {
@@ -62,7 +80,20 @@
         },
         "outco_date": {
             "type": "string",
-            "format": "datetime",
+            "anyOf": [
+                {
+                    "format": "date-time"
+                },
+                {
+                    "format": "date"
+                },
+                {
+                    "pattern": "^[0-9]{4}-[0-9]{2}$"
+                },
+                {
+                    "pattern": "^[0-9]{4}$"
+                }
+            ],
             "description": "Outcome date"
         }
     },

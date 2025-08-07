@@ -86,7 +86,7 @@ def numeric_attrs(arc, types: list[str], all_types: list[str]):
             name = {"enum": group.Variable.tolist()}
         rule = {
             "properties": {"attribute": name},
-            "required": ["value_num", "attribute_unit"],
+            "required": ["value_num"],
         }
         rule["properties"]["value_num"] = {"type": "number"}
         if not pd.isna(min):

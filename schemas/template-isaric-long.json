@@ -81,7 +81,20 @@
                 "string",
                 "null"
             ],
-            "format": "datetime",
+            "anyOf": [
+                {
+                    "format": "date-time"
+                },
+                {
+                    "format": "date"
+                },
+                {
+                    "pattern": "^[0-9]{4}-[0-9]{2}$"
+                },
+                {
+                    "pattern": "^[0-9]{4}$"
+                }
+            ],
             "description": "Date of event."
         },
         "duration": {
@@ -113,10 +126,6 @@
         "subjid",
         "dataset_id",
         "phase",
-        "attribute",
-        "arcver",
-        "reldate_adm",
-        "date",
-        "duration"
+        "attribute"
     ]
 }
