@@ -63,7 +63,7 @@ def attrs_with_lists(arc, types: list[str], all_types: list[str]):
         path = Path(*["Lists"] + file_name)
         if not path.exists():
             raise FileNotFoundError(f"List file {list_file} does not exist.")
-        list_enums = pd.read_csv(path).iloc[:, 0].unique().tolist()
+        list_enums = [x.strip() for x in pd.read_csv(path).iloc[:, 0].unique().tolist()]
 
         rule["properties"]["value"] = {"type": "string", "enum": list_enums}
 
