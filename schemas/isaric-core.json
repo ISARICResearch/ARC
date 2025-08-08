@@ -1,0 +1,113 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "title": "ISARIC Core Wide Schema",
+    "type": "object",
+    "properties": {
+        "subjid": {
+            "type": "string",
+            "description": "Patient Identification Number (PIN). May not uniquely identify a patient."
+        },
+        "siteid": {
+            "type": "string",
+            "description": "Site ID that collected the data for the patient."
+        },
+        "dataset_id": {
+            "type": "string",
+            "description": "Dataset ID that patient belongs to."
+        },
+        "dataset_disease": {
+            "type": "string",
+            "description": "Disease or syndrome corresponding to the primary reason for the data collection (same for each patient in the dataset)."
+        },
+        "demog_sex": {
+            "type": "string",
+            "enum": [
+                "male",
+                "female",
+                "other"
+            ],
+            "description": "Sex at birth"
+        },
+        "demog_age_days": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Age in days"
+        },
+        "demog_country_iso3": {
+            "type": "string",
+            "pattern": "^[A-Z]{3}$",
+            "description": "ISO 3166-1 alpha-3 country code"
+        },
+        "pres_adm": {
+            "type": "string",
+            "description": "Admitted to hospital",
+            "enum": [
+                "unknown",
+                "yes",
+                "no"
+            ]
+        },
+        "pres_date": {
+            "type": "string",
+            "anyOf": [
+                {
+                    "format": "date-time"
+                },
+                {
+                    "format": "date"
+                },
+                {
+                    "pattern": "^[0-9]{4}-[0-9]{2}$"
+                },
+                {
+                    "pattern": "^[0-9]{4}$"
+                }
+            ],
+            "description": "Most recent presentation/admission date at this facility"
+        },
+        "outco_outcome": {
+            "type": "string",
+            "enum": [
+                "discharged_alive",
+                "still_hospitalised",
+                "transfer_to_other_facility",
+                "death",
+                "palliative_care",
+                "discharged_against_medical_advice",
+                "alive_not_admitted"
+            ],
+            "description": "Outcome"
+        },
+        "outco_date": {
+            "type": "string",
+            "anyOf": [
+                {
+                    "format": "date-time"
+                },
+                {
+                    "format": "date"
+                },
+                {
+                    "pattern": "^[0-9]{4}-[0-9]{2}$"
+                },
+                {
+                    "pattern": "^[0-9]{4}$"
+                }
+            ],
+            "description": "Outcome date"
+        }
+    },
+    "required": [
+        "subjid",
+        "siteid",
+        "dataset_id",
+        "dataset_disease",
+        "demog_sex",
+        "demog_age_days",
+        "demog_country_iso3",
+        "pres_adm",
+        "pres_date",
+        "outco_outcome",
+        "outco_date"
+    ]
+}
