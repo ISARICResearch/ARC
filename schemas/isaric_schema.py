@@ -182,7 +182,7 @@ def generate_long_schema(version):
     template_long["oneOf"] = one_of_rules
 
     # Generate new long schema
-    with open(f"schemas/arc_{version}_isaric_long_schema.json", "w") as f:
+    with open(f"schemas/arc_{version}_isaric_long.schema.json", "w") as f:
         json.dump(template_long, f, indent=4)
 
 
