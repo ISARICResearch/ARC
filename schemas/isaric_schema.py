@@ -72,6 +72,32 @@ def attrs_with_lists(arc, types: list[str], all_types: list[str]):
     return rules, all_types
 
 
+def attrs_with_units(arc, types: list[str], all_types: list[str]):
+    rules = []
+    vars_with_units = arc[arc["Type"].isin(types)]["Variable"]
+
+    for var in vars_with_units:
+        unit_options = arc[arc["Variable"].str.startswith(var + "_")][
+            "Variable"
+        ].to_list()
+
+        units = [u.removeprefix(var + "_") for u in unit_options]
+
+        rule = {
+            "properties": {
+                "attribute": {"const": var},
+                "attribute_unit": {"enum": units},
+                "value_num": {"type": "number"},
+            },
+            "required": ["value_num", "attribute_unit"],
+        }
+
+        rules.append(rule)
+
+    all_types = [t for t in all_types if t not in types]
+    return rules, all_types
+
+
 def numeric_attrs(arc, types: list[str], all_types: list[str]):
     rules = []
     arc_long_numeric = arc[arc["Type"].isin(types)]
@@ -143,9 +169,9 @@ def generate_long_schema(version):
         template_long = json.load(f)
 
     # Drop the core properties from the long schema
-    # Don't include descriptive, file, or NaN types (unwanted as stored attributes)
+    # Don't include descriptive or file types (unwanted as stored attributes)
     arc_long = arc[~arc.Variable.isin(template_core["properties"].keys())]
-    arc_long = arc_long[~(arc_long.Type.isin(["descriptive", np.nan, "file"]))]
+    arc_long = arc_long[~(arc_long.Type.isin(["descriptive", "file"]))]
 
     # Get all the response types from ARC
     all_types = arc_long.Type.unique().tolist()
@@ -156,6 +182,8 @@ def generate_long_schema(version):
     list_rules, all_types = attrs_with_lists(
         arc_long, ["list", "user_list", "multi_list"], all_types
     )
+
+    unit_rules, all_types = attrs_with_units(arc_long, [np.nan], all_types)
 
     numeric_rules, all_types = numeric_attrs(arc_long, ["number", "calc"], all_types)
 
@@ -169,7 +197,12 @@ def generate_long_schema(version):
 
     # Combine all rules into one list
     one_of_rules = (
-        enum_rules + list_rules + numeric_rules + date_rules + other_str_rules
+        enum_rules
+        + list_rules
+        + unit_rules
+        + numeric_rules
+        + date_rules
+        + other_str_rules
     )
 
     # check no types have been missed
