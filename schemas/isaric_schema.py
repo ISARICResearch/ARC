@@ -20,9 +20,10 @@ def get_enums(options):
     ]
 
 
-def attrs_with_enums(arc, types: list[str], all_types: list[str]):
+def attrs_with_enums(arc, types: list[str]):
     rules = []
-    arc_long_with_enums = arc[arc["Type"].isin(types)]
+    arc_filter = arc["Type"].isin(types)
+    arc_long_with_enums = arc[arc_filter]
 
     for options, group in arc_long_with_enums.groupby("Answer Options"):
         if len(group) == 1:
@@ -41,14 +42,14 @@ def attrs_with_enums(arc, types: list[str], all_types: list[str]):
             rule["properties"]["value"]["enum"] = enums
 
         rules.append(rule)
-    # drop from the list of all types
-    all_types = [t for t in all_types if t not in types]
-    return rules, all_types
+
+    return rules, arc[~arc_filter]
 
 
-def attrs_with_lists(arc, types: list[str], all_types: list[str]):
+def attrs_with_lists(arc, types: list[str]):
     rules = []
-    arc_long_lists = arc[arc["Type"].isin(types)]
+    arc_filter = arc["Type"].isin(types)
+    arc_long_lists = arc[arc_filter]
 
     for list_file, group in arc_long_lists.groupby("List"):
         if len(group) == 1:
@@ -68,18 +69,20 @@ def attrs_with_lists(arc, types: list[str], all_types: list[str]):
         rule["properties"]["value"] = {"type": "string", "enum": list_enums}
 
         rules.append(rule)
-    all_types = [t for t in all_types if t not in types]
-    return rules, all_types
+    return rules, arc[~arc_filter]
 
 
-def attrs_with_units(arc, types: list[str], all_types: list[str]):
+def attrs_with_units(arc, types: list[str]):
     rules = []
-    vars_with_units = arc[arc["Type"].isin(types)]["Variable"]
+    arc_filter = arc["Type"].isin(types)
+    vars_with_units = arc[arc_filter]["Variable"]
+    arc_vars_to_remove = vars_with_units.copy().to_list()
 
     for var in vars_with_units:
         unit_options = arc[arc["Variable"].str.startswith(var + "_")][
             "Variable"
         ].to_list()
+        arc_vars_to_remove += unit_options
 
         units = [u.removeprefix(var + "_") for u in unit_options]
 
@@ -94,13 +97,13 @@ def attrs_with_units(arc, types: list[str], all_types: list[str]):
 
         rules.append(rule)
 
-    all_types = [t for t in all_types if t not in types]
-    return rules, all_types
+    return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
 
 
-def numeric_attrs(arc, types: list[str], all_types: list[str]):
+def numeric_attrs(arc, types: list[str]):
     rules = []
-    arc_long_numeric = arc[arc["Type"].isin(types)]
+    arc_filter = arc["Type"].isin(types)
+    arc_long_numeric = arc[arc_filter]
 
     for min_max, group in arc_long_numeric.groupby(
         ["Minimum", "Maximum"], dropna=False
@@ -121,13 +124,13 @@ def numeric_attrs(arc, types: list[str], all_types: list[str]):
             rule["properties"]["value_num"]["maximum"] = float(max)
 
         rules.append(rule)
-    all_types = [t for t in all_types if t not in types]
-    return rules, all_types
+    return rules, arc[~arc_filter]
 
 
-def date_attrs(arc, types: list[str], all_types: list[str]):
+def date_attrs(arc, types: list[str]):
     rules = []
-    arc_long_dates = arc[arc["Type"].isin(types)]
+    arc_filter = arc["Type"].isin(types)
+    arc_long_dates = arc[arc_filter]
 
     for input_type, group in arc_long_dates.groupby("Type"):
         if len(group) == 1:
@@ -144,19 +147,18 @@ def date_attrs(arc, types: list[str], all_types: list[str]):
             rule["properties"]["value"] = {"type": "string", "format": "date-time"}
 
         rules.append(rule)
-    all_types = [t for t in all_types if t not in types]
-    return rules, all_types
+    return rules, arc[~arc_filter]
 
 
-def generic_str_attrs(arc, types: list[str], all_types: list[str]):
-    arc_long_other_str = arc[arc["Type"].isin(types)]
+def generic_str_attrs(arc, types: list[str]):
+    arc_filter = arc["Type"].isin(types)
+    arc_long_other_str = arc[arc_filter]
 
     rule = {"properties": {"attribute": {"enum": arc_long_other_str.Variable.tolist()}}}
     rule["properties"]["value"] = {"type": "string"}
     rule["required"] = ["value"]
 
-    all_types = [t for t in all_types if t not in types]
-    return [rule], all_types
+    return [rule], arc[~arc_filter]
 
 
 def generate_long_schema(version):
@@ -173,26 +175,21 @@ def generate_long_schema(version):
     arc_long = arc[~arc.Variable.isin(template_core["properties"].keys())]
     arc_long = arc_long[~(arc_long.Type.isin(["descriptive", "file"]))]
 
-    # Get all the response types from ARC
-    all_types = arc_long.Type.unique().tolist()
-
     # Generate rules for each type of attribute
-    enum_rules, all_types = attrs_with_enums(arc_long, ["radio", "checkbox"], all_types)
+    enum_rules, arc_no_enums = attrs_with_enums(arc_long, ["radio", "checkbox"])
 
-    list_rules, all_types = attrs_with_lists(
-        arc_long, ["list", "user_list", "multi_list"], all_types
+    list_rules, arc_no_lists = attrs_with_lists(
+        arc_no_enums, ["list", "user_list", "multi_list"]
     )
 
-    unit_rules, all_types = attrs_with_units(arc_long, [np.nan], all_types)
+    unit_rules, arc_no_units = attrs_with_units(arc_no_lists, [np.nan])
 
-    numeric_rules, all_types = numeric_attrs(arc_long, ["number", "calc"], all_types)
+    numeric_rules, arc_no_numbers = numeric_attrs(arc_no_units, ["number", "calc"])
 
-    date_rules, all_types = date_attrs(
-        arc_long, ["date_dmy", "datetime_dmy"], all_types
-    )
+    date_rules, arc_no_dates = date_attrs(arc_no_numbers, ["date_dmy", "datetime_dmy"])
 
-    other_str_rules, all_types = generic_str_attrs(
-        arc_long, ["text", "notes"], all_types
+    other_str_rules, arc_no_other_str = generic_str_attrs(
+        arc_no_dates, ["text", "notes"]
     )
 
     # Combine all rules into one list
@@ -206,10 +203,11 @@ def generate_long_schema(version):
     )
 
     # check no types have been missed
-    if len(all_types) > 0:
+    if len(arc_no_other_str) > 0:
         raise ValueError(
-            f"The following types were not processed: {', '.join(all_types)}. "
-            "Please check the ARC.csv file for any new types."
+            "The following rows were not processed: \n",
+            arc_no_other_str,
+            "Please check the ARC.csv file for any new types.",
         )
 
     template_long["oneOf"] = one_of_rules
