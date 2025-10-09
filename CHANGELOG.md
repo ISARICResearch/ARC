@@ -1,12 +1,14 @@
-## ARC v1.1.1 (02 Jul 2025)
+## ARC v1.1.3 (09 Oct 2025)
+
+### Highlights
+- Restructured **ARChetype Dengue CRF**  
+- Introduced **recommended core outcomes for Dengue**  
+- Separated **signs** and **symptoms** for improved consistency  
 
 ### Overview
-In ARC v1.1.1, variables in the ONSET & PRESENTATION section were updated to use the prefix pres_ instead of date_ to better reflect their meaning..
+ARC v1.1.3 delivers significant updates to support dengue research and harmonisation. The **ARChetype Dengue CRF** has been restructured, and a set of **recommended core outcomes for Dengue** has been introduced.
 
-### Variable‑Level Updates
-Prefix change in ONSET & PRESENTATION section: Variables previously using the date_ prefix were renamed to pres_ (e.g., date_adm, → pres_adm).
+### Variable-Level Updates
+- Restructured **Dengue ARChetype CRF**, aligning variable definitions with current WHO classification.  
+- Introduced **recommended outcomes for Dengue**, enabling more standardised reporting across studies.  
 
-### Interoperability
-Standardised term code lists have been revised to align with **SNOMED‑CT**, **LOINC**, and **UMLS**.
-
----
