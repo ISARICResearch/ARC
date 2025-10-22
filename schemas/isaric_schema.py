@@ -72,32 +72,33 @@ def attrs_with_lists(arc, types: list[str]):
     return rules, arc[~arc_filter]
 
 
-def attrs_with_units(arc, types: list[str]):
-    rules = []
-    arc_filter = arc["Type"].isin(types)
-    vars_with_units = arc[arc_filter]["Variable"]
-    arc_vars_to_remove = vars_with_units.copy().to_list()
+# Currently not used
+# def attrs_with_units(arc, types: list[str]):
+#     rules = []
+#     arc_filter = arc["Type"].isin(types)
+#     vars_with_units = arc[arc_filter]["Variable"]
+#     arc_vars_to_remove = vars_with_units.copy().to_list()
 
-    for var in vars_with_units:
-        unit_options = arc[arc["Variable"].str.startswith(var + "_")][
-            "Variable"
-        ].to_list()
-        arc_vars_to_remove += unit_options
+#     for var in vars_with_units:
+#         unit_options = arc[arc["Variable"].str.startswith(var + "_")][
+#             "Variable"
+#         ].to_list()
+#         arc_vars_to_remove += unit_options
 
-        units = [u.removeprefix(var + "_") for u in unit_options]
+#         units = [u.removeprefix(var + "_") for u in unit_options]
 
-        rule = {
-            "properties": {
-                "attribute": {"const": var},
-                "attribute_unit": {"enum": units},
-                "value_num": {"type": "number"},
-            },
-            "required": ["value_num", "attribute_unit"],
-        }
+#         rule = {
+#             "properties": {
+#                 "attribute": {"const": var},
+#                 "attribute_unit": {"enum": units},
+#                 "value_num": {"type": "number"},
+#             },
+#             "required": ["value_num", "attribute_unit"],
+#         }
 
-        rules.append(rule)
+#         rules.append(rule)
 
-    return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
+#     return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
 
 
 def numeric_attrs(arc, types: list[str]):
@@ -171,9 +172,9 @@ def generate_long_schema(version):
         template_long = json.load(f)
 
     # Drop the core properties from the long schema
-    # Don't include descriptive or file types (unwanted as stored attributes)
+    # Don't include descriptive, file types or NaN's (unwanted as stored attributes)
     arc_long = arc[~arc.Variable.isin(template_core["properties"].keys())]
-    arc_long = arc_long[~(arc_long.Type.isin(["descriptive", "file"]))]
+    arc_long = arc_long[~(arc_long.Type.isin(["descriptive", "file", np.nan]))]
 
     # Generate rules for each type of attribute
     enum_rules, arc_no_enums = attrs_with_enums(arc_long, ["radio", "checkbox"])
@@ -182,9 +183,7 @@ def generate_long_schema(version):
         arc_no_enums, ["list", "user_list", "multi_list"]
     )
 
-    unit_rules, arc_no_units = attrs_with_units(arc_no_lists, [np.nan])
-
-    numeric_rules, arc_no_numbers = numeric_attrs(arc_no_units, ["number", "calc"])
+    numeric_rules, arc_no_numbers = numeric_attrs(arc_no_lists, ["number", "calc"])
 
     date_rules, arc_no_dates = date_attrs(arc_no_numbers, ["date_dmy", "datetime_dmy"])
 
@@ -194,12 +193,7 @@ def generate_long_schema(version):
 
     # Combine all rules into one list
     one_of_rules = (
-        enum_rules
-        + list_rules
-        + unit_rules
-        + numeric_rules
-        + date_rules
-        + other_str_rules
+        enum_rules + list_rules + numeric_rules + date_rules + other_str_rules
     )
 
     # check no types have been missed
