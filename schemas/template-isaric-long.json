@@ -12,6 +12,13 @@
             "type": "string",
             "description": "Study ID that patient belongs to."
         },
+        "event_id": {
+            "type": [
+                "string",
+                "null"
+            ],
+            "description": "ID code to link different attributes which relate to the same event (e.g. medication being administered) together."
+        },
         "phase": {
             "type": "string",
             "enum": [
@@ -48,13 +55,6 @@
             ],
             "description": "String data associated with the attribute."
         },
-        "value_bool": {
-            "type": [
-                "boolean",
-                "null"
-            ],
-            "description": "Use for Yes/No attributes."
-        },
         "value_num": {
             "type": [
                 "number",
@@ -68,13 +68,6 @@
                 "null"
             ],
             "description": "Relative day since admission."
-        },
-        "reldate_adm_end": {
-            "type": [
-                "integer",
-                "null"
-            ],
-            "description": "Relative day since admission, end of period starting from reldate_adm. Should be Null if event spans <= 1 day."
         },
         "date": {
             "type": [
@@ -109,11 +102,6 @@
         {
             "required": [
                 "value"
-            ]
-        },
-        {
-            "required": [
-                "value_bool"
             ]
         },
         {
