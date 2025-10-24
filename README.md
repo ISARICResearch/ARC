@@ -14,6 +14,75 @@ ARC (Analysis and Research Compendium) is designed to serve as a resource for re
 
 - **Integration with the Clinical Epidemiology Platform**: ARC is integrated into [BRIDGE](https://github.com/ISARICResearch/BRIDGE), our software tool for CRF generation.
 
+# ARC
+
+ISARIC ARC is a machine-readable question bank that supports harmonized data capture in outbreak and clinical research contexts.  
+It provides standardized variables, response options, and metadata that enable interoperability, reusability, and adaptation to specific disease studies.  
+
+---
+
+##ARC Components
+
+### `arc.csv`  
+The machine-readable list of clinical and research questions.  
+This file provides the standardized structure that ensures interoperability across studies and outbreak contexts.  
+
+Each row in `arc.csv` represents a **variable** used in the Case Report Forms (CRFs).  
+Variables include metadata that ensures **clarity, interoperability, and reusability** across contexts.  
+
+For every variable, the following fields are included:
+
+- **Variable name**: Unique identifier used in the dataset (e.g., `comor_hypertensi`).  
+- **Form**: The CRF form where the variable appears (e.g., *Presentation*, *Daily*, *Outcome*, ...).  
+- **Section**: Subdivision within the form that groups related questions (e.g., *Co-morbidities and Risk Factors*,...).  
+- **Type**: Format of the response field (e.g., `radio`, `checkbox`, `text`, `date`).  
+- **Question**: Human-readable text shown to the data collector (e.g., *Hypertension*).  
+- **Answer Options**: Permissible responses to the question. These may reference predefined lists in `/lists` (e.g., `1, Yes | 0, No | 99, Unknown`).  
+- **Validation**: Input rules for the response, such as numeric range or pattern restrictions.  
+- **Minimum / Maximum**: Boundaries for numeric input when applicable.  
+- **List**: Links to option lists in `/lists`.  
+- **Skip Logic**: Rules defining when the variable should be displayed, depending on other responses.  
+- **Body System**: Physiological system the variable belongs to (e.g., *Cardiovascular*).  
+- **Definition**: Description of the concept being captured, often linked to clinical definitions.  
+- **Completion Guideline**: Instruction text for data collectors to standardize responses.  
+- **Standardized Term Codelist**: Reference ontology or terminology system used for harmonization (e.g., *SNOMED*).  
+- **Standardized Term Code**: The specific code(s) from the ontology (e.g., `38341003, Hypertensive disorder, systemic arterial (disorder)`).  
+- **Templates / Presets**: Links to where the variable is used in disease-specific CRFs (*COVID, Dengue, Mpox, H5Nx, ARI*) or risk scores (*Charlson CI, mSOFA*).  
+
+This way, `arc.csv` serves not only as a **question bank**, but also as a **metadata dictionary** that enables:  
+- Harmonized clinical data collection.  
+- Mapping to standard vocabularies.  
+- Adaptation for different diseases and study contexts.  
+
+#### Example row from `arc.csv`
+
+| Form        | Section                                                                 | Variable         | Type  | Question     | Answer Options           | Body System    | Definition                                                                                                                                   | Completion Guideline                                                                                                                                                  | Standardized Term Codelist | Standardized Term Code                                      | Metathesaurus Identifier             | Research Category | Presets (selected)                  |
+|-------------|-------------------------------------------------------------------------|------------------|-------|--------------|--------------------------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|-------------------------------------------------------------|--------------------------------------|------------------|-------------------------------------|
+| Presentation | CO-MORBIDITIES AND RISK FACTORS: Existing prior to this current illness and is ongoing | comor_hypertensi | radio | Hypertension | 1, Yes \| 0, No \| 99, Unknown | Cardiovascular | Defined as elevated arterial blood pressure diagnosed clinically (systolic >140 mmHg and/or diastolic >90 mmHg), or treated with medication. | Indicate 'Yes' if this condition existed prior to admission with this current illness and remains an active medical condition. | SNOMED                      | 38341003, Hypertensive disorder, systemic arterial (disorder) | C0020538, Hypertensive disease       | risk_factor_comor | COVID=1, Dengue=1, Mpox=1, H5Nx=1, ARI=1 |
+
+---
+
+### `lists/`  
+A collection of option lists that support different response types.  
+These can be adapted or extended for a particular disease or study context (e.g., symptom lists, comorbidity categories, treatment options).  
+
+---
+
+## Data Capture Schema  
+
+The ARC data structure follows the **Clinical Characterization data capture schema**, illustrated below:  
+
+![plot](https://github.com/ISARICResearch/.github/blob/main/profile/charcaterizationSchema.png)
+
+This schema defines the key **moments/events** during a patient’s journey in a study:  
+
+- **Illness onset** → includes *onset-to-care* information.  
+- **Presentation** → data collected when the patient first presents to care.  
+- **Daily observation** → repeated measurements and clinical observations throughout the admission.  
+- **Outcome** → information recorded at the conclusion of the admission (e.g., discharge, death).  
+- **Follow-up** → post-discharge information, up to the defined *end of study*.  
+- **Summary** → aggregate or synthesized data spanning the full admission.  
+
 ## ARChetype CRFs and Templates
 
 ISARIC works closely with experts around the world to create CRFs for priority emerging and infectious diseases and outbreak-related syndromes. These CRFs address key clinical research questions that can improve patient outcomes. We call these ARChetype CRFs.
