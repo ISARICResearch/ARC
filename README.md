@@ -14,13 +14,6 @@ ARC (Analysis and Research Compendium) is designed to serve as a resource for re
 
 - **Integration with the Clinical Epidemiology Platform**: ARC is integrated into [BRIDGE](https://github.com/ISARICResearch/BRIDGE), our software tool for CRF generation.
 
-# ARC
-
-ISARIC ARC is a machine-readable question bank that supports harmonized data capture in outbreak and clinical research contexts.  
-It provides standardized variables, response options, and metadata that enable interoperability, reusability, and adaptation to specific disease studies.  
-
----
-
 ##ARC Components
 
 ### `arc.csv`  
@@ -60,13 +53,9 @@ This way, `arc.csv` serves not only as a **question bank**, but also as a **meta
 |-------------|-------------------------------------------------------------------------|------------------|-------|--------------|--------------------------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|-------------------------------------------------------------|--------------------------------------|------------------|-------------------------------------|
 | Presentation | CO-MORBIDITIES AND RISK FACTORS: Existing prior to this current illness and is ongoing | comor_hypertensi | radio | Hypertension | 1, Yes \| 0, No \| 99, Unknown | Cardiovascular | Defined as elevated arterial blood pressure diagnosed clinically (systolic >140 mmHg and/or diastolic >90 mmHg), or treated with medication. | Indicate 'Yes' if this condition existed prior to admission with this current illness and remains an active medical condition. | SNOMED                      | 38341003, Hypertensive disorder, systemic arterial (disorder) | C0020538, Hypertensive disease       | risk_factor_comor | COVID=1, Dengue=1, Mpox=1, H5Nx=1, ARI=1 |
 
----
-
 ### `lists/`  
 A collection of option lists that support different response types.  
 These can be adapted or extended for a particular disease or study context (e.g., symptom lists, comorbidity categories, treatment options).  
-
----
 
 ## Data Capture Schema  
 
