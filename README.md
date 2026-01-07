@@ -77,16 +77,69 @@ ISARIC works closely with experts around the world to create CRFs for priority e
 
 ARChetype CRFs are an important subset of our library of Templates. Templates are sets of ARC questions that we have curated for other outbreak-related contexts, such as clinical severity scores and core outcome sets. The library of Templates is openly available for use and adaptation by the research community. More information about how to download an ARChetype CRF can be found in our [Downloading an ARChetype CRF Guide](https://isaricresearch.github.io/Training/bridge_template_link).
 
-## ARC Version 1.1.3
-ARC Version 1.1.3 contains a library of questions to be used in Case Report Forms (CRFs) tailored for outbreak responses for COVID-19, Dengue, Mpox and H5Nx and ARI. The CRFs are grouped into seven forms, ‘presentation’, ‘daily’, ‘medication’, ‘pathogen testing’, ‘outcome’,‘follow up’ and ‘withdrawal’ which contain several sections including questions about inclusion and exclusion criteria, hospital admission, patient demographics, travel history, exposure history, pregnancy- and infant-related questions, comorbidities and risk factors, past medical history, medication (drug) history, vaccination history, vital signs assessment, signs and symptoms, clinical assessment, treatment and interventions, laboratory results, imaging results, pathogen testing as well as complications. The questions comprehensively capture the relevant information from the time of presentation to the health facility, daily assessment during admission and at the discharge from the health facility. 
+## ARC Version 1.2.0
 
-ARC Version 1.1.3 contains the following ARChetype CRFs and Templates, each grouped within the forms and sections described above:
-   - **COVID-19 ARChetype CRF:** In ARC Version 1.1.3, this contains 444 questions for COVID-19 outbreak responses. 
-   - **Dengue ARChetype CRF:** In ARC Version 1.1.3, this contains 445 questions for Dengue outbreak responses.
-   - **Mpox ARChetype CRF:** In ARC Version 1.1.3, this contains 595 questions for Mpox outbreak responses. This ARChetype CRF has a section on skin and mucosal assessment for Mpox lesions. 
-   - **H5Nx ARChetype CRF:** In ARC Version 1.1.3, this contains 524 question for Influenza H5Nx outbreak responses.
-   - **ARI  ARChetype CRF:** In ARC Version 1.1.3, this contains 575 question for Acute Respiratory Infection outbreak responses.
-   - **Dengue Recommended Outcomes:**  In ARC Version 1.1.3, this contains 79 question for for Dengue outbreak responses.
+ARC Version 1.2.0 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
+
+The ARC data model supports outbreak responses for **COVID-19, Dengue, Mpox, Influenza H5Nx**, and **Acute Respiratory Infection (ARI)**, and includes enhanced coverage for **pregnant and paediatric populations** through both disease-specific and population-agnostic modules.
+
+CRFs are organised into seven core forms: **presentation**, **daily**, **medication**, **pathogen testing**, **outcome**, **follow-up**, and **withdrawal**.
+
+Each form contains multiple sections covering, as applicable:
+- Inclusion and exclusion criteria  
+- Hospital admission and patient demographics  
+- Travel and exposure history  
+- Pregnancy- and infant-related information  
+- Comorbidities and risk factors  
+- Past medical history  
+- Medication and vaccination history  
+- Vital signs  
+- Signs and symptoms  
+- Clinical assessment  
+- Treatments and interventions  
+- Laboratory and imaging results  
+- Pathogen testing  
+- Complications and outcomes  
+
+Together, these questions enable comprehensive data capture from **initial presentation**, through **daily assessment during admission**, to **discharge and follow-up**.
+
+---
+
+### ARChetype CRFs and Modules Included
+
+ARC Version 1.2.0 contains the following **ARChetype CRFs and modules**, each structured within the forms and sections described above:
+
+- **COVID-19 ARChetype CRF**  
+  A disease-specific CRF supporting COVID-19 outbreak responses.
+
+- **Dengue ARChetype CRF**  
+  A disease-specific CRF supporting Dengue outbreak responses.
+
+- **Mpox ARChetype CRF**  
+  A disease-specific CRF supporting Mpox outbreak responses, including dedicated sections for **skin and mucosal lesion assessment**.
+
+- **Mpox ARChetype CRF – Pregnancy and Paediatrics**  
+  An expanded Mpox CRF with additional variables to support data collection in **pregnant and paediatric patients**.
+
+- **H5Nx ARChetype CRF**  
+  A disease-specific CRF supporting Influenza H5Nx outbreak responses.
+
+- **ARI ARChetype CRF**  
+  A syndromic CRF supporting Acute Respiratory Infection outbreak responses.
+
+- **Dengue Recommended Outcomes**  
+  A dedicated outcomes module supporting standardised outcome reporting for Dengue.
+
+---
+
+### Population-Specific, Disease-Agnostic Modules
+
+ARC Version 1.2.0 also includes **standalone population modules**, designed to be reused across disease-specific CRFs:
+
+- **Pregnancy Module**  
+- **Paediatric Module**
+
+These modules provide shared variables applicable across multiple diseases, improving modularity, consistency, and extensibility of the ARC data model.
 
 
 ## Files
@@ -144,6 +197,10 @@ If you want to use ARC for your research or study, follow these steps:
 - Srin Murthy - [srinivas.murthy@cw.bc.ca](mailto:srinivas.murthy@cw.bc.ca)
 - Antonia Ho - [antonia.ho@glasgow.ac.uk](mailto:antonia.ho@glasgow.ac.uk)
 - Tim Uyeki - [tmu0@cdc.gov](mailto:tmu0@cdc.gov)
+- Charlotte Jackson – [c.r.jackson@ucl.ac.uk](mailto:c.r.jackson@ucl.ac.uk)
+- Ali Judd – [a.judd@ucl.ac.uk](mailto:a.judd@ucl.ac.uk)
+- Rebecca Sconza – [r.sconza@ucl.ac.uk](mailto:r.sconza@ucl.ac.uk)
+- Marthe Le Prevost – [m.leprevost@ucl.ac.uk](mailto:m.leprevost@ucl.ac.uk)
 
 ### Technical Expertise
 - Sara Duque-Vallejo - [sara.duquevallejo@ndm.ox.ac.uk](mailto:sara.duquevallejo@ndm.ox.ac.uk)
@@ -154,4 +211,4 @@ If you want to use ARC for your research or study, follow these steps:
 
 ---
 
-**Note**: ARC is maintained by ISARIC. For inquiries, support, or collaboration, please [contact us](mailto:data@isaric.org).
+**Note**: ARC is maintained by ISARIC. For inquiries, support, or collaboration, please [contact us](mailto:data@isaric.org). 
