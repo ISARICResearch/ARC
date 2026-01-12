@@ -1,0 +1,94 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$comment": "v1.0. Conversion rule: to_value = multiplier * from_value + offset.",
+    "title": "Unit conversion JSON file",
+    "type": "array",
+    "minItems": 1,
+    "items": {
+        "type": "object",
+        "required": [
+            "field_name",
+            "units_field_name",
+            "to_unit",
+            "unit_conversions"
+        ],
+        "additionalProperties": false,
+        "properties": {
+            "field_name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+            "units_field_name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+            "to_unit": {
+                "type": "object",
+                "properties": {
+                    "unit_label": { "type": "string" },
+                    "unit_value": { "type": "integer" },
+                    "unit_field_name": {
+                        "oneOf": [
+                            { "type": "null" },
+                            { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+                        ]
+                    }
+                },
+                "required": ["unit_label", "unit_value", "unit_field_name"],
+                "additionalProperties": false
+            },
+            "unit_conversions": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                    "type": "object",
+                    "properties": {
+                        "from_unit": {
+                            "type": "object",
+                            "properties": {
+                                "unit_label": { "type": "string" },
+                                "unit_value": { "type": "integer" },
+                                "unit_field_name": {
+                                    "oneOf": [
+                                        { "type": "null" },
+                                        { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+                                    ]
+                                }
+                            },
+                            "required": ["unit_label", "unit_value", "unit_field_name"],
+                            "additionalProperties": false
+                        },
+                        "conversion": {
+                            "oneOf": [
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": { "type": "null" },
+                                        "note": { "type": "string", "minLength": 1 }
+                                    },
+                                    "required": ["type", "note"],
+                                    "additionalProperties": false
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "enum": ["linear", "linear_with_denominator"]
+                                        },
+                                        "multiplier": { "type": "number" },
+                                        "offset": { "type": "number" },
+                                        "denominator_field_name": {
+                                            "oneOf": [
+                                                { "type": "null" },
+                                                { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+                                            ]
+                                        },
+                                        "note": { "type": "string", "minLength": 1 }
+                                    },
+                                    "required": ["type", "multiplier", "offset"],
+                                    "additionalProperties": false
+                                }
+                            ]
+                        },
+                    "required": ["from_unit", "conversion"],
+                    "additionalProperties": false
+                }
+            }
+        }
+    }
+}

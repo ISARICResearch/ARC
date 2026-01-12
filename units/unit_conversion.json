@@ -1,0 +1,621 @@
+[
+    {
+        "field_name": "demog_age",
+        "units_field_name": "demog_age_units",
+        "to_unit": { "unit_label": "Years", "unit_value": 3, "unit_field_name": null },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "Days", "unit_value": 1, "unit_field_name": null },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.00273785078713,
+                    "offset": 0,
+                    "note": "to_value = from_value / 365.25"
+                }
+            },
+            {
+                "from_unit": { "unit_label": "Months", "unit_value": 2, "unit_field_name": null },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.0833333333333,
+                    "offset": 0,
+                    "note": "to_value = from_value / 12"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "demog_height",
+        "units_field_name": "demog_height_units",
+        "to_unit": { "unit_label": "cm", "unit_value": 1, "unit_field_name": "demog_height_cm" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "in", "unit_value": 2, "unit_field_name": "demog_height_in" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 2.54,
+                    "offset": 0,
+                    "note": "to_value = from_value * 2.54"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "demog_weight",
+        "units_field_name": "demog_weight_units",
+        "to_unit": { "unit_label": "kg", "unit_value": 1, "unit_field_name": "demog_weight_kg" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "lb", "unit_value": 2, "unit_field_name": "demog_weight_lb" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.45359237,
+                    "offset": 0,
+                    "note": "to_value = from_value * 0.45359237"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "comor_hba1c",
+        "units_field_name": "comor_hba1c_units",
+        "to_unit": { "unit_label": "mmol/mol", "unit_value": 1, "unit_field_name": "comor_hba1c_mmolmol" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "%", "unit_value": 2, "unit_field_name": "comor_hba1c_pcnt" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 10.929,
+                    "offset": -23.52235,
+                    "note": "to_value = (from_value * 10.929) - 23.52235"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "infa_brtweight",
+        "units_field_name": "infa_brtweight_units",
+        "to_unit": { "unit_label": "g", "unit_value": 1, "unit_field_name": "infa_brtweight_g" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "lb", "unit_value": 2, "unit_field_name": "infa_brtweight_lb" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 453.59237,
+                    "offset": 0,
+                    "note": "to_value = from_value * 453.59237"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "vital_highesttem",
+        "units_field_name": "vital_highesttem_units",
+        "to_unit": { "unit_label": "°C", "unit_value": 1, "unit_field_name": "vital_highesttem_c" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "°F", "unit_value": 2, "unit_field_name": "vital_highesttem_f" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.555555555556,
+                    "offset": -17.7777777778,
+                    "note": "to_value = (from_value - 32) * 5/9"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "vital_fio2spo2",
+        "units_field_name": "vital_fio2spo2_units",
+        "to_unit": { "unit_label": "Fraction, 0.21-1.0", "unit_value": 1, "unit_field_name": "vital_fio2spo2_02110" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "%", "unit_value": 2, "unit_field_name": "vital_fio2spo2_pcnt" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.01,
+                    "offset": 0,
+                    "note": "to_value = from_value / 100"
+                }
+            },
+            {
+                "from_unit": { "unit_label": "Highest L/min", "unit_value": 3, "unit_field_name": "vital_fio2spo2_ltr" },
+                "conversion": { "type": null, "note": "Not converted, device-dependent" }
+            }
+        ]
+    },
+    {
+        "field_name": "treat_pao2",
+        "units_field_name": "treat_pao2_units",
+        "to_unit": { "unit_label": "mmHg", "unit_value": 1, "unit_field_name": "treat_pao2_mmhg" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "kPa", "unit_value": 2, "unit_field_name": "treat_pao2_kpa" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 7.50061575846,
+                    "offset": 0,
+                    "note": "to_value = from_value / 0.133322387415"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "treat_fio2spo2",
+        "units_field_name": "treat_fio2spo2_units",
+        "to_unit": { "unit_label": "Fraction, 0.21-1.0", "unit_value": 1, "unit_field_name": "treat_fio2spo2_02110" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "%", "unit_value": 2, "unit_field_name": "treat_fio2spo2_pcnt" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.01,
+                    "offset": 0,
+                    "note": "to_value = from_value / 100"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_haemo",
+        "units_field_name": "labs_haemo_units",
+        "to_unit": { "unit_label": "g/dL", "unit_value": 1, "unit_field_name": "labs_haemo_gdl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "g/L", "unit_value": 2, "unit_field_name": "labs_haemo_gl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.1,
+                    "offset": 0,
+                    "note": "to_value = from_value / 10"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_neutrophil",
+        "units_field_name": "labs_neutrophil_units",
+        "to_unit": { "unit_label": "%", "unit_value": 1, "unit_field_name": "labs_neutrophil_pcnt" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "10^9/L", "unit_value": 2, "unit_field_name": "labs_neutrophil_109l" },
+                "conversion": {
+                    "type": "linear_with_denominator",
+                    "denominator_field_name": "labs_wbccount",
+                    "multiplier": 100,
+                    "offset": 0,
+                    "note": "to_value = from_value * 100 / denominator_value"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_lymphocyte",
+        "units_field_name": "labs_lymphocyte_units",
+        "to_unit": { "unit_label": "%", "unit_value": 1, "unit_field_name": "labs_lymphocyte_pcnt" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "10^9/L", "unit_value": 2, "unit_field_name": "labs_lymphocyte_109l" },
+                "conversion": {
+                    "type": "linear_with_denominator",
+                    "denominator_field_name": "labs_wbccount",
+                    "multiplier": 100,
+                    "offset": 0,
+                    "note": "to_value = from_value * 100 / denominator_value"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_eosinophil",
+        "units_field_name": "labs_eosinophil_units",
+        "to_unit": { "unit_label": "%", "unit_value": 1, "unit_field_name": "labs_eosinophil_pcnt" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "10^9/L", "unit_value": 2, "unit_field_name": "labs_eosinophil_109l" },
+                "conversion": {
+                    "type": "linear_with_denominator",
+                    "denominator_field_name": "labs_wbccount",
+                    "multiplier": 100,
+                    "offset": 0,
+                    "note": "to_value = from_value * 100 / denominator_value"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_hematocrit",
+        "units_field_name": "labs_hematocrit_units",
+        "to_unit": { "unit_label": "%", "unit_value": 1, "unit_field_name": "labs_hematocrit_pcnt" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "L/L", "unit_value": 2, "unit_field_name": "labs_hematocrit_ll" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 100,
+                    "offset": 0,
+                    "note": "to_value = from_value * 100"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_platelets",
+        "units_field_name": "labs_platelets_units",
+        "to_unit": { "unit_label": "10^9/L", "unit_value": 1, "unit_field_name": "labs_platelets_109l" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "10^6/L", "unit_value": 2, "unit_field_name": "labs_platelets_106l" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 1000,
+                    "offset": 0,
+                    "note": "to_value = from_value * 1000"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_erymeancorhgb",
+        "units_field_name": "labs_erymeancorhgb_units",
+        "to_unit": { "unit_label": "g/L", "unit_value": 1, "unit_field_name": "labs_erymeancorhgb_gl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "g/dL", "unit_value": 2, "unit_field_name": "labs_erymeancorhgb_gdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 10,
+                    "offset": 0,
+                    "note": "to_value = from_value * 10"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_fibrinogen",
+        "units_field_name": "labs_fibrinogen_units",
+        "to_unit": { "unit_label": "g/L", "unit_value": 1, "unit_field_name": "labs_fibrinogen_gl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_fibrinogen_mgdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.01,
+                    "offset": 0,
+                    "note": "to_value = from_value * 0.01"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_ddimer",
+        "units_field_name": "labs_ddimer_units",
+        "to_unit": { "unit_label": "µg/L", "unit_value": 1, "unit_field_name": "labs_ddimer_ugl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mg/L", "unit_value": 2, "unit_field_name": "labs_ddimer_mgl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 1000,
+                    "offset": 0,
+                    "note": "to_value = from_value * 1000"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_bilirubin",
+        "units_field_name": "labs_bilirubin_units",
+        "to_unit": { "unit_label": "µmol/L", "unit_value": 1, "unit_field_name": "labs_bilirubin_ugl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_bilirubin_mgl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.0584795321637,
+                    "offset": 0,
+                    "note": "to_value = from_value / 17.1"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_albumin",
+        "units_field_name": "labs_albumin_units",
+        "to_unit": { "unit_label": "g/L", "unit_value": 1, "unit_field_name": "labs_albumin_gl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mmol/L", "unit_value": 2, "unit_field_name": "labs_albumin_mmoll" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 66.5,
+                    "offset": 0,
+                    "note": "to_value = from_value * 66.5"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_glucose",
+        "units_field_name": "labs_glucose_units",
+        "to_unit": { "unit_label": "mmol/L", "unit_value": 1, "unit_field_name": "labs_glucose_mmoll" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_glucose_mgdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.0555555555556,
+                    "offset": 0,
+                    "note": "to_value = from_value / 18"
+                }
+            },
+            {
+                "from_unit": { "unit_label": "g/L", "unit_value": 3, "unit_field_name": "labs_glucose_gl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 5.55555555556,
+                    "offset": 0,
+                    "note": "to_value = from_value * 100 / 18"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_ureanitro",
+        "units_field_name": "labs_ureanitro_units",
+        "to_unit": { "unit_label": "mg/dL", "unit_value": 1, "unit_field_name": "labs_ureanitro_mgdl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mmol/L", "unit_value": 2, "unit_field_name": "labs_ureanitro_mmoll" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.357,
+                    "offset": 0,
+                    "note": "to_value = from_value * 0.357"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_creatinine",
+        "units_field_name": "labs_creatinine_units",
+        "to_unit": { "unit_label": "µmol/L", "unit_value": 1, "unit_field_name": "labs_creatinine_umoll" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_creatinine_mgdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.0113122171946,
+                    "offset": 0,
+                    "note": "to_value = from_value / 88.4"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_calcium",
+        "units_field_name": "labs_calcium_units",
+        "to_unit": { "unit_label": "mmol/L", "unit_value": 1, "unit_field_name": "labs_calcium_mmoll" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mEq/L", "unit_value": 2, "unit_field_name": "labs_calcium_meql" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.5,
+                    "offset": 0,
+                    "note": "to_value = from_value / 2"
+                }
+            },
+            {
+                "from_unit": { "unit_label": "mg/dL", "unit_value": 3, "unit_field_name": "labs_calcium_mgdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.249513448775,
+                    "offset": 0,
+                    "note": "to_value = from_value * 10 / 40.078"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_magn",
+        "units_field_name": "labs_magn_units",
+        "to_unit": { "unit_label": "mmol/L", "unit_value": 1, "unit_field_name": "labs_magn_mmoll" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_magn_mgdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 2.43,
+                    "offset": 0,
+                    "note": "to_value = from_value * 24.3 / 10"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_procalcito",
+        "units_field_name": "labs_procalcito_units",
+        "to_unit": { "unit_label": "ng/mL", "unit_value": 1, "unit_field_name": "labs_procalcito_ngml" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "µg/L", "unit_value": 2, "unit_field_name": "labs_procalcito_ugl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 1,
+                    "offset": 0,
+                    "note": "to_value = from_value * 1"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_crp",
+        "units_field_name": "labs_crp_units",
+        "to_unit": { "unit_label": "mg/L", "unit_value": 1, "unit_field_name": "labs_crp_mgl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_crp_mgdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.1,
+                    "offset": 0,
+                    "note": "to_value = from_value / 10"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_lactate",
+        "units_field_name": "labs_lactate_units",
+        "to_unit": { "unit_label": "mmol/L", "unit_value": 1, "unit_field_name": "labs_lactate_mmoll" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_lactate_mgdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 0.110035211268,
+                    "offset": 0,
+                    "note": "to_value = from_value / 9.088"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_paco2",
+        "units_field_name": "labs_paco2_units",
+        "to_unit": { "unit_label": "mmHg", "unit_value": 1, "unit_field_name": "labs_paco2_mmhg" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "kPa", "unit_value": 2, "unit_field_name": "labs_paco2_kpa" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 7.50061575846,
+                    "offset": 0,
+                    "note": "to_value = from_value / 0.133322387415"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_cd4",
+        "units_field_name": "labs_cd4_units",
+        "to_unit": { "unit_label": "cells/mm^3", "unit_value": 1, "unit_field_name": "labs_cd4_celmm" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "10^6 cells/L", "unit_value": 2, "unit_field_name": "labs_cd4_106cell" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 1,
+                    "offset": 0,
+                    "note": "to_value = from_value * 1"
+                }
+            },
+            {
+                "from_unit": { "unit_label": "cells/µL", "unit_value": 3, "unit_field_name": "labs_cd4_celul" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 1,
+                    "offset": 0,
+                    "note": "to_value = from_value * 1"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_tropi",
+        "units_field_name": "labs_tropi_units",
+        "to_unit": { "unit_label": "ng/L", "unit_value": 1, "unit_field_name": "labs_tropi_ngl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "ng/mL", "unit_value": 2, "unit_field_name": "labs_tropi_ngml" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 1000,
+                    "offset": 0,
+                    "note": "to_value = from_value * 1000"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "labs_protein",
+        "units_field_name": "labs_protein_units",
+        "to_unit": { "unit_label": "g/L", "unit_value": 1, "unit_field_name": "labs_protein_gl" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "g/dL", "unit_value": 2, "unit_field_name": "labs_protein_gdl" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 10,
+                    "offset": 0,
+                    "note": "to_value = from_value * 10"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "nborn_birthweight",
+        "units_field_name": "nborn_birthweight_units",
+        "to_unit": { "unit_label": "g", "unit_value": 1, "unit_field_name": "nborn_birthweight_g" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "lb", "unit_value": 2, "unit_field_name": "nborn_birthweight_lb" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 453.59237,
+                    "offset": 0,
+                    "note": "to_value = from_value * 453.59237"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "nborn_length",
+        "units_field_name": "nborn_length_units",
+        "to_unit": { "unit_label": "cm", "unit_value": 1, "unit_field_name": "nborn_length_cm" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "in", "unit_value": 2, "unit_field_name": "nborn_length_in" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 2.54,
+                    "offset": 0,
+                    "note": "to_value = from_value * 2.54"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "nborn_infhc",
+        "units_field_name": "nborn_infhc_units",
+        "to_unit": { "unit_label": "cm", "unit_value": 1, "unit_field_name": "nborn_infhc_cm" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "in", "unit_value": 2, "unit_field_name": "nborn_infhc_in" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 2.54,
+                    "offset": 0,
+                    "note": "to_value = from_value * 2.54"
+                }
+            }
+        ]
+    },
+    {
+        "field_name": "nborn_deathage",
+        "units_field_name": "nborn_deathage_units",
+        "to_unit": { "unit_label": "Days", "unit_value": 1, "unit_field_name": "nborn_deathage_days" },
+        "unit_conversions": [
+            {
+                "from_unit": { "unit_label": "Months", "unit_value": 2, "unit_field_name": "nborn_deathage_months" },
+                "conversion": {
+                    "type": "linear",
+                    "multiplier": 30.4375,
+                    "offset": 0,
+                    "note": "to_value = from_value * 365.25 / 12"
+                }
+            }
+        ]
+    }
+]
