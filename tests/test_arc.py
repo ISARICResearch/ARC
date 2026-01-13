@@ -26,7 +26,7 @@ REQUIRED_COLUMNS = [
     "Standardized Term Code",
     "Metathesaurus",
     "Identifier",
-    "Research Category"
+    "Research Category",
 ]
 
 # Update if new forms are added
@@ -40,7 +40,7 @@ FORM_ENUM = [
     "pregnancy",
     "neonate",
     "follow_up",
-    "withdrawal"
+    "withdrawal",
 ]
 
 # Update if new types are added
@@ -58,8 +58,11 @@ TYPE_ENUM = [
     "time",
     "calc",
     "notes",
-    "file"
+    "file",
 ]
+
+# Update if new types are added
+VALIDATION_ENUM = ["number", "date_dmy", "datetime_dmy", "time"]
 
 
 @pytest.mark.critical
@@ -80,7 +83,7 @@ def test_arc_valid_form():
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
-            f"ARC contains Form not listed in {TEST_PATH}, amend the list if needed. "
+            f"ARC contains Form enum not listed in {TEST_PATH}, amend the list if needed. "
             f"Variables: {invalid}"
         )
 
@@ -104,7 +107,7 @@ def test_arc_valid_type():
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
-            f"ARC contains Type not listed in {TEST_PATH}, amend the list if needed. "
+            f"ARC contains Type enum not listed in {TEST_PATH}, amend the list if needed. "
             f"Variables: {invalid}"
         )
 
@@ -113,12 +116,30 @@ def test_arc_valid_type():
 def test_arc_question_strip():
     """Check if Question has empty spaces at the end"""
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Question"])
-    condition = arc['Question'].eq(arc['Question'].str.strip())
+    condition = arc["Question"].eq(arc["Question"].str.strip())
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
             f"ARC contains Questions with unnecessary spaces at the beginning/end. "
             f"Variables: {invalid}"
+        )
+
+
+@pytest.mark.critical
+def test_arc_answer_options_exist():
+    """Answer options for exist where relevant (radio, checkbox, list, calc)"""
+    arc = pd.read_csv(
+        ARC_PATH, dtype="object", usecols=["Variable", "Type", "Answer Options"]
+    )
+    condition = (
+        arc["Type"].isin(["radio", "checkbox", "list", "calc"])
+        | arc["Answer Options"].isna()
+    )
+    if not condition.all():
+        invalid = arc.loc[~condition, "Variable"].tolist()
+        pytest.fail(
+            f"Answer Options should for all (radio, checkbox, list, calc) variables "
+            f"and none others. Variables: {invalid}"
         )
 
 
@@ -151,13 +172,14 @@ def is_valid_redcap_field_options(s: str) -> bool:
 
 
 @pytest.mark.critical
-def test_arc_type():
-    """Answer options for radio variables must be valid REDCap format"""
-    arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Type", "Answer Options"])
-    condition = (
-        ~arc["Type"].isin(["radio"])
-        | arc["Answer Options"].apply(lambda x: is_valid_redcap_field_options(x))
+def test_arc_answer_options_valid_redcap():
+    """Answer options for radio/checkbox variables must be valid REDCap format"""
+    arc = pd.read_csv(
+        ARC_PATH, dtype="object", usecols=["Variable", "Type", "Answer Options"]
     )
+    condition = ~arc["Type"].isin(["radio", "checkbox", "list"]) | arc[
+        "Answer Options"
+    ].apply(lambda x: is_valid_redcap_field_options(x))
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
@@ -166,16 +188,81 @@ def test_arc_type():
         )
 
 
+@pytest.mark.high
+def test_arc_valid_validation():
+    """Validation must be consistent with Type."""
+    arc = pd.read_csv(
+        ARC_PATH, dtype="object", usecols=["Variable", "Type", "Validation"]
+    )
+    condition = (
+        arc["Validation"].isin(VALIDATION_ENUM + ["units"]) | arc["Validation"].isna()
+    )
+    if not condition.all():
+        invalid = arc.loc[~condition, "Variable"].tolist()
+        pytest.fail(
+            f"ARC contains Validation enum not listed in {TEST_PATH}, amend the list if needed. "
+            f"Variables: {invalid}"
+        )
+    condition = (
+        (arc["Validation"].isin(VALIDATION_ENUM) & arc["Type"].eq(arc["Validation"]))
+        | arc["Validation"].isin(["units"])
+        | arc["Validation"].isna()
+    )
+    if not condition.all():
+        invalid = arc.loc[~condition, "Variable"].tolist()
+        pytest.fail(
+            f"Validation should either match Type when it exists, except for units. "
+            f"Variables: {invalid}"
+        )
+
+
+@pytest.mark.high
+def test_arc_minimum_maximum_correct_type():
+    """Minimum and maximum must only exist for specific Validation (number, datetime_dmy, date_dmy, time)."""
+    arc = pd.read_csv(
+        ARC_PATH,
+        dtype="object",
+        usecols=["Variable", "Validation", "Minimum", "Maximum"],
+    )
+    condition = arc["Validation"].isin(VALIDATION_ENUM) | (
+        arc["Minimum"].isna() & arc["Maximum"].isna()
+    )
+    if not condition.all():
+        invalid = arc.loc[~condition, "Variable"].tolist()
+        pytest.fail(
+            f"ARC should not contain Maximum or Minimum for non-numeric/date variables."
+            f"Variables: {invalid}"
+        )
+
+
+@pytest.mark.low
+def test_arc_minimum_maximum_exists():
+    """Minimum and maximum should exist when for specific Validation (number, datetime_dmy, date_dmy, time)."""
+    arc = pd.read_csv(
+        ARC_PATH,
+        dtype="object",
+        usecols=["Variable", "Validation", "Minimum", "Maximum"],
+    )
+    condition = arc["Validation"].isin(VALIDATION_ENUM) | (
+        arc["Minimum"].isna() & arc["Maximum"].isna()
+    )
+    if not condition.all():
+        invalid = arc.loc[~condition, "Variable"].tolist()
+        pytest.fail(
+            f"ARC has no Minimum or Maximum for numeric/date Variables: {invalid}"
+        )
+
+
 @pytest.mark.medium
 def test_arc_definition_exists():
     """
-    ARC definition must exist except for 'descriptive' Type
+    ARC definition should exist except for 'descriptive' Type
     or "units" Validation variables
     """
     arc = pd.read_csv(
         ARC_PATH,
         dtype="object",
-        usecols=["Variable", "Type", "Validation", "Definition"]
+        usecols=["Variable", "Type", "Validation", "Definition"],
     )
     condition = (
         arc["Type"].isin(["descriptive"])
@@ -192,7 +279,9 @@ def test_arc_valid_preset_values():
     """Preset columns column must be NaN or 1 (not 1.0)"""
     arc = pd.read_csv(ARC_PATH, dtype="object")
     preset_columns = [c for c in arc.columns if c.startswith("preset_")]
-    condition = arc[preset_columns].apply(lambda x: x.isin([1]) | x.isna(), axis=0).all(axis=1)
+    condition = (
+        arc[preset_columns].apply(lambda x: x.isin([1]) | x.isna(), axis=0).all(axis=1)
+    )
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(f"ARC has invalid preset values for Variables: {invalid}")

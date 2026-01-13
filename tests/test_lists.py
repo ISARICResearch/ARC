@@ -7,10 +7,7 @@ ARC_PATH = BASE_DIR / "ARC.csv"
 TEST_PATH = pathlib.Path(__file__)
 LIST_FILES = [x for x in pathlib.Path("Lists").rglob("*") if x.is_file()]
 
-REQUIRED_COLUMNS = [
-    "Selected",
-    "Value"
-]
+REQUIRED_COLUMNS = ["Selected", "Value"]
 
 
 @pytest.mark.critical
@@ -20,7 +17,7 @@ def test_arc_list_file_exist():
     relative_list_files = [x.relative_to(pathlib.Path("Lists")) for x in LIST_FILES]
     list_enum = [str(x.parent) + "_" + x.stem for x in relative_list_files]
 
-    condition = arc['List'].isin(list_enum) | arc['List'].isna()
+    condition = arc["List"].isin(list_enum) | arc["List"].isna()
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
@@ -41,9 +38,7 @@ def test_list_csv_loads(file):
             f"(file is not UTF-8 clean): {e}"
         )
     except Exception as e:
-        pytest.fail(
-            f"{str(file)} failed to load for an unexpected reason: {e}"
-        )
+        pytest.fail(f"{str(file)} failed to load for an unexpected reason: {e}")
 
 
 @pytest.mark.high
@@ -64,7 +59,9 @@ def test_list_valid_selected_values(file):
     condition = df["Selected"].isin([1]) | df["Selected"].isna()
     if not condition.all():
         invalid_index = df.loc[~condition].index.tolist()
-        pytest.fail(f"{str(file)} has invalid Selected value for index: {invalid_index}")
+        pytest.fail(
+            f"{str(file)} has invalid Selected value for index: {invalid_index}"
+        )
 
 
 @pytest.mark.medium
@@ -73,7 +70,9 @@ def test_list_valid_preset_values(file):
     """Preset columns column must be NaN or 1 (not 1.0)"""
     df = pd.read_csv(file, dtype="object")
     preset_columns = [c for c in df.columns if c.startswith("preset_")]
-    condition = df[preset_columns].apply(lambda x: x.isin([1]) | x.isna(), axis=0).all(axis=1)
+    condition = (
+        df[preset_columns].apply(lambda x: x.isin([1]) | x.isna(), axis=0).all(axis=1)
+    )
     if not condition.all():
         invalid_index = df.loc[~condition].index.tolist()
         pytest.fail(f"{str(file)} has invalid preset values for index: {invalid_index}")
