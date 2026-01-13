@@ -1,18 +1,3 @@
-[project]
-name = "ARC"
-version = "1.2.0"
-requires-python = ">=3.11"
-
-dependencies = [
-  "pandas",
-  "jsonschema",
-]
-
-[project.optional-dependencies]
-test = [
-  "pytest",
-]
-
 [tool.pytest.ini_options]
 markers = [
   "critical: critical severity test (must pass)",
