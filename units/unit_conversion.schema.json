@@ -1,6 +1,6 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "$comment": "v1.0. Conversion rule: to_value = multiplier * from_value + offset.",
+    "$comment": "v1.0",
     "title": "Unit conversion JSON file",
     "type": "array",
     "minItems": 1,
@@ -14,17 +14,44 @@
         ],
         "additionalProperties": false,
         "properties": {
-            "field_name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
-            "units_field_name": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+            "field_name": {
+                "description": "ARC variable",
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$",
+                "examples": ["demog_height", "labs_platelets"]
+            },
+            "units_field_name": {
+                "description": "Matching ARC variable for units (radio)",
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*$",
+                "examples": ["demog_height_units", "labs_platelets_units"]
+            },
             "to_unit": {
                 "type": "object",
+                "description": "Preferred unit for the ARC variable.",
                 "properties": {
-                    "unit_label": { "type": "string" },
-                    "unit_value": { "type": "integer" },
+                    "unit_label": {
+                        "type": "string",
+                        "description": "Preferred unit, with label from 'Answer Options' in units_field_name",
+                        "examples": ["cm", "10^9/L"]
+                    },
+                    "unit_value": {
+                        "type": "integer",
+                        "description": "Value matching the unit label from 'Answer Options' in units_field_name",
+                        "examples": [1, 1]
+                     },
                     "unit_field_name": {
                         "oneOf": [
-                            { "type": "null" },
-                            { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+                            {
+                                "type": "string",
+                                "pattern": "^[a-z][a-z0-9_]*$",
+                                "description": "Unit-specific ARC variable for the preferred unit",
+                                "examples": ["demog_height_cm", "labs_platelets_109l"]
+                            },
+                            {
+                                "type": "null",
+                                "description": "If unit-specific variable does not exist in ARC (e.g. age)"
+                            }
                         ]
                     }
                 },
@@ -39,13 +66,30 @@
                     "properties": {
                         "from_unit": {
                             "type": "object",
+                            "description": "An alternative unit for the ARC variable",
                             "properties": {
-                                "unit_label": { "type": "string" },
-                                "unit_value": { "type": "integer" },
+                                "unit_label": {
+                                    "type": "string",
+                                    "description": "Alternate unit, with label from 'Answer Options' in units_field_name",
+                                    "examples": ["in", "10^6/L"]
+                                },
+                                "unit_value": {
+                                    "type": "integer",
+                                    "description": "Value matching the unit label from 'Answer Options' in units_field_name",
+                                    "examples": [2, 2]
+                                },
                                 "unit_field_name": {
                                     "oneOf": [
-                                        { "type": "null" },
-                                        { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
+                                        {
+                                            "type": "string",
+                                            "pattern": "^[a-z][a-z0-9_]*$",
+                                            "description": "Unit-specific ARC variable for the alternate unit",
+                                            "examples": ["demog_height_in", "labs_platelets_106l"]
+                                        },
+                                        {
+                                            "type": "null",
+                                            "description": "If unit-specific variable does not exist in ARC (e.g. age)"
+                                        }
                                     ]
                                 }
                             },
@@ -56,35 +100,47 @@
                             "oneOf": [
                                 {
                                     "type": "object",
+                                    "description": "Conversion function: to_value = multiplier * from_value + offset.",
+                                    "properties": {
+                                        "type": {
+                                            "type": "string",
+                                            "description": "Most are linear. Add more as required",
+                                            "enum": ["linear", "linear_with_denominator"]
+                                        },
+                                        "multiplier": { "type": "number", "description": "Ideally to 12 significant figures." },
+                                        "offset": { "type": "number", "description": "Ideally to 12 significant figures." },
+                                        "denominator_field_name": {
+                                            "oneOf": [
+                                                {
+                                                    "type": "string",
+                                                    "pattern": "^[a-z][a-z0-9_]*$",
+                                                    "description": "Denominator variable, must be another unit-specific ARC variable"
+                                                },
+                                                { "type": "null" }
+                                            ]
+                                        },
+                                        "note": {
+                                            "type": "string",
+                                            "minLength": 1,
+                                            "description": "Human-readable formula for a sanity-check"
+                                        }
+                                    },
+                                    "required": ["type", "multiplier", "offset"],
+                                    "additionalProperties": false
+                                },
+                                {
+                                    "type": "object",
+                                    "description": "A note for units that cannot be converted (e.g. device-dependent)",
                                     "properties": {
                                         "type": { "type": "null" },
                                         "note": { "type": "string", "minLength": 1 }
                                     },
                                     "required": ["type", "note"],
                                     "additionalProperties": false
-                                },
-                                {
-                                    "type": "object",
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "enum": ["linear", "linear_with_denominator"]
-                                        },
-                                        "multiplier": { "type": "number" },
-                                        "offset": { "type": "number" },
-                                        "denominator_field_name": {
-                                            "oneOf": [
-                                                { "type": "null" },
-                                                { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" }
-                                            ]
-                                        },
-                                        "note": { "type": "string", "minLength": 1 }
-                                    },
-                                    "required": ["type", "multiplier", "offset"],
-                                    "additionalProperties": false
                                 }
                             ]
-                        },
+                        }
+                    },
                     "required": ["from_unit", "conversion"],
                     "additionalProperties": false
                 }
