@@ -1,11 +1,11 @@
-name: Run all tests
+name: Run tests marked as medium or low
 
 on:
   workflow_dispatch:
 
 jobs:
   build:
-    name: Tests
+    name: Tests (low/medium)
     runs-on: ubuntu-latest
 
     steps:
@@ -24,4 +24,4 @@ jobs:
 
       - name: run unit tests
         run: |
-          pytest -q
+          pytest -q -m "medium or low"
