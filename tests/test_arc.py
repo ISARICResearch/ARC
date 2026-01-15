@@ -113,14 +113,15 @@ def test_arc_valid_type():
 
 
 @pytest.mark.medium
-def test_arc_question_strip():
-    """Check if Question has empty spaces at the end"""
-    arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Question"])
-    condition = arc["Question"].eq(arc["Question"].str.strip())
+@pytest.mark.parametrize("column", REQUIRED_COLUMNS)
+def test_arc_strip(column):
+    """Check if each required column has empty spaces at the beginning/end"""
+    arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", column])
+    condition = arc[column].eq(arc[column].str.strip()) | arc[column].isna()
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
-            f"ARC contains Questions with unnecessary spaces at the beginning/end. "
+            f"ARC column {column} has unnecessary spaces at the beginning/end. "
             f"Variables: {invalid}"
         )
 

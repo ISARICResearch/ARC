@@ -13,6 +13,7 @@ def load_json(path: pathlib.Path):
         return json.load(f)
 
 
+@pytest.mark.critical
 def test_valid_schema():
     """
     Ensure the JSON schema is a valid Draft-07 schema.
@@ -25,6 +26,7 @@ def test_valid_schema():
         pytest.fail(f"Schema is not a valid Draft-07 schema:\n{e}")
 
 
+@pytest.mark.critical
 def test_valid_json_against_schema():
     """
     Ensure the conversion JSON file validates against the schema.
