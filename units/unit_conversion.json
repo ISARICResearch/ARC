@@ -120,7 +120,7 @@
             },
             {
                 "from_unit": { "unit_label": "Highest L/min", "unit_value": 3, "unit_field_name": "vital_fio2spo2_ltr" },
-                "conversion": { "type": null, "note": "Not converted, device-dependent" }
+                "conversion": { "type": "none", "note": "Not converted, device-dependent" }
             }
         ]
     },
@@ -306,7 +306,7 @@
     {
         "field_name": "labs_bilirubin",
         "units_field_name": "labs_bilirubin_units",
-        "to_unit": { "unit_label": "µmol/L", "unit_value": 1, "unit_field_name": "labs_bilirubin_ugl" },
+        "to_unit": { "unit_label": "µmol/L", "unit_value": 1, "unit_field_name": "labs_bilirubin_umoll" },
         "unit_conversions": [
             {
                 "from_unit": { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_bilirubin_mgl" },

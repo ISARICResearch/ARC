@@ -132,7 +132,7 @@
                                     "type": "object",
                                     "description": "A note for units that cannot be converted (e.g. device-dependent)",
                                     "properties": {
-                                        "type": { "type": "null" },
+                                        "type": { "type": "string", "enum": ["none"] },
                                         "note": { "type": "string", "minLength": 1 }
                                     },
                                     "required": ["type", "note"],
