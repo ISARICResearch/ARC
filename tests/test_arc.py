@@ -88,6 +88,11 @@ def test_arc_valid_form():
         )
 
 
+@pytest.mark.medium
+def test_arc_valid_section():
+    """TODO: Section should be a 1-1 match for the Variable prefix."""
+
+
 @pytest.mark.critical
 def test_arc_valid_variable_regex():
     """Check all variable names match the naming convention regex."""
@@ -238,26 +243,44 @@ def test_arc_minimum_maximum_correct_type():
 
 @pytest.mark.low
 def test_arc_minimum_maximum_exists():
-    """Minimum and maximum should exist when for specific Validation (number, datetime_dmy, date_dmy, time)."""
+    """Minimum and maximum must exist for numbers."""
     arc = pd.read_csv(
         ARC_PATH,
         dtype="object",
         usecols=["Variable", "Validation", "Minimum", "Maximum"],
     )
-    condition = arc["Validation"].isin(VALIDATION_ENUM) | (
+    condition = ~arc["Validation"].isin(["number"]) | (
         arc["Minimum"].isna() & arc["Maximum"].isna()
     )
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
-            f"ARC has no Minimum or Maximum for numeric/date Variables: {invalid}"
+            f"ARC has no Minimum or Maximum for number Variables: {invalid}"
+        )
+
+
+@pytest.mark.low
+def test_arc_minimum_maximum_exists_dates():
+    """Maximum should exist for dates/times."""
+    arc = pd.read_csv(
+        ARC_PATH,
+        dtype="object",
+        usecols=["Variable", "Validation", "Minimum", "Maximum"],
+    )
+    condition = ~arc["Validation"].isin(["date_dmy", "datetime_dmy", "time"]) | (
+        arc["Maximum"].isna()
+    )
+    if not condition.all():
+        invalid = arc.loc[~condition, "Variable"].tolist()
+        pytest.fail(
+            f"ARC has no Maximum for date Variables: {invalid}"
         )
 
 
 @pytest.mark.medium
 def test_arc_definition_exists():
     """
-    ARC definition should exist except for 'descriptive' Type
+    ARC definition should exist except for "descriptive" Type
     or "units" Validation variables
     """
     arc = pd.read_csv(
@@ -281,7 +304,7 @@ def test_arc_valid_preset_values():
     arc = pd.read_csv(ARC_PATH, dtype="object")
     preset_columns = [c for c in arc.columns if c.startswith("preset_")]
     condition = (
-        arc[preset_columns].apply(lambda x: x.isin([1]) | x.isna(), axis=0).all(axis=1)
+        arc[preset_columns].apply(lambda x: x.isin(["1"]) | x.isna(), axis=0).all(axis=1)
     )
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()

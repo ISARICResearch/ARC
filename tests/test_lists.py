@@ -8,11 +8,16 @@ TEST_PATH = pathlib.Path(__file__)
 LIST_FILES = [x for x in pathlib.Path("Lists").rglob("*") if x.is_file()]
 
 REQUIRED_COLUMNS = ["Selected", "Value"]
+LIST_FILES_WITH_ARCHETYPE_PRESETS = [
+    pathlib.Path("Lists/outcome/Diseases.csv"),
+    pathlib.Path("Lists/inclusion/Diseases.csv"),
+    pathlib.Path("Lists/pathogens/All.csv")
+]
 
 
 @pytest.mark.critical
-def test_arc_list_file_exist():
-    """Check if Question has empty spaces at the end"""
+def test_arc_list_missing():
+    """Check if an ARC list entry refers to an existing Lists file"""
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "List"])
     relative_list_files = [x.relative_to(pathlib.Path("Lists")) for x in LIST_FILES]
     list_enum = [str(x.parent) + "_" + x.stem for x in relative_list_files]
@@ -23,6 +28,21 @@ def test_arc_list_file_exist():
         pytest.fail(
             f"ARC contains List with no matching CSV file in Lists/. "
             f"Variables: {invalid}"
+        )
+
+
+@pytest.mark.high
+def test_list_file_used_in_arc():
+    """Check if a Lists file is used in ARC. If not, should be removed"""
+    arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "List"])
+    relative_list_files = [x.relative_to(pathlib.Path("Lists")) for x in LIST_FILES]
+    list_enum = [str(x.parent) + "_" + x.stem for x in relative_list_files]
+
+    unused_list = [x for x in list_enum if x not in arc["List"].unique().tolist()]
+    if unused_list:
+        pytest.fail(
+            f"ARC contains unused Lists CSV file. "
+            f"Variables: {unused_list}"
         )
 
 
@@ -53,11 +73,25 @@ def test_list_required_columns_exist(file):
 
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES)
+def test_arc_strip(file):
+    """Check if each required column has empty spaces at the beginning/end"""
+    df = pd.read_csv(file, dtype="object")
+    condition = df.eq(df.apply(lambda x: x.str.strip())) | df.isna()
+    if not condition.all().all():
+        invalid_index = df.loc[~condition.all(axis=1)].index.tolist()
+        pytest.fail(
+            f"{str(file)} has unnecessary spaces at the beginning/end "
+            f"for at least one column, index: {invalid_index}"
+        )
+
+
+@pytest.mark.medium
+@pytest.mark.parametrize("file", LIST_FILES)
 def test_list_valid_selected_values(file):
     """Selected column must be NaN or 1 (not 1.0)"""
     df = pd.read_csv(file, dtype="object", usecols=["Selected"])
-    condition = df["Selected"].isin([1]) | df["Selected"].isna()
-    if not condition.all():
+    condition = df["Selected"].isin(["1"]) | df["Selected"].isna()
+    if not condition.all().all():
         invalid_index = df.loc[~condition].index.tolist()
         pytest.fail(
             f"{str(file)} has invalid Selected value for index: {invalid_index}"
@@ -71,16 +105,16 @@ def test_list_valid_preset_values(file):
     df = pd.read_csv(file, dtype="object")
     preset_columns = [c for c in df.columns if c.startswith("preset_")]
     condition = (
-        df[preset_columns].apply(lambda x: x.isin([1]) | x.isna(), axis=0).all(axis=1)
+        df[preset_columns].apply(lambda x: x.isin(["1"]) | x.isna(), axis=0).all(axis=1)
     )
     if not condition.all():
         invalid_index = df.loc[~condition].index.tolist()
         pytest.fail(f"{str(file)} has invalid preset values for index: {invalid_index}")
 
 
-@pytest.mark.high
+@pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES)
-def test_list_matches_arc_presets(file):
+def test_too_many_presets(file):
     """Check if the Lists file has the same presets as ARC"""
     arc = pd.read_csv(ARC_PATH, nrows=0, dtype="object")
     arc_header = list(arc.columns)
@@ -93,4 +127,22 @@ def test_list_matches_arc_presets(file):
     if presets_not_in_arc:
         pytest.fail(
             f"{str(file)} contains preset columns not in ARC: {presets_not_in_arc}"
+        )
+
+
+@pytest.mark.high
+@pytest.mark.parametrize("file", LIST_FILES_WITH_ARCHETYPE_PRESETS)
+def test_missing_presets(file):
+    """Check if the Lists file has ARC presets for specific Lists"""
+    arc = pd.read_csv(ARC_PATH, nrows=0, dtype="object")
+    arc_header = list(arc.columns)
+    arc_presets = [c for c in arc_header if c.startswith("preset_ARChetype")]
+
+    header = pd.read_csv(file, nrows=0).columns
+    presets = [c for c in header if c.startswith("preset_ARChetype")]
+
+    arc_presets_not_in_list = [x for x in arc_presets if x not in presets]
+    if arc_presets_not_in_list:
+        pytest.fail(
+            f"{str(file)} missing presets in ARC: {arc_presets_not_in_list}"
         )
