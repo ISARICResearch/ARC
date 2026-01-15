@@ -298,6 +298,21 @@ def test_arc_definition_exists():
         pytest.fail(f"ARC has no Definition for Variables: {invalid}")
 
 
+@pytest.mark.high
+def test_arc_type_consistent_with_list():
+    """
+    List variable non-empty only for (user_list, multi_list, list)
+    """
+    arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Type", "List"])
+    condition = (
+        (arc["Type"].isin(["user_list", "multi_list", "list"]) & arc["List"].notna())
+        | arc["List"].isna()
+    )
+    if not condition.all():
+        invalid = arc.loc[~condition, "Variable"].tolist()
+        pytest.fail(f"ARC List missing or falsely included for Variables: {invalid}")
+
+
 @pytest.mark.medium
 def test_arc_valid_preset_values():
     """Preset columns column must be NaN or 1 (not 1.0)"""
