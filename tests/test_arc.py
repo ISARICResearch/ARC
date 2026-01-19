@@ -47,6 +47,7 @@ FORM_ENUM = [
 TYPE_ENUM = [
     "radio",
     "checkbox",
+    "dropdown",
     "list",
     "user_list",
     "multi_list",
@@ -133,12 +134,12 @@ def test_arc_strip(column):
 
 @pytest.mark.critical
 def test_arc_answer_options_exist():
-    """Answer options for exist where relevant (radio, checkbox, list, calc)"""
+    """Answer options for exist where relevant (radio, checkbox, list, calc, dropdown)"""
     arc = pd.read_csv(
         ARC_PATH, dtype="object", usecols=["Variable", "Type", "Answer Options"]
     )
     condition = (
-        arc["Type"].isin(["radio", "checkbox", "list", "calc"])
+        arc["Type"].isin(["radio", "checkbox", "list", "calc", "dropdown"])
         | arc["Answer Options"].isna()
     )
     if not condition.all():
@@ -183,7 +184,7 @@ def test_arc_answer_options_valid_redcap():
     arc = pd.read_csv(
         ARC_PATH, dtype="object", usecols=["Variable", "Type", "Answer Options"]
     )
-    condition = ~arc["Type"].isin(["radio", "checkbox", "list"]) | arc[
+    condition = ~arc["Type"].isin(["radio", "checkbox", "list", "dropdown"]) | arc[
         "Answer Options"
     ].apply(lambda x: is_valid_redcap_field_options(x))
     if not condition.all():
