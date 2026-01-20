@@ -132,6 +132,20 @@ def test_arc_strip(column):
         )
 
 
+@pytest.mark.high
+@pytest.mark.parametrize("column", REQUIRED_COLUMNS)
+def test_arc_newline(column):
+    """Check if each required column has a newline character in the string"""
+    arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", column])
+    condition = ~(arc[column].str.contains('\n') & arc[column].isna())
+    if not condition.all():
+        invalid = arc.loc[~condition, "Variable"].tolist()
+        pytest.fail(
+            f"ARC column {column} has newline characters (\n). "
+            f"Variables: {invalid}"
+        )
+
+
 @pytest.mark.critical
 def test_arc_answer_options_exist():
     """Answer options for exist where relevant (radio, checkbox, list, calc, dropdown)"""
