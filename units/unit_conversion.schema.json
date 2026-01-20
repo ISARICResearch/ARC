@@ -9,13 +9,14 @@
         "required": [
             "field_name",
             "units_field_name",
-            "to_unit",
-            "unit_conversions"
+            "units",
+            "preferred_unit",
+            "conversion_rules"
         ],
         "additionalProperties": false,
         "properties": {
             "field_name": {
-                "description": "ARC variable",
+                "description": "ARC variable containing numeric value",
                 "type": "string",
                 "pattern": "^[a-z][a-z0-9_]*$",
                 "examples": ["demog_height", "labs_platelets"]
@@ -26,123 +27,143 @@
                 "pattern": "^[a-z][a-z0-9_]*$",
                 "examples": ["demog_height_units", "labs_platelets_units"]
             },
-            "to_unit": {
-                "type": "object",
-                "description": "Preferred unit for the ARC variable.",
-                "properties": {
-                    "unit_label": {
-                        "type": "string",
-                        "description": "Preferred unit, with label from 'Answer Options' in units_field_name",
-                        "examples": ["cm", "10^9/L"]
-                    },
-                    "unit_value": {
-                        "type": "integer",
-                        "description": "Value matching the unit label from 'Answer Options' in units_field_name",
-                        "examples": [1, 1]
-                     },
-                    "unit_field_name": {
-                        "oneOf": [
-                            {
-                                "type": "string",
-                                "pattern": "^[a-z][a-z0-9_]*$",
-                                "description": "Unit-specific ARC variable for the preferred unit",
-                                "examples": ["demog_height_cm", "labs_platelets_109l"]
-                            },
-                            {
-                                "type": "null",
-                                "description": "If unit-specific variable does not exist in ARC (e.g. age)"
-                            }
-                        ]
-                    }
-                },
-                "required": ["unit_label", "unit_value", "unit_field_name"],
-                "additionalProperties": false
-            },
-            "unit_conversions": {
+            "units": {
                 "type": "array",
-                "minItems": 1,
+                "description": "Unit label, value and field name from ARC",
+                "minItems": 2,
                 "items": {
                     "type": "object",
+                    "description": "Preferred unit for the ARC variable.",
                     "properties": {
-                        "from_unit": {
-                            "type": "object",
-                            "description": "An alternative unit for the ARC variable",
-                            "properties": {
-                                "unit_label": {
-                                    "type": "string",
-                                    "description": "Alternate unit, with label from 'Answer Options' in units_field_name",
-                                    "examples": ["in", "10^6/L"]
-                                },
-                                "unit_value": {
-                                    "type": "integer",
-                                    "description": "Value matching the unit label from 'Answer Options' in units_field_name",
-                                    "examples": [2, 2]
-                                },
-                                "unit_field_name": {
-                                    "oneOf": [
-                                        {
-                                            "type": "string",
-                                            "pattern": "^[a-z][a-z0-9_]*$",
-                                            "description": "Unit-specific ARC variable for the alternate unit",
-                                            "examples": ["demog_height_in", "labs_platelets_106l"]
-                                        },
-                                        {
-                                            "type": "null",
-                                            "description": "If unit-specific variable does not exist in ARC (e.g. age)"
-                                        }
-                                    ]
-                                }
-                            },
-                            "required": ["unit_label", "unit_value", "unit_field_name"],
-                            "additionalProperties": false
+                        "unit_label": {
+                            "type": "string",
+                            "description": "Unit label, from 'Answer Options' in ARC units_field_name",
+                            "examples": ["cm", "in", "10^9/L", "10^6/L"]
                         },
-                        "conversion": {
+                        "unit_value": {
+                            "type": "integer",
+                            "description": "Unit value matching the unit label from 'Answer Options' in units_field_name",
+                            "examples": [1, 2, 1, 2]
+                         },
+                        "unit_field_name": {
                             "oneOf": [
                                 {
-                                    "type": "object",
-                                    "description": "Conversion function: to_value = multiplier * from_value + offset.",
-                                    "properties": {
-                                        "type": {
-                                            "type": "string",
-                                            "description": "Most are linear. Add more as required",
-                                            "enum": ["linear", "linear_with_denominator"]
-                                        },
-                                        "multiplier": { "type": "number", "description": "Ideally to 12 significant figures." },
-                                        "offset": { "type": "number", "description": "Ideally to 12 significant figures." },
-                                        "denominator_field_name": {
-                                            "oneOf": [
-                                                {
-                                                    "type": "string",
-                                                    "pattern": "^[a-z][a-z0-9_]*$",
-                                                    "description": "Denominator variable, must be another unit-specific ARC variable"
-                                                },
-                                                { "type": "null" }
-                                            ]
-                                        },
-                                        "note": {
-                                            "type": "string",
-                                            "minLength": 1,
-                                            "description": "Human-readable formula for a sanity-check"
-                                        }
-                                    },
-                                    "required": ["type", "multiplier", "offset"],
-                                    "additionalProperties": false
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_]*$",
+                                    "description": "Unit-specific ARC variable for a unit",
+                                    "examples": [
+                                        "demog_height_cm",
+                                        "demog_height_in",
+                                        "labs_platelets_109l",
+                                        "labs_platelets_106l"
+                                    ]
                                 },
                                 {
-                                    "type": "object",
-                                    "description": "A note for units that cannot be converted (e.g. device-dependent)",
-                                    "properties": {
-                                        "type": { "type": "string", "enum": ["none"] },
-                                        "note": { "type": "string", "minLength": 1 }
-                                    },
-                                    "required": ["type", "note"],
-                                    "additionalProperties": false
+                                    "type": "null",
+                                    "description": "If unit-specific variable does not exist in ARC (e.g. age)"
                                 }
                             ]
                         }
                     },
-                    "required": ["from_unit", "conversion"],
+                    "required": ["unit_label", "unit_value", "unit_field_name"],
                     "additionalProperties": false
+                }
+            },
+            "preferred_unit": {
+                "type": ["string", "null"],
+                "desription": "Preferred unit label for unit conversions. Must match a unit label in units",
+                "examples": ["cm", "10^9/L"]
+            },
+            "conversion_rules": {
+                "type": "array",
+                "minItems": 1,
+                "description": "Conversion rules, add more types as required.",
+                "items": {
+                    "oneOf": [
+                        {
+                            "type": "object",
+                            "description": "Conversion function: to_value = multiplier * from_value + offset.",
+                            "properties": {
+                                "from_unit": {
+                                    "type": "string",
+                                    "description": "Unit label for the numeric value that will be converted",
+                                    "examples": ["in", "10^6/L"]
+                                },
+                                "to_unit": {
+                                    "type": "string",
+                                    "description": "Unit label for the converted numeric value",
+                                    "examples": ["cm", "10^9/L"]
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Most are linear. Add more as required",
+                                    "enum": ["linear"]
+                                },
+                                "multiplier": { "type": "number", "description": "Ideally to 12 significant figures." },
+                                "offset": { "type": "number", "description": "Ideally to 12 significant figures." },
+                                "note": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "description": "Human-readable formula for a sanity-check"
+                                }
+                            },
+                            "required": ["from_unit", "to_unit", "type", "multiplier", "offset"],
+                            "additionalProperties": false
+                        },
+                        {
+                            "type": "object",
+                            "description": "Conversion function: to_value = multiplier * from_value / denominator_value + offset.",
+                            "properties": {
+                                "from_unit": {
+                                    "type": "string",
+                                    "description": "Unit label for the numeric value that will be converted",
+                                    "examples": ["in", "10^6/L"]
+                                },
+                                "to_unit": {
+                                    "type": "string",
+                                    "description": "Unit label for the converted numeric value",
+                                    "examples": ["cm", "10^9/L"]
+                                },
+                                "type": {
+                                    "type": "string",
+                                    "description": "Linear conversion with denominator from another variable.",
+                                    "enum": ["linear_with_denominator"]
+                                },
+                                "multiplier": { "type": "number", "description": "Ideally to 12 significant figures." },
+                                "offset": { "type": "number", "description": "Ideally to 12 significant figures." },
+                                "denominator_field_name": {
+                                    "type": "string",
+                                    "pattern": "^[a-z][a-z0-9_]*$",
+                                    "description": "Denominator variable, must be another unit-specific ARC variable"
+                                },
+                                "note": {
+                                    "type": "string",
+                                    "minLength": 1,
+                                    "description": "Human-readable formula for a sanity-check"
+                                }
+                            },
+                            "required": ["from_unit", "to_unit", "type", "multiplier", "offset", "denominator_field_name"],
+                            "additionalProperties": false
+                        },
+                        {
+                            "type": "object",
+                            "description": "A note for units that cannot be converted (e.g. device-dependent)",
+                            "properties": {
+                                "from_unit": {
+                                    "type": "string",
+                                    "description": "Unit label for the numeric value that will be converted"
+                                },
+                                "to_unit": {
+                                    "type": "string",
+                                    "description": "Unit label for the converted numeric value"
+                                },
+                                "type": { "type": "string", "enum": ["none"] },
+                                "note": { "type": "string", "minLength": 1 }
+                            },
+                            "required": ["from_unit", "to_unit", "type", "note"],
+                            "additionalProperties": false
+                        }
+                    ]
                 }
             }
         }
