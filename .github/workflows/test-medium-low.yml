@@ -1,0 +1,27 @@
+name: Run tests marked as medium or low
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Tests (low/medium)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: install
+        run: |
+          python --version
+          python -m pip install --upgrade pip
+          pip install pandas pytest jsonschema
+
+      - name: run unit tests
+        run: |
+          pytest -q -m "medium or low"

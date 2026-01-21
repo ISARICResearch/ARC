@@ -1,0 +1,9 @@
+venv/
+.venv/
+__pycache__
+.coverage
+.coverage.*
+converage.xml
+.pytest_cache/
+.DS_Store
+**/.DS_Store
