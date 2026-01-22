@@ -445,6 +445,21 @@ class UnitConverter:
             return dataframe
 
 
+def convert_units(
+    df: pd.DataFrame,
+    unit_conversion_path: Union[str, Path],
+    unit_conversion_schema_path: Union[str, Path],
+    is_unit_labels: Union[bool, Dict[str, bool]] = True,
+    inplace: bool = False,
+):
+    cr = ConversionRegistry().load_from_json(
+        path=unit_conversion_path,
+        schema_path=unit_conversion_schema_path,
+    )
+    uc = UnitConverter(conversion_registry=cr, is_unit_labels=is_unit_labels)
+    return uc.convert_dataframe(dataframe=df, inplace=inplace)
+
+
 if __name__ == "__main__":
     cr = ConversionRegistry().load_from_json(
         path="units/unit_conversion.json",
@@ -461,3 +476,11 @@ if __name__ == "__main__":
         values=df["demog_height"], from_units=df["demog_height_units"], to_unit="cm"
     )
     uc.convert_dataframe(dataframe=df, inplace=False)
+
+    converted_df = convert_units(
+        df=df,
+        unit_conversion_path="units/unit_conversion.json",
+        unit_conversion_schema_path="units/unit_conversion.schema.json",
+        is_unit_labels=True,
+        inplace=False,
+    )
