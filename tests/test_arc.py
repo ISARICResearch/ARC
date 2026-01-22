@@ -137,12 +137,11 @@ def test_arc_strip(column):
 def test_arc_newline(column):
     """Check if each required column has a newline character in the string"""
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", column])
-    condition = ~(arc[column].str.contains('\n') & arc[column].isna())
+    condition = ~(arc[column].str.contains("\n") & arc[column].isna())
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
-            f"ARC column {column} has newline characters (\n). "
-            f"Variables: {invalid}"
+            f"ARC column {column} has newline characters (\n). " f"Variables: {invalid}"
         )
 
 
@@ -269,9 +268,7 @@ def test_arc_minimum_maximum_exists():
     )
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
-        pytest.fail(
-            f"ARC has no Minimum or Maximum for number Variables: {invalid}"
-        )
+        pytest.fail(f"ARC has no Minimum or Maximum for number Variables: {invalid}")
 
 
 @pytest.mark.low
@@ -287,9 +284,7 @@ def test_arc_minimum_maximum_exists_dates():
     )
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
-        pytest.fail(
-            f"ARC has no Maximum for date Variables: {invalid}"
-        )
+        pytest.fail(f"ARC has no Maximum for date Variables: {invalid}")
 
 
 @pytest.mark.medium
@@ -320,9 +315,8 @@ def test_arc_type_consistent_with_list():
     """
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Type", "List"])
     condition = (
-        (arc["Type"].isin(["user_list", "multi_list", "list"]) & arc["List"].notna())
-        | arc["List"].isna()
-    )
+        arc["Type"].isin(["user_list", "multi_list", "list"]) & arc["List"].notna()
+    ) | arc["List"].isna()
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(f"ARC List missing or falsely included for Variables: {invalid}")
@@ -334,7 +328,9 @@ def test_arc_valid_preset_values():
     arc = pd.read_csv(ARC_PATH, dtype="object")
     preset_columns = [c for c in arc.columns if c.startswith("preset_")]
     condition = (
-        arc[preset_columns].apply(lambda x: x.isin(["1"]) | x.isna(), axis=0).all(axis=1)
+        arc[preset_columns]
+        .apply(lambda x: x.isin(["1"]) | x.isna(), axis=0)
+        .all(axis=1)
     )
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
