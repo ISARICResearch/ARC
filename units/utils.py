@@ -160,6 +160,7 @@ class ConversionRule:
 
 @dataclass
 class ConversionEntry:
+    """Contains all conversion rules for a single ARC variable."""
     field_name: str
     units_field_name: str
     units: BaseUnitCollection
@@ -176,6 +177,7 @@ class ConversionEntry:
         )
 
     def __post_init__(self):
+        """Create dict for easier lookup in `self.get_rule`."""
         self._conversion_rule_registry = {
             (rule.from_unit.unit_label, rule.to_unit.unit_label): rule
             for rule in self.conversion_rules
@@ -216,12 +218,14 @@ class ConversionEntry:
 
 @dataclass
 class ConversionRegistry:
+    """Registry of all conversions, indexed by the ARC field name."""
     conversion_entries: Dict[str, ConversionEntry] = field(default_factory=dict)
     verbose: bool = False
 
     def load_and_validate_json(
         self, path: Union[str, Path], schema_path: Union[str, Path]
     ):
+        """Loads JSON and validates against schema as defensive measure"""
         with Path(schema_path).open("r", encoding="utf-8") as f:
             schema = json.load(f)
 
@@ -293,6 +297,7 @@ class ConversionRegistry:
 
 @dataclass
 class UnitConverter:
+    """Uses the registry class to perform unit conversions."""
     conversion_registry: ConversionRegistry
     is_unit_labels: Union[bool, Dict[str, bool]] = True
     verbose: bool = False
@@ -323,6 +328,10 @@ class UnitConverter:
         to_unit: Union[str, int],
         denominator_value: Optional[Numeric] = None,
     ) -> Dict[str, Union[str, Numeric]]:
+        """
+        Convert scalar inputs. `from_unit` and `to_unit` should be labels if
+        self._is_unit_labels[field_name] is True.
+        """
         rule = self.conversion_registry.get_rule(
             field_name=field_name,
             from_unit=from_unit,
@@ -381,6 +390,8 @@ class UnitConverter:
         to_unit: Union[str, int],
         denominator_values: Optional[Dict[str, pd.Series]] = None,
     ):
+        """Convert an entire pandas Series to `to_unit` where possible.
+        If conversion is not possible, the original unit is kept."""
         field_name = values.name
 
         if not values.index.equals(from_units.index):
@@ -445,6 +456,12 @@ class UnitConverter:
         }
 
     def convert_dataframe(self, dataframe: pd.DataFrame, inplace: bool = False):
+        """
+        Convert a dataframe using the conversion registry.
+        Identifies variables in the dataframe to convert from the conversion registry,
+        the corresponding radio units variable must also exist in the dataframe.
+        Will only convert variables that exist in the registry (via the JSON)
+        """
         if not inplace:
             dataframe = dataframe.copy()
 
@@ -485,6 +502,7 @@ def convert_units(
     is_unit_labels: Union[bool, Dict[str, bool]] = True,
     inplace: bool = False,
 ):
+    """Wrapper for converting a full dataframe."""
     cr = ConversionRegistry().load_from_json(
         path=unit_conversion_path,
         schema_path=unit_conversion_schema_path,
