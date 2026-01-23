@@ -141,7 +141,7 @@ def test_arc_newline(column):
     if not condition.all():
         invalid = arc.loc[~condition, "Variable"].tolist()
         pytest.fail(
-            f"ARC column {column} has newline characters (\n). " f"Variables: {invalid}"
+            f"ARC column {column} has newline characters (\n). Variables: {invalid}"
         )
 
 
@@ -238,7 +238,10 @@ def test_arc_valid_validation():
 
 @pytest.mark.high
 def test_arc_minimum_maximum_correct_type():
-    """Minimum and maximum must only exist for specific Validation (number, datetime_dmy, date_dmy, time)."""
+    """
+    Minimum and maximum must only exist for specific Validation
+    (number, datetime_dmy, date_dmy, time).
+    """
     arc = pd.read_csv(
         ARC_PATH,
         dtype="object",
