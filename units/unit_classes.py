@@ -27,6 +27,10 @@ class SchemaValidationError(Exception):
 
 @dataclass
 class BaseUnit:
+    """
+    Defined in unit conversion JSON file, but from ARC. Label and value pair from
+    ARC units radio variables, field name from unit-specific numeric variable.
+    """
     unit_label: str
     unit_value: Optional[int]
     unit_field_name: Optional[str]
@@ -34,9 +38,16 @@ class BaseUnit:
 
 @dataclass
 class BaseUnitCollection:
+    """
+    List of units objects, i.e. for the same variable.
+    """
     units: List[BaseUnit]
 
     def __post_init__(self):
+        """
+        Raises an exception if any of the unit attributes are not unique
+        across the list of unit objects.
+        """
         attr_lists = {
             "unit_label": [unit.unit_label for unit in self.units],
             "unit_values": [
@@ -55,10 +66,28 @@ class BaseUnitCollection:
                 )
 
     def get_unit_from_unit_label(self, unit_label: str) -> BaseUnit:
-        return [unit for unit in self.units if unit.unit_label == unit_label][0]
+        """
+        Returns unit for matching unit label, __post_init__ enforces list length of 1.
+        Raises exception if no match.
+        """
+        matching_units = [unit for unit in self.units if unit.unit_label == unit_label]
+        if not matching_units:
+            raise ValidationError(
+                f"Units {self.units} does not contain unit label {unit_label}"
+            )
+        return matching_units[0]
 
     def get_unit_from_unit_value(self, unit_value: str) -> BaseUnit:
-        return [unit for unit in self.units if unit.unit_value == unit_value][0]
+        """
+        Returns unit for matching value, __post_init__ enforces list length of 1.
+        Raises exception if no match.
+        """
+        matching_units = [unit for unit in self.units if unit.unit_value == unit_value]
+        if not matching_units:
+            raise ValidationError(
+                f"Units {self.units} does not contain unit value {unit_value}"
+            )
+        return matching_units[0]
 
 
 @dataclass
@@ -74,6 +103,10 @@ class LinearConversion:
         value: Union[Numeric, pd.Series],
         denominator_value: Union[Numeric, pd.Series],
     ):
+        """
+        Used if the conversion depends on the numeric value for another variable as
+        a denominator. Returns NaN if the denominator is missing or zero-valued.
+        """
         if isinstance(denominator_value, Numeric) and (
             np.isnan(denominator_value) or denominator_value == 0.0
         ):
@@ -129,7 +162,7 @@ class ConversionRule:
 class ConversionEntry:
     field_name: str
     units_field_name: str
-    units: List[BaseUnit]
+    units: BaseUnitCollection
     conversion_rules: List[ConversionRule]
     preferred_unit: BaseUnit
 
