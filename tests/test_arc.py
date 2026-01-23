@@ -82,7 +82,7 @@ def test_arc_valid_form():
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Form"])
     condition = arc["Form"].isin(FORM_ENUM)
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Form"]))
         pytest.fail(
             f"ARC contains Form enum not listed in {TEST_PATH}, amend the list if needed. "
             f"Variables: {invalid}"
@@ -101,7 +101,7 @@ def test_arc_valid_variable_regex():
     variable_regex = re.compile(r"^[a-z][a-z0-9_]*$")
     non_match = arc["Variable"].apply(lambda x: not variable_regex.match(x))
     if non_match.any():
-        invalid = arc.loc[non_match].tolist()
+        invalid = arc.loc[non_match, "Variable"].tolist()
         pytest.fail(f"Variables do not following naming convention regex: {invalid}")
 
 
@@ -111,7 +111,7 @@ def test_arc_valid_type():
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Type"])
     condition = arc["Type"].isin(TYPE_ENUM)
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Type"]))
         pytest.fail(
             f"ARC contains Type enum not listed in {TEST_PATH}, amend the list if needed. "
             f"Variables: {invalid}"
@@ -125,7 +125,7 @@ def test_arc_strip(column):
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", column])
     condition = arc[column].eq(arc[column].str.strip()) | arc[column].isna()
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, column]))
         pytest.fail(
             f"ARC column {column} has unnecessary spaces at the beginning/end. "
             f"Variables: {invalid}"
@@ -139,7 +139,7 @@ def test_arc_newline(column):
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", column])
     condition = ~(arc[column].str.contains("\n") & arc[column].isna())
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, column]))
         pytest.fail(
             f"ARC column {column} has newline characters (\n). Variables: {invalid}"
         )
@@ -156,9 +156,9 @@ def test_arc_answer_options_exist():
         | arc["Answer Options"].isna()
     )
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = arc.loc[~condition].set_index("Variable").to_dict(orient="index")
         pytest.fail(
-            f"Answer Options should for all (radio, checkbox, list, calc) variables "
+            "Answer Options should for all (radio, checkbox, list, calc) variables "
             f"and none others. Variables: {invalid}"
         )
 
@@ -201,9 +201,9 @@ def test_arc_answer_options_valid_redcap():
         "Answer Options"
     ].apply(lambda x: is_valid_redcap_field_options(x))
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = arc.loc[~condition].set_index("Variable").to_dict(orient="index")
         pytest.fail(
-            f"ARC contains Answer Options that are not valid REDCap-format. "
+            "ARC contains Answer Options that are not valid REDCap-format. "
             f"Variables: {invalid}"
         )
 
@@ -218,9 +218,9 @@ def test_arc_valid_validation():
         arc["Validation"].isin(VALIDATION_ENUM + ["units"]) | arc["Validation"].isna()
     )
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Validation"]))
         pytest.fail(
-            f"ARC contains Validation enum not listed in {TEST_PATH}, amend the list if needed. "
+            "ARC contains Validation enum not listed in {TEST_PATH}, amend the list if needed. "
             f"Variables: {invalid}"
         )
     condition = (
@@ -229,9 +229,9 @@ def test_arc_valid_validation():
         | arc["Validation"].isna()
     )
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = arc.loc[~condition].set_index("Variable").to_dict(orient="index")
         pytest.fail(
-            f"Validation should either match Type when it exists, except for units. "
+            "Validation should either match Type when it exists, except for units. "
             f"Variables: {invalid}"
         )
 
@@ -251,9 +251,9 @@ def test_arc_minimum_maximum_correct_type():
         arc["Minimum"].isna() & arc["Maximum"].isna()
     )
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = arc.loc[~condition].set_index("Variable").to_dict(orient="index")
         pytest.fail(
-            f"ARC should not contain Maximum or Minimum for non-numeric/date variables."
+            "ARC should not contain Maximum or Minimum for non-numeric/date variables."
             f"Variables: {invalid}"
         )
 
@@ -267,10 +267,10 @@ def test_arc_minimum_maximum_exists():
         usecols=["Variable", "Validation", "Minimum", "Maximum"],
     )
     condition = ~arc["Validation"].isin(["number"]) | (
-        arc["Minimum"].isna() & arc["Maximum"].isna()
+        arc["Minimum"].notna() & arc["Maximum"].notna()
     )
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = arc.loc[~condition].set_index("Variable").to_dict(orient="index")
         pytest.fail(f"ARC has no Minimum or Maximum for number Variables: {invalid}")
 
 
@@ -280,13 +280,13 @@ def test_arc_minimum_maximum_exists_dates():
     arc = pd.read_csv(
         ARC_PATH,
         dtype="object",
-        usecols=["Variable", "Validation", "Minimum", "Maximum"],
+        usecols=["Variable", "Validation", "Maximum"],
     )
     condition = ~arc["Validation"].isin(["date_dmy", "datetime_dmy", "time"]) | (
-        arc["Maximum"].isna()
+        arc["Maximum"].notna()
     )
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = arc.loc[~condition].set_index("Variable").to_dict(orient="index")
         pytest.fail(f"ARC has no Maximum for date Variables: {invalid}")
 
 
@@ -321,7 +321,7 @@ def test_arc_type_consistent_with_list():
         arc["Type"].isin(["user_list", "multi_list", "list"]) & arc["List"].notna()
     ) | arc["List"].isna()
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = arc.loc[~condition].set_index("Variable").to_dict(orient="index")
         pytest.fail(f"ARC List missing or falsely included for Variables: {invalid}")
 
 
@@ -336,5 +336,5 @@ def test_arc_valid_preset_values():
         .all(axis=1)
     )
     if not condition.all():
-        invalid = arc.loc[~condition, "Variable"].tolist()
+        invalid = arc.loc[~condition].set_index("Variable")[preset_columns].to_dict(orient="index")
         pytest.fail(f"ARC has invalid preset values for Variables: {invalid}")
