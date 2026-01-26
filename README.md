@@ -14,22 +14,132 @@ ARC (Analysis and Research Compendium) is designed to serve as a resource for re
 
 - **Integration with the Clinical Epidemiology Platform**: ARC is integrated into [BRIDGE](https://github.com/ISARICResearch/BRIDGE), our software tool for CRF generation.
 
+## ARC Components
+
+### `arc.csv`  
+The machine-readable list of clinical and research questions.  
+This file provides the standardized structure that ensures interoperability across studies and outbreak contexts.  
+
+Each row in `arc.csv` represents a **variable** used in the Case Report Forms (CRFs).  
+Variables include metadata that ensures **clarity, interoperability, and reusability** across contexts.  
+
+For every variable, the following fields are included:
+
+- **Variable name**: Unique identifier used in the dataset (e.g., `comor_hypertensi`).  
+- **Form**: The CRF form where the variable appears (e.g., *Presentation*, *Daily*, *Outcome*, ...).  
+- **Section**: Subdivision within the form that groups related questions (e.g., *Co-morbidities and Risk Factors*,...).  
+- **Type**: Format of the response field (e.g., `radio`, `checkbox`, `text`, `date`).  
+- **Question**: Human-readable text shown to the data collector (e.g., *Hypertension*).  
+- **Answer Options**: Permissible responses to the question. These may reference predefined lists in `/lists` (e.g., `1, Yes | 0, No | 99, Unknown`).  
+- **Validation**: Input rules for the response, such as numeric range or pattern restrictions.  
+- **Minimum / Maximum**: Boundaries for numeric input when applicable.  
+- **List**: Links to option lists in `/lists`.  
+- **Skip Logic**: Rules defining when the variable should be displayed, depending on other responses.  
+- **Body System**: Physiological system the variable belongs to (e.g., *Cardiovascular*).  
+- **Definition**: Description of the concept being captured, often linked to clinical definitions.  
+- **Completion Guideline**: Instruction text for data collectors to standardize responses.  
+- **Standardized Term Codelist**: Reference ontology or terminology system used for harmonization (e.g., *SNOMED*).  
+- **Standardized Term Code**: The specific code(s) from the ontology (e.g., `38341003, Hypertensive disorder, systemic arterial (disorder)`).  
+- **Templates / Presets**: Links to where the variable is used in disease-specific CRFs (*COVID, Dengue, Mpox, H5Nx, ARI*) or risk scores (*Charlson CI, mSOFA*).  
+
+This way, `arc.csv` serves not only as a **question bank**, but also as a **metadata dictionary** that enables:  
+- Harmonized clinical data collection.  
+- Mapping to standard vocabularies.  
+- Adaptation for different diseases and study contexts.  
+
+#### Example row from `arc.csv`
+
+| Form        | Section                                                                 | Variable         | Type  | Question     | Answer Options           | Body System    | Definition                                                                                                                                   | Completion Guideline                                                                                                                                                  | Standardized Term Codelist | Standardized Term Code                                      | Metathesaurus Identifier             | Research Category | Presets (selected)                  |
+|-------------|-------------------------------------------------------------------------|------------------|-------|--------------|--------------------------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|-------------------------------------------------------------|--------------------------------------|------------------|-------------------------------------|
+| Presentation | CO-MORBIDITIES AND RISK FACTORS: Existing prior to this current illness and is ongoing | comor_hypertensi | radio | Hypertension | 1, Yes \| 0, No \| 99, Unknown | Cardiovascular | Defined as elevated arterial blood pressure diagnosed clinically (systolic >140 mmHg and/or diastolic >90 mmHg), or treated with medication. | Indicate 'Yes' if this condition existed prior to admission with this current illness and remains an active medical condition. | SNOMED                      | 38341003, Hypertensive disorder, systemic arterial (disorder) | C0020538, Hypertensive disease       | risk_factor_comor | COVID=1, Dengue=1, Mpox=1, H5Nx=1, ARI=1 |
+
+### `lists/`  
+A collection of option lists containing standardised reference tables (conditions, demographics, and drugs) that support different response types while ensuring adaptability and consistency in data capture and coding across studies.
+
+## Data Capture Schema  
+
+The ARC data structure follows the **Clinical Characterization data capture schema**, illustrated below:  
+
+![plot](https://github.com/ISARICResearch/.github/blob/main/profile/charcaterizationSchema.png)
+
+This schema defines the key **moments/events** during a patient’s journey in a study:  
+
+- **Illness onset** → includes *onset-to-care* information.  
+- **Presentation** → data collected when the patient first presents to care.  
+- **Daily observation** → repeated measurements and clinical observations throughout the admission.  
+- **Outcome** → information recorded at the conclusion of the admission (e.g., discharge, death).  
+- **Follow-up** → post-discharge information, up to the defined *end of study*.  
+- **Summary** → aggregate or synthesized data spanning the full admission.  
+
 ## ARChetype CRFs and Templates
 
 ISARIC works closely with experts around the world to create CRFs for priority emerging and infectious diseases and outbreak-related syndromes. These CRFs address key clinical research questions that can improve patient outcomes. We call these ARChetype CRFs.
 
 ARChetype CRFs are an important subset of our library of Templates. Templates are sets of ARC questions that we have curated for other outbreak-related contexts, such as clinical severity scores and core outcome sets. The library of Templates is openly available for use and adaptation by the research community. More information about how to download an ARChetype CRF can be found in our [Downloading an ARChetype CRF Guide](https://isaricresearch.github.io/Training/bridge_template_link).
 
-## ARC Version 1.1.3
-ARC Version 1.1.3 contains a library of questions to be used in Case Report Forms (CRFs) tailored for outbreak responses for COVID-19, Dengue, Mpox and H5Nx and ARI. The CRFs are grouped into seven forms, ‘presentation’, ‘daily’, ‘medication’, ‘pathogen testing’, ‘outcome’,‘follow up’ and ‘withdrawal’ which contain several sections including questions about inclusion and exclusion criteria, hospital admission, patient demographics, travel history, exposure history, pregnancy- and infant-related questions, comorbidities and risk factors, past medical history, medication (drug) history, vaccination history, vital signs assessment, signs and symptoms, clinical assessment, treatment and interventions, laboratory results, imaging results, pathogen testing as well as complications. The questions comprehensively capture the relevant information from the time of presentation to the health facility, daily assessment during admission and at the discharge from the health facility. 
+## ARC Version 1.2.1
 
-ARC Version 1.1.3 contains the following ARChetype CRFs and Templates, each grouped within the forms and sections described above:
-   - **COVID-19 ARChetype CRF:** In ARC Version 1.1.3, this contains 444 questions for COVID-19 outbreak responses. 
-   - **Dengue ARChetype CRF:** In ARC Version 1.1.3, this contains 445 questions for Dengue outbreak responses.
-   - **Mpox ARChetype CRF:** In ARC Version 1.1.3, this contains 595 questions for Mpox outbreak responses. This ARChetype CRF has a section on skin and mucosal assessment for Mpox lesions. 
-   - **H5Nx ARChetype CRF:** In ARC Version 1.1.3, this contains 524 question for Influenza H5Nx outbreak responses.
-   - **ARI  ARChetype CRF:** In ARC Version 1.1.3, this contains 575 question for Acute Respiratory Infection outbreak responses.
-   - **Dengue Recommended Outcomes:**  In ARC Version 1.1.3, this contains 79 question for for Dengue outbreak responses.
+ARC Version 1.2.1 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
+
+The ARC data model supports outbreak responses for **COVID-19, Dengue, Mpox, Influenza H5Nx**, and **Acute Respiratory Infection (ARI)**, and includes enhanced coverage for **pregnant and paediatric populations** through both disease-specific and population-agnostic modules.
+
+CRFs are organised into seven core forms: **presentation**, **daily**, **medication**, **pathogen testing**, **outcome**, **follow-up**, and **withdrawal**.
+
+Each form contains multiple sections covering, as applicable:
+- Inclusion and exclusion criteria  
+- Hospital admission and patient demographics  
+- Travel and exposure history  
+- Pregnancy- and infant-related information  
+- Comorbidities and risk factors  
+- Past medical history  
+- Medication and vaccination history  
+- Vital signs  
+- Signs and symptoms  
+- Clinical assessment  
+- Treatments and interventions  
+- Laboratory and imaging results  
+- Pathogen testing  
+- Complications and outcomes  
+
+Together, these questions enable comprehensive data capture from **initial presentation**, through **daily assessment during admission**, to **discharge and follow-up**.
+
+---
+
+### ARChetype CRFs and Modules Included
+
+ARC Version 1.2.1 contains the following **ARChetype CRFs and modules**, each structured within the forms and sections described above:
+
+- **COVID-19 ARChetype CRF**  
+  A disease-specific CRF supporting COVID-19 outbreak responses.
+
+- **Dengue ARChetype CRF**  
+  A disease-specific CRF supporting Dengue outbreak responses.
+
+- **Mpox ARChetype CRF**  
+  A disease-specific CRF supporting Mpox outbreak responses, including dedicated sections for **skin and mucosal lesion assessment**.
+
+- **Mpox ARChetype CRF – Pregnancy and Paediatrics**  
+  An expanded Mpox CRF with additional variables to support data collection in **pregnant and paediatric patients**.
+
+- **H5Nx ARChetype CRF**  
+  A disease-specific CRF supporting Influenza H5Nx outbreak responses.
+
+- **ARI ARChetype CRF**  
+  A syndromic CRF supporting Acute Respiratory Infection outbreak responses.
+
+- **Dengue Recommended Outcomes**  
+  A dedicated outcomes module supporting standardised outcome reporting for Dengue.
+
+---
+
+### Population-Specific, Disease-Agnostic Modules
+
+ARC Version 1.2.1 also includes **standalone population modules**, designed to be reused across disease-specific CRFs:
+
+- **Pregnancy Module**  
+- **Paediatric Module**
+
+These modules provide shared variables applicable across multiple diseases, improving modularity, consistency, and extensibility of the ARC data model.
 
 
 ## Files
@@ -87,6 +197,10 @@ If you want to use ARC for your research or study, follow these steps:
 - Srin Murthy - [srinivas.murthy@cw.bc.ca](mailto:srinivas.murthy@cw.bc.ca)
 - Antonia Ho - [antonia.ho@glasgow.ac.uk](mailto:antonia.ho@glasgow.ac.uk)
 - Tim Uyeki - [tmu0@cdc.gov](mailto:tmu0@cdc.gov)
+- Charlotte Jackson – [c.r.jackson@ucl.ac.uk](mailto:c.r.jackson@ucl.ac.uk)
+- Ali Judd – [a.judd@ucl.ac.uk](mailto:a.judd@ucl.ac.uk)
+- Rebecca Sconza – [r.sconza@ucl.ac.uk](mailto:r.sconza@ucl.ac.uk)
+- Marthe Le Prevost – [m.leprevost@ucl.ac.uk](mailto:m.leprevost@ucl.ac.uk)
 
 ### Technical Expertise
 - Sara Duque-Vallejo - [sara.duquevallejo@ndm.ox.ac.uk](mailto:sara.duquevallejo@ndm.ox.ac.uk)
@@ -97,4 +211,4 @@ If you want to use ARC for your research or study, follow these steps:
 
 ---
 
-**Note**: ARC is maintained by ISARIC. For inquiries, support, or collaboration, please [contact us](mailto:data@isaric.org).
+**Note**: ARC is maintained by ISARIC. For inquiries, support, or collaboration, please [contact us](mailto:data@isaric.org). 
