@@ -82,7 +82,9 @@ def test_arc_valid_form():
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Form"])
     condition = arc["Form"].isin(FORM_ENUM)
     if not condition.all():
-        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Form"]))
+        invalid = dict(
+            zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Form"])
+        )
         pytest.fail(
             f"ARC contains Form enum not listed in {TEST_PATH}, amend the list if needed. "
             f"Variables: {invalid}"
@@ -111,7 +113,9 @@ def test_arc_valid_type():
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Type"])
     condition = arc["Type"].isin(TYPE_ENUM)
     if not condition.all():
-        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Type"]))
+        invalid = dict(
+            zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Type"])
+        )
         pytest.fail(
             f"ARC contains Type enum not listed in {TEST_PATH}, amend the list if needed. "
             f"Variables: {invalid}"
@@ -125,7 +129,9 @@ def test_arc_strip(column):
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", column])
     condition = arc[column].eq(arc[column].str.strip()) | arc[column].isna()
     if not condition.all():
-        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, column]))
+        invalid = dict(
+            zip(arc.loc[~condition, "Variable"], arc.loc[~condition, column])
+        )
         pytest.fail(
             f"ARC column {column} has unnecessary spaces at the beginning/end. "
             f"Variables: {invalid}"
@@ -139,7 +145,9 @@ def test_arc_newline(column):
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", column])
     condition = ~(arc[column].str.contains("\n") & arc[column].isna())
     if not condition.all():
-        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, column]))
+        invalid = dict(
+            zip(arc.loc[~condition, "Variable"], arc.loc[~condition, column])
+        )
         pytest.fail(
             f"ARC column {column} has newline characters (\n). Variables: {invalid}"
         )
@@ -218,7 +226,9 @@ def test_arc_valid_validation():
         arc["Validation"].isin(VALIDATION_ENUM + ["units"]) | arc["Validation"].isna()
     )
     if not condition.all():
-        invalid = dict(zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Validation"]))
+        invalid = dict(
+            zip(arc.loc[~condition, "Variable"], arc.loc[~condition, "Validation"])
+        )
         pytest.fail(
             "ARC contains Validation enum not listed in {TEST_PATH}, amend the list if needed. "
             f"Variables: {invalid}"
@@ -336,5 +346,9 @@ def test_arc_valid_preset_values():
         .all(axis=1)
     )
     if not condition.all():
-        invalid = arc.loc[~condition].set_index("Variable")[preset_columns].to_dict(orient="index")
+        invalid = (
+            arc.loc[~condition]
+            .set_index("Variable")[preset_columns]
+            .to_dict(orient="index")
+        )
         pytest.fail(f"ARC has invalid preset values for Variables: {invalid}")

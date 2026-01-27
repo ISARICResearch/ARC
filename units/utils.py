@@ -31,6 +31,7 @@ class BaseUnit:
     Defined in unit conversion JSON file, but from ARC. Label and value pair from
     ARC units radio variables, field name from unit-specific numeric variable.
     """
+
     unit_label: str
     unit_value: Optional[int]
     unit_field_name: Optional[str]
@@ -41,6 +42,7 @@ class BaseUnitCollection:
     """
     List of units objects, i.e. for the same variable.
     """
+
     units: List[BaseUnit]
 
     def __post_init__(self):
@@ -175,6 +177,7 @@ class ConversionRule:
 @dataclass
 class ConversionEntry:
     """Contains all conversion rules for a single ARC variable."""
+
     field_name: str
     units_field_name: str
     units: BaseUnitCollection
@@ -233,6 +236,7 @@ class ConversionEntry:
 @dataclass
 class ConversionRegistry:
     """Registry of all conversions, indexed by the ARC field name."""
+
     conversion_entries: Dict[str, ConversionEntry] = field(default_factory=dict)
     verbose: bool = False
 
@@ -312,6 +316,7 @@ class ConversionRegistry:
 @dataclass
 class UnitConverter:
     """Uses the registry class to perform unit conversions."""
+
     conversion_registry: ConversionRegistry
     is_unit_labels: Union[bool, Dict[str, bool]] = True
     verbose: bool = False
