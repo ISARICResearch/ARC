@@ -89,6 +89,20 @@ class BaseUnitCollection:
             )
         return matching_units[0]
 
+    def get_unit_from_unit_field_name(self, unit_field_name: str) -> BaseUnit:
+        """
+        Returns unit for matching value, __post_init__ enforces list length of 1.
+        Raises exception if no match.
+        """
+        matching_units = [
+            unit for unit in self.units if unit.unit_field_name == unit_field_name
+        ]
+        if not matching_units:
+            raise ValidationError(
+                f"Units {self.units} does not contain unit field_name {unit_field_name}"
+            )
+        return matching_units[0]
+
 
 @dataclass
 class LinearConversion:

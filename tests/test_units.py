@@ -3,7 +3,7 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from units.utils import ConversionRegistry
+from units.utils import ConversionRegistry, UnitConverter
 
 BASE_DIR = pathlib.Path(".")
 UNITS_DIR = pathlib.Path("units")
@@ -194,7 +194,7 @@ def test_fields_in_conversions_exist_in_arc():
     arc = pd.read_csv(
         ARC_PATH,
         dtype="object",
-        usecols=["Variable", "Validation", "Answer Options"],
+        usecols=["Variable", "Validation"],
     )
 
     units_idx = arc["Validation"] == "units"
@@ -235,4 +235,116 @@ def test_fields_in_conversions_exist_in_arc():
         pytest.fail(
             f"ARC variables {missing_unit_specific_field_names} does not include units "
             f"listed in conversion JSON file {UNITS_PATH}. Please update the JSON file."
+        )
+
+
+@pytest.mark.high
+def test_valid_conversions_for_min_max():
+    """
+    Test that the min/max values for unit-specific variables align with conversion
+    functions.
+    """
+    arc = pd.read_csv(
+        ARC_PATH,
+        dtype="object",
+        usecols=["Variable", "Validation", "Minimum", "Maximum"],
+    )
+
+    units_idx = arc["Validation"] == "units"
+    units_field_names = arc.loc[units_idx, "Variable"].tolist()
+    field_names = [x.split("_units")[0] for x in units_field_names]
+
+    units_field_names = dict(zip(field_names, units_field_names))
+    arc_subset = pd.concat(
+        [
+            arc.loc[
+                arc["Variable"].str.startswith(x + "_")
+                & ~arc["Variable"].str.endswith("_units"),
+                ["Variable", "Minimum", "Maximum"]
+            ].assign(field_name=x)
+            .assign(from_unit=np.nan)
+            .assign(preferred_unit=np.nan)
+            for x in field_names
+        ]
+    )
+    arc_subset[["Minimum", "Maximum"]] = arc_subset[["Minimum", "Maximum"]].astype(float)
+
+    conversion_registry = ConversionRegistry().load_from_json(
+        path=UNITS_PATH,
+        schema_path=SCHEMA_PATH,
+    )
+
+    entries = conversion_registry.conversion_entries
+
+    # Ignore fields not yet in the JSON file, these are highlighted by an earlier test
+    arc_subset = arc_subset.loc[arc_subset["field_name"].isin(entries.keys())]
+    field_names = arc_subset["field_name"].unique().tolist()
+
+    def get_from_unit(x: pd.DataFrame):
+        try:
+            units = entries[x["field_name"]].units
+            from_unit = units.get_unit_from_unit_field_name(x["Variable"]).unit_label
+        except Exception:
+            return np.nan
+        return from_unit
+
+    arc_subset["from_unit"] = arc_subset[["Variable", "field_name"]].apply(
+        lambda x: get_from_unit(x), axis=1
+    )
+    arc_subset["preferred_unit"] = arc_subset["field_name"].apply(
+        lambda x: entries[x].preferred_unit.unit_label
+    )
+
+    # Add additional columns for min/max values of preferred unit
+    preferred = arc_subset.loc[
+        arc_subset["from_unit"] == arc_subset["preferred_unit"]
+    ].copy()
+    preferred.rename(
+        columns={"Minimum": "preferred_min", "Maximum": "preferred_max"},
+        inplace=True
+    )
+    arc_subset = pd.merge(
+        arc_subset,
+        preferred[["field_name", "preferred_min", "preferred_max"]],
+        on="field_name",
+        how="left"
+    )
+
+    unit_converter = UnitConverter(
+        conversion_registry=conversion_registry,
+        is_unit_labels=True
+    )
+
+    def convert(x: pd.DataFrame, values_column="Minimum"):
+        if x["from_unit"] == x["preferred_unit"]:
+            return x[values_column]
+        output = unit_converter.convert(
+            field_name=x["field_name"],
+            value=x[values_column],
+            from_unit=x["from_unit"],
+            to_unit=x["preferred_unit"]
+        )
+        return output["value"] if output["converted"] else np.nan
+
+    arc_subset["Minimum"] = arc_subset.apply(convert, axis=1)
+    arc_subset["Maximum"] = arc_subset.apply(convert, values_column="Maximum", axis=1)
+
+    # Don't necessarily need equality, but raise if relative difference is greater than 1%
+    invalid_min = (1 - arc_subset["Minimum"] / arc_subset["preferred_min"]).abs() > 0.01
+    invalid_max = (1 - arc_subset["Maximum"] / arc_subset["preferred_max"]).abs() > 0.01
+
+    invalid_min = [
+        x for x in field_names
+        if x in arc_subset.loc[invalid_min, "field_name"].tolist()
+    ]
+    invalid_max = [
+        x for x in field_names
+        if x in arc_subset.loc[invalid_max, "field_name"].tolist()
+    ]
+    if invalid_min + invalid_max:
+        pytest.fail(
+            "Min values for unit-specific variables are not consistent with "
+            f"the conversion functions for {invalid_min}. Fix ARC or conversion JSON. "
+            "Max values for unit-specific variables are not consistent with "
+            f"the conversion functions for {invalid_max}. Fix ARC or conversion JSON."
         )
