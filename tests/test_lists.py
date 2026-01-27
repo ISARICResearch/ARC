@@ -68,6 +68,19 @@ def test_list_required_columns_exist(file):
         pytest.fail(f"{str(file)} missing required columns: {missing}")
 
 
+@pytest.mark.high
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_list_other_value(file):
+    """Check required columns exist"""
+    df = pd.read_csv(file, dtype="object")
+    condition = df["Value"].isin(["88", "99"]).any()
+    if condition.any():
+        pytest.fail(
+            f"{str(file)} values 88, 99 should be reserved for Other/Unknown "
+            "(which are not included in the file)"
+        )
+
+
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES)
 def test_arc_strip(file):
