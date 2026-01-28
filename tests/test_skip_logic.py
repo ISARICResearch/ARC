@@ -23,9 +23,14 @@ PRESET_COLUMNS = [
 ]
 CHOICE_TYPES = ["radio", "user_list", "checkbox", "multi_list", "dropdown", "list"]
 
+EVENT_NAMES = ["daily_arm_1", "initial_assessment_arm_1"]
+
+EXCEPTIONS_SUFFIX_LIST = ["_otherl2"]  # Add to this as needed
+EXCEPTIONS_SUFFIX = r"|".join(EXCEPTIONS_SUFFIX_LIST)
+
 REDCAP_PATTERN = re.compile(
     r"""
-    (?:\[([a-z_]]+)\]\s*)?                              # optional event: [event_name] (Group 1)
+    (?:\[([a-z0-9_]+)\]\s*)?                            # optional event: [event_name] (Group 1)
     \[                                                  # start of field
       ([a-z0-9_]+)                                      # field name (Group 2)
       (?:\((\d+)\))?                                    # possible checkbox value (Group 3)
@@ -41,9 +46,6 @@ REDCAP_PATTERN = re.compile(
 """,
     re.VERBOSE,
 )
-
-EXCEPTIONS_SUFFIX_LIST = ["_otherl2"]  # Add to this as needed
-EXCEPTIONS_SUFFIX = r"|".join(EXCEPTIONS_SUFFIX_LIST)
 
 
 def extract(skip_logic: str) -> List[Dict[str, Union[str, Numeric]]]:
@@ -150,6 +152,23 @@ def test_valid_regex():
 
 
 @pytest.mark.high
+def test_events():
+    """Check that fields mentioned in the skip logic exist"""
+    arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Skip Logic"])
+    arc_skip_logic = extract_from_arc(arc)
+
+    condition = (
+        arc_skip_logic["redcap_event"].isin(EVENT_NAMES)
+        | arc_skip_logic["redcap_event"].isna()
+    )
+    if not condition.all():
+        invalid = invalid = arc_skip_logic.loc[
+            ~condition, ["field_name", "redcap_event"]
+        ].to_dict(orient="records")
+        pytest.fail(f"Skip logic includes variable not in ARC: {invalid}")
+
+
+@pytest.mark.high
 def test_fields_exist():
     """Check that fields mentioned in the skip logic exist"""
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Skip Logic"])
@@ -193,7 +212,7 @@ def test_checkboxes():
         pytest.fail(f"Skip logic incorrectly uses checkbox variable: {invalid}")
 
 
-@pytest.mark.high
+@pytest.mark.medium
 @pytest.mark.parametrize("preset_column", PRESET_COLUMNS)
 def test_fields_exist_presets(preset_column):
     """Check that fields mentioned in the skip logic exist"""
