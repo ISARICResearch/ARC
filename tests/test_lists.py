@@ -68,6 +68,19 @@ def test_list_required_columns_exist(file):
         pytest.fail(f"{str(file)} missing required columns: {missing}")
 
 
+@pytest.mark.high
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_list_other_value(file):
+    """Check required columns exist"""
+    df = pd.read_csv(file, dtype="object")
+    condition = df["Value"].isin(["88", "99"]).any()
+    if condition.any():
+        pytest.fail(
+            f"{str(file)} values 88, 99 should be reserved for Other/Unknown "
+            "(which are not included in the file)"
+        )
+
+
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES)
 def test_arc_strip(file):
@@ -125,6 +138,38 @@ def test_too_many_presets(file):
         pytest.fail(
             f"{str(file)} contains preset columns not in ARC: {presets_not_in_arc}"
         )
+
+
+@pytest.mark.high
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_unique_labels(file):
+    """Check if the Lists file has the same presets as ARC"""
+    df = pd.read_csv(file, dtype="object")
+
+    condition = df[df.columns[0]].str.strip().duplicated(keep=False)
+    if condition.any():
+        invalid = df.loc[condition, df.columns[0]]
+        pytest.fail(
+            f"{str(file)} has repeated labels: {invalid}"
+        )
+
+
+@pytest.mark.medium
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_unique_codes(file):
+    """Check if the Lists file has the same presets as ARC"""
+    df = pd.read_csv(file, dtype="object")
+
+    if "Code" in df.columns:
+        condition = df["Code"].str.strip().duplicated(keep=False) & df["Code"].notna()
+        if condition.any():
+            invalid = df.loc[
+                condition,
+                [df.columns[0], "Code"],
+            ].to_dict(orient="records")
+            pytest.fail(
+                f"{str(file)} has repeated labels: {invalid}"
+            )
 
 
 @pytest.mark.high
