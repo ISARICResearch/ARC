@@ -141,6 +141,38 @@ def test_too_many_presets(file):
 
 
 @pytest.mark.high
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_unique_labels(file):
+    """Check if the Lists file has the same presets as ARC"""
+    df = pd.read_csv(file, dtype="object")
+
+    condition = df[df.columns[0]].str.strip().duplicated(keep=False)
+    if condition.any():
+        invalid = df.loc[condition, df.columns[0]]
+        pytest.fail(
+            f"{str(file)} has repeated labels: {invalid}"
+        )
+
+
+@pytest.mark.medium
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_unique_codes(file):
+    """Check if the Lists file has the same presets as ARC"""
+    df = pd.read_csv(file, dtype="object")
+
+    if "Code" in df.columns:
+        condition = df["Code"].dropna().str.strip().duplicated(keep=False)
+        if condition.any():
+            invalid = df.loc[
+                condition,
+                [df.columns[0], "Code"],
+            ].to_dict(orient="records")
+            pytest.fail(
+                f"{str(file)} has repeated labels: {invalid}"
+            )
+
+
+@pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES_WITH_ARCHETYPE_PRESETS)
 def test_missing_presets(file):
     """Check if the Lists file has ARC presets for specific Lists"""

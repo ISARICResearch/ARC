@@ -1,7 +1,7 @@
 """
 This should handle skip logic in ARC at the time of writing (ARC v1.2.1).
 It cannot do the following:
-- RHS 'value' is a second field.
+- RHS 'value' is a second field e.g. [demog_weight] = [infa_brtwei].
 - REDCap smart variables e.g. datediff
 """
 
@@ -23,7 +23,7 @@ PRESET_COLUMNS = [
 ]
 CHOICE_TYPES = ["radio", "user_list", "checkbox", "multi_list", "dropdown", "list"]
 
-REDCAP_PATTERN = pattern = re.compile(
+REDCAP_PATTERN = re.compile(
     r"""
     (?:\[([a-z_]]+)\]\s*)?                              # optional event: [event_name] (Group 1)
     \[                                                  # start of field
@@ -48,7 +48,7 @@ EXCEPTIONS_SUFFIX = r"|".join(EXCEPTIONS_SUFFIX_LIST)
 
 def extract(skip_logic: str) -> List[Dict[str, Union[str, Numeric]]]:
     results = []
-    for m in pattern.finditer(skip_logic):
+    for m in REDCAP_PATTERN.finditer(skip_logic):
         event = m.group(1) or None
         field = m.group(2)
         checkbox = m.group(3) or None
@@ -129,7 +129,8 @@ def get_codes_from_answer_options(s: str) -> str:
 
 @pytest.mark.critical
 def test_valid_regex():
-    """Test if the skip logic entries match the above regex."""
+    """
+    Test if the skip logic entries match the above regex (won't fix all typos)."""
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "Skip Logic"])
     arc_skip_logic = extract_from_arc(arc)
 
@@ -228,8 +229,8 @@ def test_values_exist():
         for x, y in zip(list_enum, relative_list_files)
     }
     arc.loc[arc["List"].notna(), "Answer Options"] = (
-        arc.loc[arc["List"].notna(), "List"].map(list_answer_options) + " | 88, Other"
-    )
+        arc.loc[arc["List"].notna(), "List"].map(list_answer_options)
+    ) + " | 88, Other"
 
     arc_skip_logic = extract_from_arc(arc)
 
