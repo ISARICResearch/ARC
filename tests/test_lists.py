@@ -161,7 +161,7 @@ def test_unique_codes(file):
     df = pd.read_csv(file, dtype="object")
 
     if "Code" in df.columns:
-        condition = df["Code"].dropna().str.strip().duplicated(keep=False)
+        condition = df["Code"].str.strip().duplicated(keep=False) & df["Code"].notna()
         if condition.any():
             invalid = df.loc[
                 condition,
