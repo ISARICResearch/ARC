@@ -11,7 +11,7 @@ REQUIRED_COLUMNS = ["Selected", "Value"]
 LIST_FILES_WITH_ARCHETYPE_PRESETS = [
     pathlib.Path("Lists/outcome/Diseases.csv"),
     pathlib.Path("Lists/inclusion/Diseases.csv"),
-    pathlib.Path("Lists/pathogens/All.csv")
+    pathlib.Path("Lists/pathogens/All.csv"),
 ]
 
 
@@ -40,10 +40,7 @@ def test_list_file_used_in_arc():
 
     unused_list = [x for x in list_enum if x not in arc["List"].unique().tolist()]
     if unused_list:
-        pytest.fail(
-            f"ARC contains unused Lists CSV file. "
-            f"Variables: {unused_list}"
-        )
+        pytest.fail(f"ARC contains unused Lists CSV file. Variables: {unused_list}")
 
 
 @pytest.mark.high
@@ -143,6 +140,4 @@ def test_missing_presets(file):
 
     arc_presets_not_in_list = [x for x in arc_presets if x not in presets]
     if arc_presets_not_in_list:
-        pytest.fail(
-            f"{str(file)} missing presets in ARC: {arc_presets_not_in_list}"
-        )
+        pytest.fail(f"{str(file)} missing presets in ARC: {arc_presets_not_in_list}")
