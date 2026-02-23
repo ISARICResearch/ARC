@@ -22,9 +22,10 @@
         "demog_sex": {
             "type": "string",
             "enum": [
-                "male",
-                "female",
-                "other"
+                "Male",
+                "Female",
+                "Other",
+                "Unknown"
             ],
             "description": "Sex at birth"
         },
@@ -42,9 +43,9 @@
             "type": "string",
             "description": "Admitted to hospital",
             "enum": [
-                "unknown",
-                "yes",
-                "no"
+                "Unknown",
+                "Yes",
+                "No"
             ]
         },
         "pres_date": {
@@ -68,13 +69,14 @@
         "outco_outcome": {
             "type": "string",
             "enum": [
-                "discharged_alive",
-                "still_hospitalised",
-                "transfer_to_other_facility",
-                "death",
-                "palliative_care",
-                "discharged_against_medical_advice",
-                "alive_not_admitted"
+                "Discharged alive",
+                "Still hospitalised",
+                "Transfer to other facility",
+                "Death",
+                "Palliative care",
+                "Discharged against medical advice",
+                "Alive not admitted",
+                "Hospitalised"
             ],
             "description": "Outcome"
         },
