@@ -11,7 +11,7 @@ REQUIRED_COLUMNS = ["Selected", "Value"]
 LIST_FILES_WITH_ARCHETYPE_PRESETS = [
     pathlib.Path("Lists/outcome/Diseases.csv"),
     pathlib.Path("Lists/inclusion/Diseases.csv"),
-    pathlib.Path("Lists/pathogens/All.csv")
+    pathlib.Path("Lists/pathogens/All.csv"),
 ]
 
 
@@ -40,10 +40,7 @@ def test_list_file_used_in_arc():
 
     unused_list = [x for x in list_enum if x not in arc["List"].unique().tolist()]
     if unused_list:
-        pytest.fail(
-            f"ARC contains unused Lists CSV file. "
-            f"Variables: {unused_list}"
-        )
+        pytest.fail(f"ARC contains unused Lists CSV file. Variables: {unused_list}")
 
 
 @pytest.mark.high
@@ -69,6 +66,19 @@ def test_list_required_columns_exist(file):
     missing = [c for c in REQUIRED_COLUMNS if c not in header]
     if missing:
         pytest.fail(f"{str(file)} missing required columns: {missing}")
+
+
+@pytest.mark.high
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_list_other_value(file):
+    """Check required columns exist"""
+    df = pd.read_csv(file, dtype="object")
+    condition = df["Value"].isin(["88", "99"]).any()
+    if condition.any():
+        pytest.fail(
+            f"{str(file)} values 88, 99 should be reserved for Other/Unknown "
+            "(which are not included in the file)"
+        )
 
 
 @pytest.mark.medium
@@ -131,6 +141,38 @@ def test_too_many_presets(file):
 
 
 @pytest.mark.high
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_unique_labels(file):
+    """Check if the Lists file has the same presets as ARC"""
+    df = pd.read_csv(file, dtype="object")
+
+    condition = df[df.columns[0]].str.strip().duplicated(keep=False)
+    if condition.any():
+        invalid = df.loc[condition, df.columns[0]]
+        pytest.fail(
+            f"{str(file)} has repeated labels: {invalid}"
+        )
+
+
+@pytest.mark.medium
+@pytest.mark.parametrize("file", LIST_FILES)
+def test_unique_codes(file):
+    """Check if the Lists file has the same presets as ARC"""
+    df = pd.read_csv(file, dtype="object")
+
+    if "Code" in df.columns:
+        condition = df["Code"].str.strip().duplicated(keep=False) & df["Code"].notna()
+        if condition.any():
+            invalid = df.loc[
+                condition,
+                [df.columns[0], "Code"],
+            ].to_dict(orient="records")
+            pytest.fail(
+                f"{str(file)} has repeated labels: {invalid}"
+            )
+
+
+@pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES_WITH_ARCHETYPE_PRESETS)
 def test_missing_presets(file):
     """Check if the Lists file has ARC presets for specific Lists"""
@@ -143,6 +185,4 @@ def test_missing_presets(file):
 
     arc_presets_not_in_list = [x for x in arc_presets if x not in presets]
     if arc_presets_not_in_list:
-        pytest.fail(
-            f"{str(file)} missing presets in ARC: {arc_presets_not_in_list}"
-        )
+        pytest.fail(f"{str(file)} missing presets in ARC: {arc_presets_not_in_list}")

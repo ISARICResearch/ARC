@@ -85,11 +85,11 @@
         ]
     },
     {
-        "field_name": "infa_brtweight",
-        "units_field_name": "infa_brtweight_units",
+        "field_name": "infa_brtwei",
+        "units_field_name": "infa_brtwei_units",
         "units": [
-            { "unit_label": "g", "unit_value": 1, "unit_field_name": "infa_brtweight_g" },
-            { "unit_label": "lb", "unit_value": 2, "unit_field_name": "infa_brtweight_lb" }
+            { "unit_label": "g", "unit_value": 1, "unit_field_name": "infa_brtwei_g" },
+            { "unit_label": "lb", "unit_value": 2, "unit_field_name": "infa_brtwei_lb" }
         ],
         "preferred_unit": "g",
         "conversion_rules": [
@@ -168,11 +168,11 @@
         ]
     },
     {
-        "field_name": "treat_fio2spo2",
-        "units_field_name": "treat_fio2spo2_units",
+        "field_name": "treat_highfio",
+        "units_field_name": "treat_highfio_units",
         "units": [
-            { "unit_label": "Fraction, 0.21-1.0", "unit_value": 1, "unit_field_name": "treat_fio2spo2_02110" },
-            { "unit_label": "%", "unit_value": 2, "unit_field_name": "treat_fio2spo2_pcnt" }
+            { "unit_label": "Fraction, 0.21-1.0", "unit_value": 1, "unit_field_name": "treat_highfio_02110" },
+            { "unit_label": "%", "unit_value": 2, "unit_field_name": "treat_highfio_pcnt" }
         ],
         "preferred_unit": "Fraction, 0.21-1.0",
         "conversion_rules": [
@@ -289,17 +289,17 @@
         "units_field_name": "labs_platelets_units",
         "units": [
             { "unit_label": "10^9/L", "unit_value": 1, "unit_field_name": "labs_platelets_109l" },
-            { "unit_label": "10^6/L", "unit_value": 2, "unit_field_name": "labs_platelets_106l" }
+            { "unit_label": "10^3/µL", "unit_value": 2, "unit_field_name": "labs_platelets_103ul" }
         ],
         "preferred_unit": "10^9/L",
         "conversion_rules": [
             {
-                "from_unit": "10^6/L",
+                "from_unit": "10^3/µL",
                 "to_unit": "10^9/L",
                 "type": "linear",
-                "multiplier": 1000,
+                "multiplier": 1,
                 "offset": 0,
-                "note": "to_value = from_value * 1000"
+                "note": "to_value = from_value * 1"
             }
         ]
     },
@@ -365,7 +365,7 @@
         "units_field_name": "labs_bilirubin_units",
         "units": [
             { "unit_label": "µmol/L", "unit_value": 1, "unit_field_name": "labs_bilirubin_umoll" },
-            { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_bilirubin_mgl" }
+            { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_bilirubin_mgdl" }
         ],
         "preferred_unit": "µmol/L",
         "conversion_rules": [
@@ -373,9 +373,9 @@
                 "from_unit": "mg/dL",
                 "to_unit": "µmol/L",
                 "type": "linear",
-                "multiplier": 0.0584795321637,
+                "multiplier": 17.1,
                 "offset": 0,
-                "note": "to_value = from_value / 17.1"
+                "note": "to_value = from_value * 17.1"
             }
         ]
     },
@@ -439,9 +439,9 @@
                 "from_unit": "mmol/L",
                 "to_unit": "mg/dL",
                 "type": "linear",
-                "multiplier": 0.357,
+                "multiplier": 2.8,
                 "offset": 0,
-                "note": "to_value = from_value * 0.357"
+                "note": "to_value = from_value / 0.357"
             }
         ]
     },
@@ -458,9 +458,9 @@
                 "from_unit": "mg/dL",
                 "to_unit": "µmol/L",
                 "type": "linear",
-                "multiplier": 0.0113122171946,
+                "multiplier": 88.4,
                 "offset": 0,
-                "note": "to_value = from_value / 88.4"
+                "note": "to_value = from_value * 88.4"
             }
         ]
     },
@@ -493,6 +493,25 @@
         ]
     },
     {
+        "field_name": "labs_chlor",
+        "units_field_name": "labs_chlor_units",
+        "units": [
+            { "unit_label": "mmol/L", "unit_value": 1, "unit_field_name": "labs_chlor_mmoll" },
+            { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_chlor_mgdl" }
+        ],
+        "preferred_unit": "mmol/L",
+        "conversion_rules": [
+            {
+                "from_unit": "mg/dL",
+                "to_unit": "mmol/L",
+                "type": "linear",
+                "multiplier": 0.282087447109,
+                "offset": 0,
+                "note": "to_value = from_value * 10 / 35.45"
+            }
+        ]
+    },
+    {
         "field_name": "labs_magn",
         "units_field_name": "labs_magn_units",
         "units": [
@@ -505,9 +524,9 @@
                 "from_unit": "mg/dL",
                 "to_unit": "mmol/L",
                 "type": "linear",
-                "multiplier": 2.43,
+                "multiplier": 0.411522633745,
                 "offset": 0,
-                "note": "to_value = from_value * 24.3 / 10"
+                "note": "to_value = from_value * 10 / 2.43"
             }
         ]
     },
