@@ -20,6 +20,23 @@ def get_enums(options):
     ]
 
 
+def medications_dosage(arc):
+    # medi_units behave differently to other units.
+    # Unit should be associated with the dosage, not as it's own long table entry.
+    meds_filter = arc["Variable"].isin(["medi_dose", "medi_units", "medi_units_oth"])
+
+    rule = {
+        "properties": {
+            "attribute": {"const": "medi_dose"},
+            "value_num": {"type": "number"},
+            "attribute_unit": {"type": "string"},
+        },
+        "required": ["value_num", "attribute_unit"],
+    }
+
+    return [rule], arc[~meds_filter]
+
+
 def attrs_with_enums(arc, types: list[str]):
     rules = []
     arc_filter = arc["Type"].isin(types)
@@ -72,33 +89,36 @@ def attrs_with_lists(arc, types: list[str]):
     return rules, arc[~arc_filter]
 
 
-# Currently not used
-# def attrs_with_units(arc, types: list[str]):
-#     rules = []
-#     arc_filter = arc["Type"].isin(types)
-#     vars_with_units = arc[arc_filter]["Variable"]
-#     arc_vars_to_remove = vars_with_units.copy().to_list()
+def attrs_with_units(arc):
+    rules = []
+    arc_filter = arc["Variable"].str.endswith("_units")
+    vars_with_units = arc[arc_filter]["Variable"].str.removesuffix("_units")
+    arc_vars_to_remove = (
+        vars_with_units.copy().to_list() + arc[arc_filter]["Variable"].to_list()
+    )
 
-#     for var in vars_with_units:
-#         unit_options = arc[arc["Variable"].str.startswith(var + "_")][
-#             "Variable"
-#         ].to_list()
-#         arc_vars_to_remove += unit_options
+    for var in vars_with_units:
+        unit_options = arc[
+            arc["Variable"].str.startswith(var + "_")
+            & ~arc["Variable"].str.endswith("_units")
+        ]["Variable"].to_list()
+        arc_vars_to_remove += unit_options
 
-#         units = [u.removeprefix(var + "_") for u in unit_options]
+        rs = [
+            {
+                "properties": {
+                    "attribute": {"const": unit_var},
+                    "attribute_unit": {"const": unit_var.removeprefix(var + "_")},
+                    "value_num": {"type": "number"},
+                },
+                "required": ["value_num", "attribute_unit"],
+            }
+            for unit_var in unit_options
+        ]
 
-#         rule = {
-#             "properties": {
-#                 "attribute": {"const": var},
-#                 "attribute_unit": {"enum": units},
-#                 "value_num": {"type": "number"},
-#             },
-#             "required": ["value_num", "attribute_unit"],
-#         }
+        rules.extend(rs)
 
-#         rules.append(rule)
-
-#     return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
+    return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
 
 
 def numeric_attrs(arc, types: list[str]):
@@ -151,6 +171,27 @@ def date_attrs(arc, types: list[str]):
     return rules, arc[~arc_filter]
 
 
+def time_attrs(arc, types: list[str]):
+    rules = []
+    arc_filter = arc["Type"].isin(types)
+    arc_long_times = arc[arc_filter]
+
+    for input_type, group in arc_long_times.groupby("Type"):
+        if len(group) == 1:
+            name = {"const": group.Variable.item()}
+        else:
+            name = {"enum": group.Variable.tolist()}
+        rule = {
+            "properties": {"attribute": name},
+            "required": ["value"],
+        }
+        if input_type == "time":
+            rule["properties"]["value"] = {"type": "string", "format": "time"}
+
+        rules.append(rule)
+    return rules, arc[~arc_filter]
+
+
 def generic_str_attrs(arc, types: list[str]):
     arc_filter = arc["Type"].isin(types)
     arc_long_other_str = arc[arc_filter]
@@ -171,13 +212,25 @@ def generate_long_schema(version):
     with open("schemas/template-isaric-long.json", "r") as f:
         template_long = json.load(f)
 
-    # Drop the core properties from the long schema
+    # Drop the core properties from the long schema,
+    # plus the 'demog_age' variables which map to `demog_age_days``
+    arc_long = arc[
+        ~arc.Variable.isin(
+            list(template_core["properties"].keys()) + ["demog_age", "demog_age_units"]
+        )
+    ]
     # Don't include descriptive, file types or NaN's (unwanted as stored attributes)
-    arc_long = arc[~arc.Variable.isin(template_core["properties"].keys())]
     arc_long = arc_long[~(arc_long.Type.isin(["descriptive", "file", np.nan]))]
 
+    # medications dosage, which has units field that behaves differently
+    medi_unit_rule, arc_long_med_unit = medications_dosage(arc_long)
+
     # Generate rules for each type of attribute
-    enum_rules, arc_no_enums = attrs_with_enums(arc_long, ["radio", "checkbox"])
+    units_rules, arc_long_no_units = attrs_with_units(arc_long_med_unit)
+
+    enum_rules, arc_no_enums = attrs_with_enums(
+        arc_long_no_units, ["radio", "checkbox"]
+    )
 
     list_rules, arc_no_lists = attrs_with_lists(
         arc_no_enums, ["list", "user_list", "multi_list"]
@@ -187,13 +240,22 @@ def generate_long_schema(version):
 
     date_rules, arc_no_dates = date_attrs(arc_no_numbers, ["date_dmy", "datetime_dmy"])
 
+    time_rules, arc_no_times = time_attrs(arc_no_dates, ["time"])
+
     other_str_rules, arc_no_other_str = generic_str_attrs(
-        arc_no_dates, ["text", "notes"]
+        arc_no_times, ["text", "notes"]
     )
 
     # Combine all rules into one list
     one_of_rules = (
-        enum_rules + list_rules + numeric_rules + date_rules + other_str_rules
+        medi_unit_rule
+        + units_rules
+        + enum_rules
+        + list_rules
+        + numeric_rules
+        + date_rules
+        + time_rules
+        + other_str_rules
     )
 
     # check no types have been missed
@@ -213,7 +275,7 @@ def generate_long_schema(version):
 
 def main():
     tag = sys.argv[1]
-    print(f"Running script with tag: {tag}")
+    print(f"Running schema script with tag: {tag}")
     generate_long_schema(tag)
 
 
