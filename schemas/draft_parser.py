@@ -131,7 +131,7 @@ def attrs_with_lists(arc):
                 "can_skip": True,
             },
             "ref": row["Form"],
-            "for.n.range": [0, 5],
+            "for": {"n": {"range": [0, 4]}},
         }
 
         rules.append(rule)
@@ -405,7 +405,8 @@ def generate_parser(
             "attribute": "medi_dose",
             "value_num": {"field": "medi_dose"},
             "attribute_unit": {
-                "firstNonNull": [
+                "combinedType": "firstNonNull",
+                "fields": [
                     {
                         "field": "medi_units_other",
                         "if": {
@@ -420,7 +421,7 @@ def generate_parser(
                         "field": "medi_units",
                         "values": unit_options,
                     },
-                ]
+                ],
             },
             "ref": arc[arc.Variable == "medi_dose"]["Form"].item(),
         }
@@ -442,6 +443,7 @@ def generate_parser(
         "multi_lists": attrs_with_multilists,
         "numeric": numeric_attrs,
         "dates": date_attrs,
+        "strings": generic_str_attrs,
     }
 
     row_types = {
