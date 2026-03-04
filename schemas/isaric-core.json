@@ -25,7 +25,7 @@
                 "Male",
                 "Female",
                 "Other",
-                "Unknown"
+                "Not specified/Unknown"
             ],
             "description": "Sex at birth"
         },

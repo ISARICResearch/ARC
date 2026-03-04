@@ -279,7 +279,7 @@ def generate_parser(
                 "medication": {
                     "event_id": {
                         "generate": {
-                            "type": "uuid",
+                            "type": "uuid5",
                             "values": [
                                 "subjid",
                                 "redcap_repeat_instrument",
@@ -300,7 +300,7 @@ def generate_parser(
                 "pathogen_testing": {
                     "event_id": {
                         "generate": {
-                            "type": "uuid",
+                            "type": "uuid5",
                             "values": [
                                 "subjid",
                                 "redcap_repeat_instrument",
@@ -317,7 +317,7 @@ def generate_parser(
                 "photographs": {
                     "event_id": {
                         "generate": {
-                            "type": "uuid",
+                            "type": "uuid5",
                             "values": [
                                 "subjid",
                                 "redcap_repeat_instrument",
@@ -332,15 +332,15 @@ def generate_parser(
                     "phase": "outcome",
                     "date": {"field": "outco_date", "if": {"outco_date": {"!=": "NA"}}},
                 },
-                "follow_up": {
-                    "phase": "follow_up",
+                "followup": {
+                    "phase": "followup",
                     "date": {
                         "field": "follow_date",
                         "if": {"follow_date": {"!=": "NA"}},
                     },
                 },
                 "withdrawal": {
-                    "phase": "follow_up",
+                    "phase": "followup",
                     "date": {"field": "withd_date", "if": {"withd_date": {"!=": "NA"}}},
                 },
             },
@@ -379,22 +379,35 @@ def generate_parser(
     for var in arc_core_vars:
         if opts := get_value_options(arc[arc.Variable == var]["Answer Options"].item()):
             parser["core"][var]["values"] = opts
+        elif arc[arc.Variable == var]["Type"].item() in ["user_list"]:
+            # Outcome options
+            parser["core"][var]["values"] = read_list_file(
+                f"Lists/{'/'.join(arc[arc.Variable == var]['List'].item().split('_'))}.csv"
+            )
 
     # Hard-code some of the fields we know about
 
     parser["core"]["demog_age_days"] = {
-        "field": "demog_age",
-        "unit": "days",
-        "source_unit": {
-            "field": "demog_age_units",
-            "values": get_value_options(
-                arc[arc.Variable == "demog_age_units"]["Answer Options"].item(),
-                lower_case=True,
-            ),
-        },
+        "combinedType": "firstNonNull",
+        "fields": [
+            {
+                "field": "demog_calcage_days",
+            },
+            {
+                "field": "demog_age",
+                "unit": "days",
+                "source_unit": {
+                    "field": "demog_age_units",
+                    "values": get_value_options(
+                        arc[arc.Variable == "demog_age_units"]["Answer Options"].item(),
+                        lower_case=True,
+                    ),
+                },
+            },
+        ],
     }
 
-    core_fields += ["demog_age", "demog_age_units"]
+    core_fields += ["demog_age", "demog_age_units", "demog_calcage_days"]
 
     # Hard-code the medi_dose field as it should behave differently to other '_units' fields
     unit_options = get_value_options(
