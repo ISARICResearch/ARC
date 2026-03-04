@@ -116,6 +116,33 @@ def attrs_with_units(arc):
             for unit_var in unit_options
         ]
 
+        rs += [
+            {
+                "properties": {
+                    "attribute": {"const": var},
+                    "value_num": {"type": "number"},
+                },
+                "required": [
+                    "value_num",
+                ],
+            },
+            {
+                "properties": {
+                    "attribute": {"const": var + "_units"},
+                    "value": {
+                        "enum": get_enums(
+                            arc[arc["Variable"] == var + "_units"][
+                                "Answer Options"
+                            ].item()
+                        )
+                    },
+                },
+                "required": [
+                    "value",
+                ],
+            },
+        ]
+
         rules.extend(rs)
 
     return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
