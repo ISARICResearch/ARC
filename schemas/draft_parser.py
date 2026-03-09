@@ -15,6 +15,8 @@ _unit_registry = ConversionRegistry().load_from_json(
     "units/unit_conversion.json", "units/unit_conversion.schema.json"
 )
 
+missing_codes = {"unk": "UNK", "ni": "NI", "nask": "NASK", "na": "NA"}
+
 
 def if_all_not_missing(field, missing_values=["UNK", "NI", "NASK", "NA"]):
     """
@@ -179,6 +181,19 @@ def attrs_with_checkboxes(arc):
 
             rules.append(rule)
 
+        for k, v in missing_codes.items():
+            rule = {
+                "attribute": row["Variable"],
+                "attribute_status": {
+                    "field": row["Variable"] + f"___{k}",
+                    "values": {"1": v},
+                },
+                "if": {row["Variable"] + f"___{k}": 1},
+                "ref": row["Form"],
+            }
+
+            rules.append(rule)
+
     return rules
 
 
@@ -254,6 +269,19 @@ def attrs_with_multilists(arc):
 
             rules.append(rule)
 
+        for k, v in missing_codes.items():
+            rule = {
+                "attribute": row["Variable"],
+                "attribute_status": {
+                    "field": f"{row['Variable']}___{k}",
+                    "values": {"1": v},
+                },
+                "if": {f"{row['Variable']}___{k}": 1},
+                "ref": row["Form"],
+            }
+
+            rules.append(rule)
+
     return rules
 
 
@@ -264,27 +292,6 @@ def numeric_attrs(arc):
         rule = {
             "attribute": row["Variable"],
             "value_num": {
-                "field": row["Variable"],
-                "if": if_all_not_missing(row["Variable"]),
-            },
-            "attribute_status": {
-                "field": row["Variable"],
-                "apply": {"function": "attribute_status_fill"},
-            },
-            "ref": row["Form"],
-        }
-
-        rules.append(rule)
-    return rules
-
-
-def date_attrs(arc):
-    rules = []
-
-    for _, row in arc.iterrows():
-        rule = {
-            "attribute": row["Variable"],
-            "value": {
                 "field": row["Variable"],
                 "if": if_all_not_missing(row["Variable"]),
             },
@@ -442,7 +449,7 @@ def generate_parser(
                     },
                 },
                 "withdrawal": {
-                    "phase": "follow_up",
+                    "phase": "outcome",
                     "date": {
                         "field": "withd_date",
                         "if": if_all_not_missing("withd_date"),
@@ -572,7 +579,6 @@ def generate_parser(
         "user_lists": attrs_with_userlists,
         "multi_lists": attrs_with_multilists,
         "numeric": numeric_attrs,
-        "dates": date_attrs,
         "strings": generic_str_attrs,
     }
 
@@ -584,8 +590,7 @@ def generate_parser(
         "user_lists": ["user_list"],
         "multi_lists": ["multi_list"],
         "numeric": ["number", "calc"],
-        "dates": ["date_dmy", "datetime_dmy", "time"],
-        "strings": ["text", "notes"],
+        "strings": ["date_dmy", "datetime_dmy", "time", "text", "notes"],
     }
 
     arc_remaining = arc_long[~arc_long.Variable.isin(hard_coded_fields)]
