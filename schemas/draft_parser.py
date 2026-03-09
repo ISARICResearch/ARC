@@ -173,6 +173,7 @@ def attrs_with_checkboxes(arc):
                     "field": row["Variable"] + f"___{k}",
                     "values": {"1": v},
                 },
+                "attribute_status": "VAL",
                 "ref": row["Form"],
             }
 
@@ -195,6 +196,10 @@ def attrs_with_lists(arc):
                 ),
                 "can_skip": True,
             },
+            "attribute_status": {
+                "field": field_base + "{n}item",
+                "apply": {"function": "attribute_status_fill"},
+            },
             "ref": row["Form"],
             "for": {"n": {"range": [0, 4]}},
         }
@@ -215,6 +220,10 @@ def attrs_with_userlists(arc):
                 "values": read_list_file(
                     f"Lists/{'/'.join(row['List'].split('_'))}.csv"
                 ),
+            },
+            "attribute_status": {
+                "field": row["Variable"],
+                "apply": {"function": "attribute_status_fill"},
             },
             "ref": row["Form"],
         }
@@ -239,6 +248,7 @@ def attrs_with_multilists(arc):
                     "values": {"1": v},
                     "can_skip": True,
                 },
+                "attribute_status": "VAL",
                 "ref": row["Form"],
             }
 
@@ -539,7 +549,10 @@ def generate_parser(
                     },
                 ],
             },
-            # "attribute_status": attribute_status_rule("medi_dose"),
+            "attribute_status": {
+                "field": "medi_dose",
+                "apply": {"function": "attribute_status_fill"},
+            },
             "ref": arc[arc.Variable == "medi_dose"]["Form"].item(),
         }
     ]
