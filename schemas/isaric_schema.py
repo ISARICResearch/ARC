@@ -10,6 +10,13 @@ import numpy as np
 from pathlib import Path
 import sys
 
+from units.utils import ConversionRegistry
+
+# Create a ConversionRegistry instance for looking up unit values
+_conversion_registry = ConversionRegistry().load_from_json(
+    "units/unit_conversion.json", "units/unit_conversion.schema.json"
+)
+
 
 def get_enums(options):
     """Extracts the enum values from the 'Answer Options' field."""
@@ -30,6 +37,11 @@ def medications_dosage(arc):
             "attribute": {"const": "medi_dose"},
             "value_num": {"type": "number"},
             "attribute_unit": {"type": "string"},
+            "attribute_status": {
+                "type": "string",
+                "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                "description": "Use to indicate missing data and the reason for missingness.",
+            },
         },
         "required": ["value_num", "attribute_unit"],
     }
@@ -47,16 +59,18 @@ def attrs_with_enums(arc, types: list[str]):
             name = {"const": group.Variable.iloc[0]}
         else:
             name = {"enum": group.Variable.tolist()}
+        enums = get_enums(options)
         rule = {
-            "properties": {"attribute": name},
+            "properties": {
+                "attribute": name,
+                "value": {"type": "string", "enum": enums},
+                "attribute_status": {
+                    "type": "string",
+                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                },
+            },
             "required": ["value"],
         }
-        rule["properties"]["value"] = {"type": "string"}
-        enums = get_enums(options)
-        if set(enums) == {"Yes", "No"}:
-            rule["properties"]["value_bool"] = {"type": "boolean"}
-        else:
-            rule["properties"]["value"]["enum"] = enums
 
         rules.append(rule)
 
@@ -70,11 +84,17 @@ def attrs_with_lists(arc, types: list[str]):
 
     for list_file, group in arc_long_lists.groupby("List"):
         if len(group) == 1:
-            name = {"const": group.Variable.iloc[0]}
+            name = {"const": group.Variable.item()}
         else:
             name = {"enum": group.Variable.tolist()}
         rule = {
-            "properties": {"attribute": name},
+            "properties": {
+                "attribute": name,
+                "attribute_status": {
+                    "type": "string",
+                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                },
+            },
             "required": ["value"],
         }
         file_name = (list_file + ".csv").split("_")
@@ -108,41 +128,21 @@ def attrs_with_units(arc):
             {
                 "properties": {
                     "attribute": {"const": unit_var},
-                    "attribute_unit": {"const": unit_var.removeprefix(var + "_")},
+                    "attribute_unit": {
+                        "const": _conversion_registry.get_unit_label_from_unit_field_name(
+                            unit_var.rsplit("_", 1)[0], unit_var
+                        )
+                    },
                     "value_num": {"type": "number"},
+                    "attribute_status": {
+                        "type": "string",
+                        "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                    },
                 },
                 "required": ["value_num", "attribute_unit"],
             }
             for unit_var in unit_options
         ]
-
-        rs += [
-            {
-                "properties": {
-                    "attribute": {"const": var},
-                    "value_num": {"type": "number"},
-                },
-                "required": [
-                    "value_num",
-                ],
-            },
-            {
-                "properties": {
-                    "attribute": {"const": var + "_units"},
-                    "value": {
-                        "enum": get_enums(
-                            arc[arc["Variable"] == var + "_units"][
-                                "Answer Options"
-                            ].item()
-                        )
-                    },
-                },
-                "required": [
-                    "value",
-                ],
-            },
-        ]
-
         rules.extend(rs)
 
     return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
@@ -162,10 +162,16 @@ def numeric_attrs(arc, types: list[str]):
         else:
             name = {"enum": group.Variable.tolist()}
         rule = {
-            "properties": {"attribute": name},
+            "properties": {
+                "attribute": name,
+                "value_num": {"type": "number"},
+                "attribute_status": {
+                    "type": "string",
+                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                },
+            },
             "required": ["value_num"],
         }
-        rule["properties"]["value_num"] = {"type": "number"}
         if not pd.isna(min):
             rule["properties"]["value_num"]["minimum"] = float(min)
         if not pd.isna(max):
@@ -182,17 +188,23 @@ def date_attrs(arc, types: list[str]):
 
     for input_type, group in arc_long_dates.groupby("Type"):
         if len(group) == 1:
-            name = {"const": group.Variable.iloc[0]}
+            name = {"const": group.Variable.item()}
         else:
             name = {"enum": group.Variable.tolist()}
         rule = {
-            "properties": {"attribute": name},
+            "properties": {
+                "attribute": name,
+                "value": {
+                    "type": "string",
+                    "format": "date" if input_type == "date_dmy" else "date-time",
+                },
+                "attribute_status": {
+                    "type": "string",
+                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                },
+            },
             "required": ["value"],
         }
-        if input_type == "date_dmy":
-            rule["properties"]["value"] = {"type": "string", "format": "date"}
-        elif input_type == "datetime_dmy":
-            rule["properties"]["value"] = {"type": "string", "format": "date-time"}
 
         rules.append(rule)
     return rules, arc[~arc_filter]
@@ -203,17 +215,22 @@ def time_attrs(arc, types: list[str]):
     arc_filter = arc["Type"].isin(types)
     arc_long_times = arc[arc_filter]
 
-    for input_type, group in arc_long_times.groupby("Type"):
+    for _, group in arc_long_times.groupby("Type"):
         if len(group) == 1:
             name = {"const": group.Variable.item()}
         else:
             name = {"enum": group.Variable.tolist()}
         rule = {
-            "properties": {"attribute": name},
+            "properties": {
+                "attribute": name,
+                "value": {"type": "string", "format": "time"},
+                "attribute_status": {
+                    "type": "string",
+                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                },
+            },
             "required": ["value"],
         }
-        if input_type == "time":
-            rule["properties"]["value"] = {"type": "string", "format": "time"}
 
         rules.append(rule)
     return rules, arc[~arc_filter]
@@ -223,9 +240,17 @@ def generic_str_attrs(arc, types: list[str]):
     arc_filter = arc["Type"].isin(types)
     arc_long_other_str = arc[arc_filter]
 
-    rule = {"properties": {"attribute": {"enum": arc_long_other_str.Variable.tolist()}}}
-    rule["properties"]["value"] = {"type": "string"}
-    rule["required"] = ["value"]
+    rule = {
+        "properties": {
+            "attribute": {"enum": arc_long_other_str.Variable.tolist()},
+            "value": {"type": "string"},
+            "attribute_status": {
+                "type": "string",
+                "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+            },
+        },
+        "required": ["value"],
+    }
 
     return [rule], arc[~arc_filter]
 
