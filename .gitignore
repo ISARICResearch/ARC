@@ -11,3 +11,5 @@ venv/
 converage.xml
 .pytest_cache/
 **/.DS_Store
+
+*.egg-info/
