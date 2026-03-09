@@ -4,10 +4,23 @@ Create a template schema for transforming ARC data into the ISARIC format.
 
 import pandas as pd
 import json
-import numpy as np
 import toml_writer as tomli_w
 import warnings
 import sys
+
+from units.utils import ConversionRegistry
+
+# Create a ConversionRegistry instance for looking up unit values
+_unit_registry = ConversionRegistry().load_from_json(
+    "units/unit_conversion.json", "units/unit_conversion.schema.json"
+)
+
+
+def if_all_not_missing(field, missing_values=["UNK", "NI", "NASK", "NA"]):
+    """
+    Helper function to create an 'if' condition that checks a field is not equal to any
+    of the specified missing values, or empty."""
+    return {"all": [{field: {"!=": opt}} for opt in missing_values + [""]]}
 
 
 def get_value_options(options, lower_case=False):
@@ -38,27 +51,76 @@ def read_list_file(file):
         return "TODO: fix this"
 
 
-def attrs_with_units(arc, types: list[str]):
+def attrs_with_units(arc):
     """
     Don't use inside `make_long_row`, so we have the full arc file
     """
     rules = []
-    arc_filter = arc["Type"].isin(types)
-    vars_with_units = arc[arc_filter]["Variable"]
-    arc_vars_to_remove = vars_with_units.copy().to_list()
+    arc_filter = arc["Variable"].str.endswith("_units")
+    vars_with_units = arc[arc_filter]["Variable"].str.removesuffix("_units")
+    arc_vars_to_remove = (
+        vars_with_units.copy().to_list() + arc[arc_filter]["Variable"].to_list()
+    )
 
     for var in vars_with_units:
         unit_options = arc[arc["Variable"].str.startswith(var + "_")][
             "Variable"
         ].to_list()
         arc_vars_to_remove += unit_options
+        # Remove the unit field itself from the options list
+        unit_options.remove(var + "_units")
 
         for opt in unit_options:
             rule = {
-                # "attribute": var,
                 "attribute": opt,
-                "value_num": {"field": opt},
-                "attribute_unit": opt.rsplit("_", 1)[-1],
+                # Have to construct an if rule here as it's dependent on both there being data present,
+                # *and* the unit being correct.
+                "if": {
+                    "all": [
+                        {opt: {"!=": ""}, "can_skip": True},
+                        {var: {"!=": ""}, "can_skip": True},
+                        {
+                            f"{var}_units": _unit_registry.get_unit_value_from_unit_field_name(
+                                var, opt
+                            )
+                        },
+                    ]
+                },
+                # Either a the field exists with the unit in the name, or data is present as `name, name_units` columns where
+                # the being entered in this unit-specific column is dependent on the units selected.
+                "value_num": {
+                    "combinedType": "firstNonNull",
+                    "fields": [
+                        {
+                            "field": opt,
+                            "apply": {"function": "values_strip_missing"},
+                            "can_skip": True,
+                        },
+                        {
+                            "field": var,
+                            "apply": {"function": "values_strip_missing"},
+                            "can_skip": True,
+                        },
+                    ],
+                },
+                "attribute_unit": (
+                    _unit_registry.get_unit_label_from_unit_field_name(var, opt)
+                ),
+                "attribute_status": {
+                    "combinedType": "firstNonNull",
+                    "fields": [
+                        {
+                            "field": opt,
+                            "apply": {"function": "attribute_status_fill"},
+                            "can_skip": True,
+                        },
+                        {
+                            "field": var,
+                            "apply": {"function": "attribute_status_fill"},
+                            "can_skip": True,
+                        },
+                    ],
+                },
                 "ref": arc[arc.Variable == var]["Form"].item(),
             }
 
@@ -73,7 +135,6 @@ def make_long_row(arc, types, rule_func):
 
     rules = rule_func(filtered_arc)
 
-    # return rules, arc[~arc_filter]
     return rules
 
 
@@ -86,6 +147,10 @@ def attrs_with_enums(arc):
             "value": {
                 "field": row["Variable"],
                 "values": get_value_options(row["Answer Options"]),
+            },
+            "attribute_status": {
+                "field": row["Variable"],
+                "apply": {"function": "attribute_status_fill"},
             },
             "ref": row["Form"],
         }
@@ -190,6 +255,11 @@ def numeric_attrs(arc):
             "attribute": row["Variable"],
             "value_num": {
                 "field": row["Variable"],
+                "if": if_all_not_missing(row["Variable"]),
+            },
+            "attribute_status": {
+                "field": row["Variable"],
+                "apply": {"function": "attribute_status_fill"},
             },
             "ref": row["Form"],
         }
@@ -206,6 +276,11 @@ def date_attrs(arc):
             "attribute": row["Variable"],
             "value": {
                 "field": row["Variable"],
+                "if": if_all_not_missing(row["Variable"]),
+            },
+            "attribute_status": {
+                "field": row["Variable"],
+                "apply": {"function": "attribute_status_fill"},
             },
             "ref": row["Form"],
         }
@@ -222,6 +297,11 @@ def generic_str_attrs(arc):
             "attribute": row["Variable"],
             "value": {
                 "field": row["Variable"],
+                "if": if_all_not_missing(row["Variable"]),
+            },
+            "attribute_status": {
+                "field": row["Variable"],
+                "apply": {"function": "attribute_status_fill"},
             },
             "ref": row["Form"],
         }
@@ -270,11 +350,17 @@ def generate_parser(
             "defs": {
                 "presentation": {
                     "phase": "presentation",
-                    "date": {"field": "pres_date", "if": {"pres_date": {"!=": "NA"}}},
+                    "date": {
+                        "field": "pres_date",
+                        "if": if_all_not_missing("pres_date"),
+                    },
                 },
                 "daily": {
                     "phase": "during_observation",
-                    "date": {"field": "daily_date", "if": {"daily_date": {"!=": "NA"}}},
+                    "date": {
+                        "field": "daily_date",
+                        "if": if_all_not_missing("daily_date"),
+                    },
                 },
                 "medication": {
                     "event_id": {
@@ -290,11 +376,11 @@ def generate_parser(
                     "phase": "during_observation",
                     "date": {
                         "field": "medi_medstartdate",
-                        "if": {"medi_medstartdate": {"!=": "NA"}},
+                        "if": if_all_not_missing("medi_medstartdate"),
                     },
                     "duration": {
                         "field": "medi_numdays",
-                        "if": {"medi_numdays": {"!=": "NA"}},
+                        "if": if_all_not_missing("medi_numdays"),
                     },
                 },
                 "pathogen_testing": {
@@ -311,7 +397,7 @@ def generate_parser(
                     "phase": "during_observation",
                     "date": {
                         "field": "test_collectiondate",
-                        "if": {"test_collectiondate": {"!=": "NA"}},
+                        "if": if_all_not_missing("test_collectiondate"),
                     },
                 },
                 "photographs": {
@@ -326,22 +412,31 @@ def generate_parser(
                         }
                     },
                     "phase": "during_observation",
-                    "date": {"field": "photo_date", "if": {"photo_date": {"!=": "NA"}}},
+                    "date": {
+                        "field": "photo_date",
+                        "if": if_all_not_missing("photo_date"),
+                    },
                 },
                 "outcome": {
                     "phase": "outcome",
-                    "date": {"field": "outco_date", "if": {"outco_date": {"!=": "NA"}}},
+                    "date": {
+                        "field": "outco_date",
+                        "if": if_all_not_missing("outco_date"),
+                    },
                 },
-                "followup": {
-                    "phase": "followup",
+                "follow_up": {
+                    "phase": "follow_up",
                     "date": {
                         "field": "follow_date",
-                        "if": {"follow_date": {"!=": "NA"}},
+                        "if": if_all_not_missing("follow_date"),
                     },
                 },
                 "withdrawal": {
-                    "phase": "followup",
-                    "date": {"field": "withd_date", "if": {"withd_date": {"!=": "NA"}}},
+                    "phase": "follow_up",
+                    "date": {
+                        "field": "withd_date",
+                        "if": if_all_not_missing("withd_date"),
+                    },
                 },
             },
             "tables": {
@@ -372,7 +467,12 @@ def generate_parser(
     arc_core_vars = arc[arc.Variable.isin(core_fields)]["Variable"].tolist()
 
     parser["core"] = {
-        k: {"field": k} if k in arc_core_vars else "TODO: FILL THIS IN"
+        k: {
+            "field": k,
+            "if": if_all_not_missing(k),
+        }
+        if k in arc_core_vars
+        else "TODO: FILL THIS IN"
         for k in core_fields
     }
 
@@ -416,12 +516,15 @@ def generate_parser(
     parser["long"] = [
         {
             "attribute": "medi_dose",
-            "value_num": {"field": "medi_dose"},
+            "value_num": {
+                "field": "medi_dose",
+                "if": if_all_not_missing("medi_dose"),
+            },
             "attribute_unit": {
                 "combinedType": "firstNonNull",
                 "fields": [
                     {
-                        "field": "medi_units_other",
+                        "field": "medi_units_oth",
                         "if": {
                             "medi_units": int(
                                 next(
@@ -436,11 +539,12 @@ def generate_parser(
                     },
                 ],
             },
+            # "attribute_status": attribute_status_rule("medi_dose"),
             "ref": arc[arc.Variable == "medi_dose"]["Form"].item(),
         }
     ]
 
-    hard_coded_fields = core_fields + ["medi_dose", "medi_units", "medi_units_other"]
+    hard_coded_fields = core_fields + ["medi_dose", "medi_units", "medi_units_oth"]
 
     # setup for long schema
     # Drop the core properties from the long schema
@@ -472,7 +576,7 @@ def generate_parser(
     }
 
     arc_remaining = arc_long[~arc_long.Variable.isin(hard_coded_fields)]
-    unit_rules, arc_no_units = attrs_with_units(arc_remaining, [np.nan])
+    unit_rules, arc_no_units = attrs_with_units(arc_remaining)
     parser["long"] += unit_rules
 
     for attr_type in row_rules.keys():
@@ -498,7 +602,11 @@ def generate_parser(
 def main():
     tag = sys.argv[1]
     print(f"Running parser script with tag: {tag}")
-    generate_parser(tag)
+    generate_parser(
+        tag,
+        filename="mpox_parser_1.2.1",
+        preset="preset_ARChetype Disease CRF_Mpox",
+    )
 
 
 if __name__ == "__main__":

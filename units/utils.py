@@ -312,6 +312,38 @@ class ConversionRegistry:
         if entry is not None:
             return entry.units_field_name
 
+    def get_unit_label_from_unit_field_name(
+        self, var_name: str, unit_field_name: str
+    ) -> Optional[int]:
+        """
+        Searches all conversion entries to find the unit_value for a given unit_field_name.
+
+        Args:
+            unit_field_name: The field name to search for (e.g., "demog_height_cm")
+
+        Returns:
+            The unit_value (int) if found, None otherwise.
+        """
+        entry = self.conversion_entries[var_name]
+        unit = entry.units.get_unit_from_unit_field_name(unit_field_name)
+        return unit.unit_label
+
+    def get_unit_value_from_unit_field_name(
+        self, var_name: str, unit_field_name: str
+    ) -> Optional[int]:
+        """
+        Searches all conversion entries to find the unit_value for a given unit_field_name.
+
+        Args:
+            unit_field_name: The field name to search for (e.g., "demog_height_cm")
+
+        Returns:
+            The unit_value (int) if found, None otherwise.
+        """
+        entry = self.conversion_entries[var_name]
+        unit = entry.units.get_unit_from_unit_field_name(unit_field_name)
+        return unit.unit_value
+
 
 @dataclass
 class UnitConverter:
