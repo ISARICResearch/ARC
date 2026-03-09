@@ -25,7 +25,7 @@
                 "presentation",
                 "pre_observation",
                 "during_observation",
-                "followup",
+                "follow_up",
                 "outcome"
             ],
             "description": "Healthcare encounter phase"
@@ -96,6 +96,19 @@
                 "null"
             ],
             "description": "Duration of the event in days."
+        },
+        "attribute_status": {
+            "type": [
+                "string"
+            ],
+            "enum": [
+                "VAL",
+                "UNK",
+                "NI",
+                "NASK",
+                "NA"
+            ],
+            "description": "Use to indicate missing data and the reason for missingness. 'VAL' indicates that the data was collected and is present in the 'value' or 'value_num' field."
         }
     },
     "oneOf": [
@@ -114,6 +127,7 @@
         "subjid",
         "dataset_id",
         "phase",
-        "attribute"
+        "attribute",
+        "attribute_status"
     ]
 }
