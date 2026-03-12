@@ -16,6 +16,7 @@ _unit_registry = ConversionRegistry().load_from_json(
 )
 
 missing_codes = {"unk": "UNK", "ni": "NI", "nask": "NASK", "na": "NA"}
+missing_codes_multilist = {**missing_codes, "88": "OTH"}
 
 
 def if_all_not_missing(field, missing_values=["UNK", "NI", "NASK", "NA"]):
@@ -202,24 +203,42 @@ def attrs_with_lists(arc):
 
     for _, row in arc.iterrows():
         field_base = f"{row['Variable']}_"
-        rule = {
-            "attribute": row["Variable"],
-            "value": {
-                "field": field_base + "{n}item",
-                "values": read_list_file(
-                    f"Lists/{'/'.join(row['List'].split('_'))}.csv"
-                ),
-                "can_skip": True,
+        rule = [
+            {
+                "attribute": row["Variable"],
+                "value": {
+                    "field": field_base + "{n}item",
+                    "values": read_list_file(
+                        f"Lists/{'/'.join(row['List'].split('_'))}.csv"
+                    ),
+                    "can_skip": True,
+                },
+                "attribute_status": {
+                    "field": field_base + "{n}item",
+                    "apply": {"function": "attribute_status_fill"},
+                },
+                "ref": row["Form"],
+                "for": {"n": {"range": [0, 4]}},
             },
-            "attribute_status": {
-                "field": field_base + "{n}item",
-                "apply": {"function": "attribute_status_fill"},
+            {
+                "attribute": row["Variable"],
+                "value": {
+                    "field": field_base + "{n}otherl2",
+                    "values": read_list_file(
+                        f"Lists/{'/'.join(row['List'].split('_'))}.csv"
+                    ),
+                    "can_skip": True,
+                },
+                "attribute_status": {
+                    "field": field_base + "{n}otherl2",
+                    "apply": {"function": "attribute_status_fill"},
+                },
+                "ref": row["Form"],
+                "for": {"n": {"range": [0, 4]}},
             },
-            "ref": row["Form"],
-            "for": {"n": {"range": [0, 4]}},
-        }
+        ]
 
-        rules.append(rule)
+        rules.extend(rule)
 
     return rules
 
@@ -228,22 +247,48 @@ def attrs_with_userlists(arc):
     rules = []
 
     for _, row in arc.iterrows():
-        rule = {
-            "attribute": row["Variable"],
-            "value": {
-                "field": row["Variable"],
-                "values": read_list_file(
-                    f"Lists/{'/'.join(row['List'].split('_'))}.csv"
-                ),
+        values = read_list_file(f"Lists/{'/'.join(row['List'].split('_'))}.csv")
+        row_rules = [
+            {
+                "attribute": row["Variable"],
+                "value": {
+                    "field": row["Variable"],
+                    "values": values,
+                },
+                "attribute_status": {
+                    "field": row["Variable"],
+                    "apply": {"function": "attribute_status_fill"},
+                },
+                "ref": row["Form"],
             },
-            "attribute_status": {
-                "field": row["Variable"],
-                "apply": {"function": "attribute_status_fill"},
+            {
+                "attribute": row["Variable"],
+                "value": {
+                    "field": f"{row['Variable']}_otherl2",
+                    "values": values,
+                    "can_skip": True,
+                },
+                "attribute_status": {
+                    "field": f"{row['Variable']}_otherl2",
+                    "apply": {"function": "attribute_status_fill"},
+                },
+                "ref": row["Form"],
             },
-            "ref": row["Form"],
-        }
+            {
+                "attribute": row["Variable"],
+                "value": {
+                    "field": f"{row['Variable']}_otherl3",
+                    "can_skip": True,
+                },
+                "attribute_status": {
+                    "field": f"{row['Variable']}_otherl3",
+                    "apply": {"function": "attribute_status_fill"},
+                },
+                "ref": row["Form"],
+            },
+        ]
 
-        rules.append(rule)
+        rules.extend(row_rules)
 
     return rules
 
@@ -269,6 +314,7 @@ def attrs_with_multilists(arc):
 
             rules.append(rule)
 
+        # add in 'missing' code options
         for k, v in missing_codes.items():
             rule = {
                 "attribute": row["Variable"],
@@ -281,6 +327,40 @@ def attrs_with_multilists(arc):
             }
 
             rules.append(rule)
+
+        # if 88, 'other' is selected, more columns are filled as well as the errors...
+        # the variable___ syntax is only for the 'top level' fields, the rest are 'variable_otherl2___{n}'
+        # Then there's a free-text option as level 3...
+
+        other_rules = [
+            {
+                "attribute": row["Variable"],
+                "value": {
+                    "field": f"{row['Variable']}_otherl2",
+                    "values": values,
+                    "can_skip": True,
+                },
+                "attribute_status": {
+                    "field": f"{row['Variable']}_otherl2",
+                    "apply": {"function": "attribute_status_fill"},
+                },
+                "ref": row["Form"],
+            },
+            {
+                "attribute": row["Variable"],
+                "value": {
+                    "field": f"{row['Variable']}_otherl3",
+                    "can_skip": True,
+                },
+                "attribute_status": {
+                    "field": f"{row['Variable']}_otherl3",
+                    "apply": {"function": "attribute_status_fill"},
+                },
+                "ref": row["Form"],
+            },
+        ]
+
+        rules.extend(other_rules)
 
     return rules
 
@@ -498,9 +578,26 @@ def generate_parser(
             parser["core"][var]["values"] = opts
         elif arc[arc.Variable == var]["Type"].item() in ["user_list"]:
             # Outcome options
-            parser["core"][var]["values"] = read_list_file(
+            values = read_list_file(
                 f"Lists/{'/'.join(arc[arc.Variable == var]['List'].item().split('_'))}.csv"
             )
+            parser["core"][var] = {
+                "combinedType": "firstNonNull",
+                "fields": [
+                    {
+                        "field": f"{var}_otherl3",
+                        "if": {"all": [{var: 88}, {f"{var}_otherl2": 88}]},
+                        "can_skip": True,
+                    },
+                    {
+                        "field": f"{var}_otherl2",
+                        "values": values,
+                        "if": {var: 88},
+                        "can_skip": True,
+                    },
+                    {"field": var, "values": values, "if": if_all_not_missing(var)},
+                ],
+            }
 
     # Hard-code some of the fields we know about
 

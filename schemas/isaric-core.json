@@ -76,7 +76,7 @@
                 "Palliative care",
                 "Discharged against medical advice",
                 "Alive not admitted",
-                "Hospitalised"
+                "Hospitalized"
             ],
             "description": "Outcome"
         },
