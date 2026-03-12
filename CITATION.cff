@@ -1,0 +1,61 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: database
+title: "ARC"
+authors:
+  - family-names: Garcia-Gallo
+    given-names: Esteban
+  - family-names: Duque-Vallejo
+    given-names: Sara
+  - family-names: Darji
+    given-names: Dhruv
+  - family-names: Edinburgh
+    given-names: Tom
+  - family-names: Lunn
+    given-names: Miles
+  - family-names: Kelly
+    given-names: Sadie
+  - family-names: Carson
+    given-names: Gail
+  - family-names: Cummings
+    given-names: Mattew
+  - family-names: Diaz
+    given-names: Janet
+  - family-names: Dunning
+    given-names: Jake
+  - family-names: Ho
+    given-names: Antonia
+  - family-names: Horby
+    given-names: Peter
+  - family-names: Jackson
+    given-names: Charlotte
+  - family-names: Judd
+    given-names: Ali
+  - family-names: Le Prevost
+    given-names: Marthe
+  - family-names: Lim
+    given-names: Wei Shen
+  - family-names: Mello
+    given-names: Claudia
+  - family-names: Murthy
+    given-names: Srin
+  - family-names: Olliaro
+    given-names: Piero
+  - family-names: Reyes
+    given-names: Luis Felipe
+  - family-names: Rojek
+    given-names: Amanda
+  - family-names: Rylance
+    given-names: Jamie
+  - family-names: Sauer
+    given-names: Lauren
+  - family-names: Semple
+    given-names: Calum
+  - family-names: Sconza
+    given-names: Rebecca
+  - family-names: Uyeki
+    given-names: Tim
+  - family-names: Pesonel
+    given-names: Elise
+  - family-names: Merson
+    given-names: Laura
