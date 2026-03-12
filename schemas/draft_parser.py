@@ -41,12 +41,19 @@ def get_value_options(options, lower_case=False):
     return formatted_options
 
 
-def read_list_file(file):
+def read_list_file(list_name, selected=False, preset=None):
     """
     Opens a file containing the list of options for a specific question and returns
     the values dictionary.
     """
+    file = f"Lists/{'/'.join(list_name.split('_'))}.csv"
     df = pd.read_csv(file)
+
+    if preset and preset in df.columns:
+        df = df[df[preset] == 1]
+    elif selected:
+        df = df[(df["Selected"] == 1) | (df["Selected"] == "1")]
+
     try:
         value_dict = pd.Series(df.iloc[:, 0].to_list(), index=df["Value"]).to_dict()
         return {str(k): v.rstrip(" ") for k, v in value_dict.items()}
@@ -133,16 +140,16 @@ def attrs_with_units(arc):
     return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
 
 
-def make_long_row(arc, types, rule_func):
+def make_long_row(arc, types, rule_func, preset=None):
     arc_filter = arc["Type"].isin(types)
     filtered_arc = arc[arc_filter]
 
-    rules = rule_func(filtered_arc)
+    rules = rule_func(filtered_arc, preset=preset)
 
     return rules
 
 
-def attrs_with_enums(arc):
+def attrs_with_enums(arc, preset=None):
     rules = []
 
     for _, row in arc.iterrows():
@@ -164,7 +171,7 @@ def attrs_with_enums(arc):
     return rules
 
 
-def attrs_with_checkboxes(arc):
+def attrs_with_checkboxes(arc, preset=None):
     rules = []
 
     for _, row in arc.iterrows():
@@ -199,7 +206,7 @@ def attrs_with_checkboxes(arc):
     return rules
 
 
-def attrs_with_lists(arc):
+def attrs_with_lists(arc, preset=None):
     rules = []
 
     for _, row in arc.iterrows():
@@ -209,9 +216,7 @@ def attrs_with_lists(arc):
                 "attribute": row["Variable"],
                 "value": {
                     "field": field_base + "{n}item",
-                    "values": read_list_file(
-                        f"Lists/{'/'.join(row['List'].split('_'))}.csv"
-                    ),
+                    "values": read_list_file(row["List"], selected=True),
                     "can_skip": True,
                 },
                 "attribute_status": {
@@ -225,9 +230,7 @@ def attrs_with_lists(arc):
                 "attribute": row["Variable"],
                 "value": {
                     "field": field_base + "{n}otherl2",
-                    "values": read_list_file(
-                        f"Lists/{'/'.join(row['List'].split('_'))}.csv"
-                    ),
+                    "values": read_list_file(row["List"]),
                     "can_skip": True,
                 },
                 "attribute_status": {
@@ -244,17 +247,16 @@ def attrs_with_lists(arc):
     return rules
 
 
-def attrs_with_userlists(arc):
+def attrs_with_userlists(arc, preset=None):
     rules = []
 
     for _, row in arc.iterrows():
-        values = read_list_file(f"Lists/{'/'.join(row['List'].split('_'))}.csv")
         row_rules = [
             {
                 "attribute": row["Variable"],
                 "value": {
                     "field": row["Variable"],
-                    "values": values,
+                    "values": read_list_file(row["List"], selected=True),
                 },
                 "attribute_status": {
                     "field": row["Variable"],
@@ -266,7 +268,7 @@ def attrs_with_userlists(arc):
                 "attribute": row["Variable"],
                 "value": {
                     "field": f"{row['Variable']}_otherl2",
-                    "values": values,
+                    "values": read_list_file(row["List"]),
                     "can_skip": True,
                 },
                 "attribute_status": {
@@ -294,11 +296,11 @@ def attrs_with_userlists(arc):
     return rules
 
 
-def attrs_with_multilists(arc):
+def attrs_with_multilists(arc, preset=None):
     rules = []
 
     for _, row in arc.iterrows():
-        values = read_list_file(f"Lists/{'/'.join(row['List'].split('_'))}.csv")
+        values = read_list_file(row["List"], preset=preset, selected=True)
         if not isinstance(values, dict):
             continue
         for i, v in values.items():
@@ -332,13 +334,13 @@ def attrs_with_multilists(arc):
         # if 88, 'other' is selected, more columns are filled as well as the errors...
         # the variable___ syntax is only for the 'top level' fields, the rest are 'variable_otherl2___{n}'
         # Then there's a free-text option as level 3...
-
+        full_value_set = read_list_file(row["List"])
         other_rules = [
             {
                 "attribute": row["Variable"],
                 "value": {
                     "field": f"{row['Variable']}_otherl2",
-                    "values": values,
+                    "values": full_value_set,
                     "can_skip": True,
                 },
                 "attribute_status": {
@@ -366,7 +368,7 @@ def attrs_with_multilists(arc):
     return rules
 
 
-def numeric_attrs(arc):
+def numeric_attrs(arc, preset=None):
     rules = []
 
     for _, row in arc.iterrows():
@@ -387,7 +389,7 @@ def numeric_attrs(arc):
     return rules
 
 
-def generic_str_attrs(arc):
+def generic_str_attrs(arc, preset=None):
     rules = []
 
     for _, row in arc.iterrows():
@@ -597,9 +599,7 @@ def generate_parser(
             parser["core"][var]["values"] = opts
         elif arc[arc.Variable == var]["Type"].item() in ["user_list"]:
             # Outcome options
-            values = read_list_file(
-                f"Lists/{'/'.join(arc[arc.Variable == var]['List'].item().split('_'))}.csv"
-            )
+            values = read_list_file(arc[arc.Variable == var]["List"].item())
             parser["core"][var] = {
                 "combinedType": "firstNonNull",
                 "fields": [
@@ -714,7 +714,9 @@ def generate_parser(
     parser["long"] += unit_rules
 
     for attr_type in row_rules.keys():
-        rules = make_long_row(arc_no_units, row_types[attr_type], row_rules[attr_type])
+        rules = make_long_row(
+            arc_no_units, row_types[attr_type], row_rules[attr_type], preset=preset
+        )
         parser["long"] += rules
 
     # Then sort by recreating the list in the order of the ARC file
@@ -739,7 +741,11 @@ def main():
     else:
         tag = subprocess.check_output(["git", "describe", "--tags"], text=True).strip()
     print(f"Running parser script with tag: {tag}")
-    generate_parser(tag)
+    generate_parser(
+        tag,
+        filename="schemas/mpox_parser_1.2.1",
+        preset="preset_ARChetype Disease CRF_Mpox",
+    )
 
 
 if __name__ == "__main__":
