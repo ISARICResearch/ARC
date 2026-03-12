@@ -1,15 +1,22 @@
 """
-Create a template schema for transforming ARC data into the ISARIC format.
+Generate a template parser for transforming ARC data into the ISARIC format.
 """
 
-import pandas as pd
 import json
-import warnings
-import sys
 import subprocess
+import sys
+import warnings
+from typing import Any
 
-from units.utils import ConversionRegistry
+import pandas as pd
+
 from schemas import toml_writer as tomli_w
+from units.utils import ConversionRegistry
+
+# Type aliases
+Rule = dict[str, Any]
+RuleList = list[Rule]
+ValueDict = dict[str, str]
 
 # Create a ConversionRegistry instance for looking up unit values
 _unit_registry = ConversionRegistry().load_from_json(
@@ -20,15 +27,23 @@ missing_codes = {"unk": "UNK", "ni": "NI", "nask": "NASK", "na": "NA"}
 missing_codes_multilist = {**missing_codes, "88": "OTH"}
 
 
-def if_all_not_missing(field, missing_values=["UNK", "NI", "NASK", "NA"]):
+def if_all_not_missing(
+    field: str, missing_values: list[str] = missing_codes.values()
+) -> dict[str, list[dict]]:
     """
-    Helper function to create an 'if' condition that checks a field is not equal to any
-    of the specified missing values, or empty."""
+    Create an 'if' condition that checks a field is not equal to any of `missing_values`
+    """
     return {"all": [{field: {"!=": opt}} for opt in missing_values + [""]]}
 
 
-def get_value_options(options, lower_case=False):
-    """Creates a dictionary from the 'Answer Options' field."""
+def get_value_options(options: str, lower_case: bool = False) -> ValueDict | None:
+    """
+    Parse the 'Answer Options' field into a dictionary.
+
+    Example:
+        >>> get_value_options("1, Yes|2, No")
+        {'1': 'Yes', '2': 'No'}
+    """
     if pd.isna(options):
         return None
     formatted_options = {
@@ -41,10 +56,20 @@ def get_value_options(options, lower_case=False):
     return formatted_options
 
 
-def read_list_file(list_name, selected=False, preset=None):
+def read_list_file(
+    list_name: str, selected: bool = False, preset: str | None = None
+) -> ValueDict | str:
     """
-    Opens a file containing the list of options for a specific question and returns
-    the values dictionary.
+    Read a list file and return the values as a dictionary.
+
+    Args:
+        list_name: Name of the list in format "category_Name" (e.g., "conditions_Symptoms").
+        selected: If True, only include rows where Selected=1.
+        preset: If provided, only include rows where this column equals 1.
+
+    Returns:
+        Dictionary mapping Value column to the first column's values,
+        or "TODO: fix this" if the file format is invalid.
     """
     file = f"Lists/{'/'.join(list_name.split('_'))}.csv"
     df = pd.read_csv(file)
@@ -62,9 +87,13 @@ def read_list_file(list_name, selected=False, preset=None):
         return "TODO: fix this"
 
 
-def attrs_with_units(arc):
+def attrs_with_units(arc: pd.DataFrame) -> tuple[RuleList, pd.DataFrame]:
     """
-    Don't use inside `make_long_row`, so we have the full arc file
+    Generate rules for attributes that have associated unit fields.
+
+    Identifies variables with "_units" suffixes and creates rules
+    that handle unit conversion. Should be called with the full ARC dataframe
+    (i.e. not inside `make_long_row`).
     """
     rules = []
     arc_filter = arc["Variable"].str.endswith("_units")
@@ -140,16 +169,17 @@ def attrs_with_units(arc):
     return rules, arc[~arc["Variable"].isin(arc_vars_to_remove)]
 
 
-def make_long_row(arc, types, rule_func, preset=None):
+def make_long_row(
+    arc: pd.DataFrame, types: list[str], rule_func: callable, preset: str | None = None
+) -> RuleList:
+    """Filter ARC dataframe by types and apply a rule generation function."""
     arc_filter = arc["Type"].isin(types)
     filtered_arc = arc[arc_filter]
-
-    rules = rule_func(filtered_arc, preset=preset)
-
-    return rules
+    return rule_func(filtered_arc, preset=preset)
 
 
-def attrs_with_enums(arc, preset=None):
+def attrs_with_enums(arc: pd.DataFrame, preset: str | None = None) -> RuleList:
+    """Generate rules for radio button (enum) fields."""
     rules = []
 
     for _, row in arc.iterrows():
@@ -171,7 +201,8 @@ def attrs_with_enums(arc, preset=None):
     return rules
 
 
-def attrs_with_checkboxes(arc, preset=None):
+def attrs_with_checkboxes(arc: pd.DataFrame, preset: str | None = None) -> RuleList:
+    """Generate rules for checkbox fields with multiple selectable options."""
     rules = []
 
     for _, row in arc.iterrows():
@@ -206,7 +237,8 @@ def attrs_with_checkboxes(arc, preset=None):
     return rules
 
 
-def attrs_with_lists(arc, preset=None):
+def attrs_with_lists(arc: pd.DataFrame, preset: str | None = None) -> RuleList:
+    """Generate rules for list-type fields with item selection."""
     rules = []
 
     for _, row in arc.iterrows():
@@ -247,7 +279,8 @@ def attrs_with_lists(arc, preset=None):
     return rules
 
 
-def attrs_with_userlists(arc, preset=None):
+def attrs_with_userlists(arc: pd.DataFrame, preset: str | None = None) -> RuleList:
+    """Generate rules for user_list type fields (single-select with other option)."""
     rules = []
 
     for _, row in arc.iterrows():
@@ -280,6 +313,7 @@ def attrs_with_userlists(arc, preset=None):
             {
                 "attribute": row["Variable"],
                 "value": {
+                    # free-text field, no value mapping
                     "field": f"{row['Variable']}_otherl3",
                     "can_skip": True,
                 },
@@ -296,7 +330,8 @@ def attrs_with_userlists(arc, preset=None):
     return rules
 
 
-def attrs_with_multilists(arc, preset=None):
+def attrs_with_multilists(arc: pd.DataFrame, preset: str | None = None) -> RuleList:
+    """Generate rules for multi_list type fields (checkbox-style from list)."""
     rules = []
 
     for _, row in arc.iterrows():
@@ -352,6 +387,7 @@ def attrs_with_multilists(arc, preset=None):
             {
                 "attribute": row["Variable"],
                 "value": {
+                    # free-text field, no value mapping
                     "field": f"{row['Variable']}_otherl3",
                     "can_skip": True,
                 },
@@ -368,7 +404,8 @@ def attrs_with_multilists(arc, preset=None):
     return rules
 
 
-def numeric_attrs(arc, preset=None):
+def numeric_attrs(arc: pd.DataFrame, preset: str | None = None) -> RuleList:
+    """Generate rules for numeric (number/calc) fields."""
     rules = []
 
     for _, row in arc.iterrows():
@@ -389,7 +426,8 @@ def numeric_attrs(arc, preset=None):
     return rules
 
 
-def generic_str_attrs(arc, preset=None):
+def generic_str_attrs(arc: pd.DataFrame, preset: str | None = None) -> RuleList:
+    """Generate rules for string-type fields (date, text, notes, etc.)."""
     rules = []
 
     for _, row in arc.iterrows():
@@ -410,7 +448,10 @@ def generic_str_attrs(arc, preset=None):
     return rules
 
 
-def form_definitions():
+def form_definitions() -> dict[str, dict[str, Any]]:
+    """Return definitions for TOML file, based on the 'Form' names in arc. All should have a
+    phase and date field mapping, those which are repeatable forms (e.g. medications)
+    should also contain an `event_id` field."""
     return {
         "presentation": {
             "phase": "presentation",
@@ -618,8 +659,7 @@ def generate_parser(
                 ],
             }
 
-    # Hard-code some of the fields we know about
-
+    # Hard-code demog_age_days as it isn't present in ARC
     parser["core"]["demog_age_days"] = {
         "combinedType": "firstNonNull",
         "fields": [
@@ -713,18 +753,15 @@ def generate_parser(
     unit_rules, arc_no_units = attrs_with_units(arc_remaining)
     parser["long"] += unit_rules
 
+    # Iterate through the variable types to construct the long table rules
     for attr_type in row_rules.keys():
         rules = make_long_row(
             arc_no_units, row_types[attr_type], row_rules[attr_type], preset=preset
         )
         parser["long"] += rules
 
-    # Then sort by recreating the list in the order of the ARC file
-
-    # Make a lookup for the order
+    # Sort the long table to match the ARC file
     order_index = {k: i for i, k in enumerate(arc_long["Variable"])}
-
-    # Sort parser by looking up the dict's value in the order list
     parser["long"] = sorted(parser["long"], key=lambda d: order_index[d["attribute"]])
 
     # Generate new long table parser
