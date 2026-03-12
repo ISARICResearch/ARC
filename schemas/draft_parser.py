@@ -4,11 +4,12 @@ Create a template schema for transforming ARC data into the ISARIC format.
 
 import pandas as pd
 import json
-import toml_writer as tomli_w
 import warnings
 import sys
+import subprocess
 
 from units.utils import ConversionRegistry
+from schemas import toml_writer as tomli_w
 
 # Create a ConversionRegistry instance for looking up unit values
 _unit_registry = ConversionRegistry().load_from_json(
@@ -407,6 +408,115 @@ def generic_str_attrs(arc):
     return rules
 
 
+def form_definitions():
+    return {
+        "presentation": {
+            "phase": "presentation",
+            "date": {
+                "field": "pres_date",
+                "if": if_all_not_missing("pres_date"),
+            },
+        },
+        "daily": {
+            "phase": "during_observation",
+            "date": {
+                "field": "daily_date",
+                "if": if_all_not_missing("daily_date"),
+            },
+        },
+        "medication": {
+            "event_id": {
+                "generate": {
+                    "type": "uuid5",
+                    "values": [
+                        "subjid",
+                        "redcap_repeat_instrument",
+                        "redcap_repeat_instance",
+                    ],
+                }
+            },
+            "phase": "during_observation",
+            "date": {
+                "field": "medi_medstartdate",
+                "if": if_all_not_missing("medi_medstartdate"),
+            },
+            "duration": {
+                "field": "medi_numdays",
+                "if": if_all_not_missing("medi_numdays"),
+            },
+        },
+        "pathogen_testing": {
+            "event_id": {
+                "generate": {
+                    "type": "uuid5",
+                    "values": [
+                        "subjid",
+                        "redcap_repeat_instrument",
+                        "redcap_repeat_instance",
+                    ],
+                }
+            },
+            "phase": "during_observation",
+            "date": {
+                "field": "test_collectiondate",
+                "if": if_all_not_missing("test_collectiondate"),
+            },
+        },
+        "photographs": {
+            "event_id": {
+                "generate": {
+                    "type": "uuid5",
+                    "values": [
+                        "subjid",
+                        "redcap_repeat_instrument",
+                        "redcap_repeat_instance",
+                    ],
+                }
+            },
+            "phase": "during_observation",
+            "date": {
+                "field": "photo_date",
+                "if": if_all_not_missing("photo_date"),
+            },
+        },
+        "outcome": {
+            "phase": "outcome",
+            "date": {
+                "field": "outco_date",
+                "if": if_all_not_missing("outco_date"),
+            },
+        },
+        "follow_up": {
+            "phase": "follow_up",
+            "date": {
+                "field": "follow_date",
+                "if": if_all_not_missing("follow_date"),
+            },
+        },
+        "withdrawal": {
+            "phase": "outcome",
+            "date": {
+                "field": "withd_date",
+                "if": if_all_not_missing("withd_date"),
+            },
+        },
+        "pregnancy": {
+            "phase": "presentation",
+            "date": {
+                "field": "preg_date",
+                "if": if_all_not_missing("preg_date"),
+            },
+        },
+        "neonate": {
+            "phase": "presentation",
+            "date": {
+                "field": "preg_date",
+                "if": if_all_not_missing("preg_date"),
+            },
+        },
+    }
+
+
 def generate_parser(
     version: str,
     arc_path: str = "ARC.csv",
@@ -444,98 +554,7 @@ def generate_parser(
         "adtl": {
             "name": "ARC-isaric",
             "description": "isaric",
-            "defs": {
-                "presentation": {
-                    "phase": "presentation",
-                    "date": {
-                        "field": "pres_date",
-                        "if": if_all_not_missing("pres_date"),
-                    },
-                },
-                "daily": {
-                    "phase": "during_observation",
-                    "date": {
-                        "field": "daily_date",
-                        "if": if_all_not_missing("daily_date"),
-                    },
-                },
-                "medication": {
-                    "event_id": {
-                        "generate": {
-                            "type": "uuid5",
-                            "values": [
-                                "subjid",
-                                "redcap_repeat_instrument",
-                                "redcap_repeat_instance",
-                            ],
-                        }
-                    },
-                    "phase": "during_observation",
-                    "date": {
-                        "field": "medi_medstartdate",
-                        "if": if_all_not_missing("medi_medstartdate"),
-                    },
-                    "duration": {
-                        "field": "medi_numdays",
-                        "if": if_all_not_missing("medi_numdays"),
-                    },
-                },
-                "pathogen_testing": {
-                    "event_id": {
-                        "generate": {
-                            "type": "uuid5",
-                            "values": [
-                                "subjid",
-                                "redcap_repeat_instrument",
-                                "redcap_repeat_instance",
-                            ],
-                        }
-                    },
-                    "phase": "during_observation",
-                    "date": {
-                        "field": "test_collectiondate",
-                        "if": if_all_not_missing("test_collectiondate"),
-                    },
-                },
-                "photographs": {
-                    "event_id": {
-                        "generate": {
-                            "type": "uuid5",
-                            "values": [
-                                "subjid",
-                                "redcap_repeat_instrument",
-                                "redcap_repeat_instance",
-                            ],
-                        }
-                    },
-                    "phase": "during_observation",
-                    "date": {
-                        "field": "photo_date",
-                        "if": if_all_not_missing("photo_date"),
-                    },
-                },
-                "outcome": {
-                    "phase": "outcome",
-                    "date": {
-                        "field": "outco_date",
-                        "if": if_all_not_missing("outco_date"),
-                    },
-                },
-                "follow_up": {
-                    "phase": "follow_up",
-                    "date": {
-                        "field": "follow_date",
-                        "if": if_all_not_missing("follow_date"),
-                    },
-                },
-                "withdrawal": {
-                    "phase": "outcome",
-                    "date": {
-                        "field": "withd_date",
-                        "if": if_all_not_missing("withd_date"),
-                    },
-                },
-            },
+            "defs": form_definitions(),
             "tables": {
                 "core": {
                     "kind": "groupBy",
@@ -708,14 +727,17 @@ def generate_parser(
 
     # Generate new long table parser
     if filename is None:
-        filename = f"global_arc_{version}_parser"
+        filename = f"schemas/global_arc_{version}_parser"
 
-    with open(f"schemas/{filename}.toml", "wb") as f:
+    with open(f"{filename}.toml", "wb") as f:
         tomli_w.dump(parser, f)
 
 
 def main():
-    tag = sys.argv[1]
+    if len(sys.argv) > 1:
+        tag = sys.argv[1]
+    else:
+        tag = subprocess.check_output(["git", "describe", "--tags"], text=True).strip()
     print(f"Running parser script with tag: {tag}")
     generate_parser(
         tag,

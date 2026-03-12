@@ -23,7 +23,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          pip install ".[dev]"
 
       - name: Run scripts with tag
         run: |
@@ -32,6 +32,10 @@ jobs:
           python schemas/isaric_schema.py "$TAG_NAME"
           python schemas/draft_parser.py "$TAG_NAME"
 
+      - name: Test generated files
+        run: |
+          python -m pytest tests/test_generated_parser.py
+      
       - name: Commit and push changes
         run: |
             git config --global user.name "github-actions[bot]"

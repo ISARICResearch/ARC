@@ -9,6 +9,7 @@ import json
 import numpy as np
 from pathlib import Path
 import sys
+import subprocess
 
 from units.utils import ConversionRegistry
 
@@ -326,7 +327,10 @@ def generate_long_schema(version):
 
 
 def main():
-    tag = sys.argv[1]
+    if len(sys.argv) > 1:
+        tag = sys.argv[1]
+    else:
+        tag = subprocess.check_output(["git", "describe", "--tags"], text=True).strip()
     print(f"Running schema script with tag: {tag}")
     generate_long_schema(tag)
 
