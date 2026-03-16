@@ -5,7 +5,6 @@ Generate a template parser for transforming ARC data into the ISARIC format.
 import json
 import subprocess
 import sys
-import warnings
 from typing import Any
 
 import pandas as pd
@@ -16,7 +15,6 @@ from units.utils import ConversionRegistry
 # Type aliases
 Rule = dict[str, Any]
 RuleList = list[Rule]
-ValueDict = dict[str, str]
 
 # Create a ConversionRegistry instance for looking up unit values
 _unit_registry = ConversionRegistry().load_from_json(
@@ -28,7 +26,7 @@ missing_codes_multilist = {**missing_codes, "88": "OTH"}
 
 
 def if_all_not_missing(
-    field: str, missing_values: list[str] = missing_codes.values()
+    field: str, missing_values: list[str] = list(missing_codes.values())
 ) -> dict[str, list[dict]]:
     """
     Create an 'if' condition that checks a field is not equal to any of `missing_values`
@@ -36,7 +34,7 @@ def if_all_not_missing(
     return {"all": [{field: {"!=": opt}} for opt in missing_values + [""]]}
 
 
-def get_value_options(options: str, lower_case: bool = False) -> ValueDict | None:
+def get_value_options(options: str, lower_case: bool = False) -> dict | None:
     """
     Parse the 'Answer Options' field into a dictionary.
 
@@ -58,7 +56,7 @@ def get_value_options(options: str, lower_case: bool = False) -> ValueDict | Non
 
 def read_list_file(
     list_name: str, selected: bool = False, preset: str | None = None
-) -> ValueDict | str:
+) -> dict:
     """
     Read a list file and return the values as a dictionary.
 
@@ -68,8 +66,7 @@ def read_list_file(
         preset: If provided, only include rows where this column equals 1.
 
     Returns:
-        Dictionary mapping Value column to the first column's values,
-        or "TODO: fix this" if the file format is invalid.
+        Dictionary mapping Value column to the first column's values.
     """
     file = f"Lists/{'/'.join(list_name.split('_'))}.csv"
     df = pd.read_csv(file)
@@ -79,12 +76,8 @@ def read_list_file(
     elif selected:
         df = df[(df["Selected"] == 1) | (df["Selected"] == "1")]
 
-    try:
-        value_dict = pd.Series(df.iloc[:, 0].to_list(), index=df["Value"]).to_dict()
-        return {str(k): v.rstrip(" ") for k, v in value_dict.items()}
-    except KeyError as e:
-        warnings.warn(f"From file '{file}': {e}")
-        return "TODO: fix this"
+    value_dict = pd.Series(df.iloc[:, 0].to_list(), index=df["Value"]).to_dict()
+    return {str(k): v.rstrip(" ") for k, v in value_dict.items()}
 
 
 def attrs_with_units(arc: pd.DataFrame) -> tuple[RuleList, pd.DataFrame]:
@@ -336,8 +329,6 @@ def attrs_with_multilists(arc: pd.DataFrame, preset: str | None = None) -> RuleL
 
     for _, row in arc.iterrows():
         values = read_list_file(row["List"], preset=preset, selected=True)
-        if not isinstance(values, dict):
-            continue
         for i, v in values.items():
             rule = {
                 "attribute": row["Variable"],
