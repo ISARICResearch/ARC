@@ -33,7 +33,7 @@ Erectile dysfunction,N52.9,ICD10,860914002,SNOMED,,,,31
 Fainting / blackouts (Syncope and collapse),R55,ICD10,309585006,SNOMED,,,,32
 Fecal incontinence,R15,ICD10,72042002,SNOMED,,,,33
 Feeding difficulty,R63.3,ICD10,78164000,SNOMED,,,,34
-Fever,R50.9,ICD10,386661006,SNOMED,1.0,1,1,35
+Fever,R50.9,ICD10,386661006,SNOMED,1,1,1,35
 Gastrointestinal bleeding (Gastrointestinal hemorrhage),K92.2,ICD10,74474003,SNOMED,,,,36
 Headache,R51,ICD10,25064002,SNOMED,,,,37
 Hepatomegaly,R16.0,ICD10,80515008,SNOMED,,,,38
@@ -52,7 +52,7 @@ Loss of taste (Parageusia),R43.2,ICD10,271801002,SNOMED,,,,50
 Lymphadenitis,I88,ICD10,19471005,SNOMED,,,,51
 Malaise and fatigue,R53,ICD10,271795006,SNOMED,,,,52
 Mouth ulcers (Recurrent oral aphthae),K12.0,ICD10,26284000,SNOMED,,,,53
-Mucosal lesion,,,427752005,SNOMED,1.0,1,,54
+Mucosal lesion,,,427752005,SNOMED,1,1,,54
 Muscle aches (Myalgia),M79.1,ICD10,68962001,SNOMED,,,,55
 Muscle weakness,M62.81,ICD10,26544005,SNOMED,,,,56
 Nasal congestion,R09.81,ICD10,68235000,SNOMED,,,1,57
@@ -67,7 +67,7 @@ Rapid heart beat/Pulse (Tachycardia),R00.0,ICD10,3424008,SNOMED,,,,65
 Rashes or skin lesions,R21,ICD10,271807003,SNOMED,,,,66
 Retention of urine,R33.9,ICD10,267064002,SNOMED,,,,67
 Shortness of breath (Dyspnea),R06.0,ICD10,267036007,SNOMED,,,1,68
-Skin lesion,,,,SNOMED,1.0,,,69
+Skin lesion,,,,SNOMED,1,,,69
 Skin rash,R21,ICD10,271807003,SNOMED,,1,,70
 Sleep disorder,F51.9,ICD10,39898005,SNOMED,,,,71
 Sneezing,R06.7,ICD10,162367006,SNOMED,,,1,72

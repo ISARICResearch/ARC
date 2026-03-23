@@ -26,11 +26,11 @@ Mupirocin (Bactroban),D06AX09,ATC,,,,,,,,,,Topical/Locally acting,23
 "Podophyllotoxin (Podofilox, Condylox)",D06BB04,ATC,,,,,,,,,,Topical,25
 Primaquine,P01BA03,ATC,,,,,,,,,,,26
 "Salbutamol (Ventolin, Proventil)",R03AC02,ATC,,,,,,,,,,,27
-Salmeterol (Serevent),R03AC12,ATC,1.0,,,,,,,,,,28
+Salmeterol (Serevent),R03AC12,ATC,1,,,,,,,,,,28
 "Salmeterol and Fluticasone (Advair, Seretide)",R03AK06,ATC,,,,,,,,,,,29
 "Sulphur, precipitated in petrolatum",D10AB02,ATC,,,,,,,,,,Topical,30
 "Theophylline (Theo-24, Elixophyllin)",R03DA04,ATC,,,,,,,,,,,31
 Tiotropium Bromide (Spiriva),R03BB04,ATC,,,,,,,,,,,32
 Trichloroacetic acid,78151001,SNOMED,,,,,,,,,,Topical,33
 Vilanterol and Fluticasone Furoate (Breo Ellipta),R03AK10,ATC,,,,,,,,,,,34
-Vilanterol and Umeclidinium Bromide (Anoro Ellipta),R03AL03,ATC,1.0,,,,,,,,,,35
+Vilanterol and Umeclidinium Bromide (Anoro Ellipta),R03AL03,ATC,1,,,,,,,,,,35
