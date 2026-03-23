@@ -2,7 +2,7 @@ Outcome,Code,Selected,preset_ARChetype Disease CRF_Mpox,preset_ARChetype Disease
 All lesions are completely resolved and no serious complications,,,1.0,1.0,1.0,,1
 All lesions are no longer active and no serious complications,,,1.0,1.0,1.0,,2
 Death,,1.0,1.0,1.0,1.0,1.0,3
-Discharged alive - medical grounds ,,1.0,1.0,1.0,1.0,1.0,4
+Discharged alive - medical grounds,,1.0,1.0,1.0,1.0,1.0,4
 Discharged alive - patient's preference,,1.0,1.0,1.0,1.0,1.0,5
 Early withdrawal,,1.0,1.0,1.0,1.0,1.0,6
 Loss to follow-up,,1.0,1.0,1.0,1.0,1.0,7
