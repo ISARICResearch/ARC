@@ -12,6 +12,7 @@ import sys
 import subprocess
 
 from units.utils import ConversionRegistry
+from schemas.codes import status_codes
 
 # Create a ConversionRegistry instance for looking up unit values
 _conversion_registry = ConversionRegistry().load_from_json(
@@ -40,7 +41,7 @@ def medications_dosage(arc):
             "attribute_unit": {"type": "string"},
             "attribute_status": {
                 "type": "string",
-                "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                "enum": status_codes,
                 "description": "Use to indicate missing data and the reason for missingness.",
             },
         },
@@ -67,7 +68,7 @@ def attrs_with_enums(arc, types: list[str]):
                 "value": {"type": "string", "enum": enums},
                 "attribute_status": {
                     "type": "string",
-                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                    "enum": status_codes,
                 },
             },
             "required": ["value"],
@@ -93,7 +94,7 @@ def attrs_with_lists(arc, types: list[str]):
                 "attribute": name,
                 "attribute_status": {
                     "type": "string",
-                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                    "enum": status_codes,
                 },
             },
             "required": ["value"],
@@ -137,7 +138,7 @@ def attrs_with_units(arc):
                     "value_num": {"type": "number"},
                     "attribute_status": {
                         "type": "string",
-                        "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                        "enum": status_codes,
                     },
                 },
                 "required": ["value_num", "attribute_unit"],
@@ -168,7 +169,7 @@ def numeric_attrs(arc, types: list[str]):
                 "value_num": {"type": "number"},
                 "attribute_status": {
                     "type": "string",
-                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                    "enum": status_codes,
                 },
             },
             "required": ["value_num"],
@@ -201,7 +202,7 @@ def date_attrs(arc, types: list[str]):
                 },
                 "attribute_status": {
                     "type": "string",
-                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                    "enum": status_codes,
                 },
             },
             "required": ["value"],
@@ -227,7 +228,7 @@ def time_attrs(arc, types: list[str]):
                 "value": {"type": "string", "format": "time"},
                 "attribute_status": {
                     "type": "string",
-                    "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                    "enum": status_codes,
                 },
             },
             "required": ["value"],
@@ -247,7 +248,7 @@ def generic_str_attrs(arc, types: list[str]):
             "value": {"type": "string"},
             "attribute_status": {
                 "type": "string",
-                "enum": ["VAL", "UNK", "NI", "NASK", "NA"],
+                "enum": status_codes,
             },
         },
         "required": ["value"],

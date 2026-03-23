@@ -11,6 +11,7 @@ import pandas as pd
 
 from schemas import toml_writer as tomli_w
 from units.utils import ConversionRegistry
+from schemas.codes import missing_codes as mc
 
 # Type aliases
 Rule = dict[str, Any]
@@ -21,7 +22,7 @@ _unit_registry = ConversionRegistry().load_from_json(
     "units/unit_conversion.json", "units/unit_conversion.schema.json"
 )
 
-missing_codes = {"unk": "UNK", "ni": "NI", "nask": "NASK", "na": "NA"}
+missing_codes = {code.lower(): code for code in mc}
 missing_codes_multilist = {**missing_codes, "88": "OTH"}
 
 
