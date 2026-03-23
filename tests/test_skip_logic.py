@@ -215,21 +215,55 @@ def test_checkboxes():
 @pytest.mark.medium
 @pytest.mark.parametrize("preset_column", PRESET_COLUMNS)
 def test_fields_exist_presets(preset_column):
-    """Check that fields mentioned in the skip logic exist"""
+    """Check that at least one valid OR-branch exists in skip logic for preset.
+
+    For example, if skip logic is "(demog_age < 1 and demog_age_units = 1) OR
+    demog_calcage_days <365", and only demog_calcage_days is present in the
+    filtered preset, the test passes because that branch is fully valid.
+    """
     arc = pd.read_csv(
         ARC_PATH, dtype="object", usecols=["Variable", "Skip Logic", preset_column]
     )
     arc = arc.loc[arc[preset_column].isin(["1"])]
-    arc_skip_logic = extract_from_arc(arc)
+    valid_variables = set(arc["Variable"])
 
-    condition = arc_skip_logic["skip_logic_field"].isin(
-        arc["Variable"]
-    ) | arc_skip_logic["skip_logic_field"].str.endswith(EXCEPTIONS_SUFFIX)
-    if not condition.all():
-        invalid = invalid = arc_skip_logic.loc[
-            ~condition, ["field_name", "skip_logic_field"]
-        ].to_dict(orient="records")
-        pytest.fail(f"Skip logic includes variable not in ARC: {invalid}")
+    invalid_rows = []
+
+    for idx in arc["Skip Logic"].dropna().index:
+        skip_logic = arc.loc[idx, "Skip Logic"]
+
+        # Split by OR (case insensitive) to get separate branches
+        or_branches = re.split(r"\s+or\s+", skip_logic, flags=re.IGNORECASE)
+
+        # Check if at least one branch has all its fields valid
+        has_valid_branch = False
+        for branch in or_branches:
+            branch_fields = extract(branch)
+            if not branch_fields:
+                continue
+            # Check if all fields in this branch are valid
+            all_valid = all(
+                f["skip_logic_field"] in valid_variables
+                or re.search(EXCEPTIONS_SUFFIX + "$", f["skip_logic_field"])
+                for f in branch_fields
+            )
+            if all_valid:
+                has_valid_branch = True
+                break
+
+        if not has_valid_branch:
+            field_name = arc.loc[idx, "Variable"]
+            all_fields = extract(skip_logic)
+            invalid_rows.append(
+                {
+                    "field_name": field_name,
+                    "skip_logic_fields": [f["skip_logic_field"] for f in all_fields],
+                }
+            )
+
+    if invalid_rows:
+        formatted = "\n".join(str(row) for row in invalid_rows)
+        pytest.fail(f"Skip logic has no valid branches:\n{formatted}")
 
 
 @pytest.mark.high
