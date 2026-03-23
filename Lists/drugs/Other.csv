@@ -2,7 +2,7 @@ Drugs,Code,Library,Selected,preset_Respiratory,preset_ARChetype Disease CRF_Covi
 Aminophylline (Truphylline),R03DA05,ATC,,,,,,,,,,,1
 "Beclometasone (Qvar, Beconase AQ)",R03BA01,ATC,,,,,,,,,,,2
 Caspofungin (Cancidas),J02AX04,ATC,,,,,,,,,,,3
-Chloroquine (Aralen),P01BA01,ATC,,,1.0,,,,,,1.0,,4
+Chloroquine (Aralen),P01BA01,ATC,,,1,,,,,,1,,4
 "Clobetasol (Temovate, Olux, Impoyz)",D07AD01,ATC,,,,,,,,,,Topical,5
 Fluconazole (Diflucan),J02AC01,ATC,,,,,,,,,,,6
 "Fluticasone (Flovent, Flonase)",R03BA05,ATC,,,,,,,,,,,7
@@ -14,8 +14,8 @@ Glycopyrronium Bromide (Seebri),R03BB06,ATC,,,,,,,,,,,12
 Hydroxychloroquine (Plaquenil),P01BA02,ATC,,,,,,,,,,,13
 "Imiquimod (Aldara, Zyclara)",D06BB10,ATC,,,,,,,,,,Topical/Locally acting,14
 Indacaterol and Glycopyrronium Bromide (Ultibro Breezhaler),R03AL04,ATC,,,,,,,,,,,15
-Interferon Alpha,L03AB01,ATC,,,1.0,,,,,,1.0,,16
-Interferon Beta,L03AB02,ATC,,,1.0,,,,,,1.0,,17
+Interferon Alpha,L03AB01,ATC,,,1,,,,,,1,,16
+Interferon Beta,L03AB02,ATC,,,1,,,,,,1,,17
 Ipratropium Bromide (Atrovent),R03BB01,ATC,,,,,,,,,,,18
 Ivermectin (Stromectol),P02CF01,ATC,,,,,,,,,,,19
 Mafenide (Sulfamylon),D06BA03,ATC,,,,,,,,,,Topical,20
