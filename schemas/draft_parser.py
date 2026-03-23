@@ -770,11 +770,7 @@ def main():
     else:
         tag = subprocess.check_output(["git", "describe", "--tags"], text=True).strip()
     print(f"Running parser script with tag: {tag}")
-    generate_parser(
-        tag,
-        filename="schemas/mpox_parser_1.2.1",
-        preset="preset_ARChetype Disease CRF_Mpox",
-    )
+    generate_parser(tag)
 
 
 if __name__ == "__main__":
