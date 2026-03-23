@@ -6,6 +6,7 @@ BASE_DIR = pathlib.Path(".")
 ARC_PATH = BASE_DIR / "ARC.csv"
 TEST_PATH = pathlib.Path(__file__)
 LIST_FILES = [x for x in pathlib.Path("Lists").rglob("*") if x.is_file()]
+LIST_FILE_NAMES = [f"{f.parent.stem}_{f.stem}" for f in LIST_FILES]
 
 REQUIRED_COLUMNS = ["Selected", "Value"]
 LIST_FILES_WITH_ARCHETYPE_PRESETS = [
@@ -44,7 +45,7 @@ def test_list_file_used_in_arc():
 
 
 @pytest.mark.high
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_csv_loads(file):
     """Check loads correctly with no encoding"""
     try:
@@ -59,7 +60,7 @@ def test_list_csv_loads(file):
 
 
 @pytest.mark.high
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_required_columns_exist(file):
     """Check required columns exist"""
     header = pd.read_csv(file, nrows=0, dtype="object").columns
@@ -69,7 +70,7 @@ def test_list_required_columns_exist(file):
 
 
 @pytest.mark.high
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_other_value(file):
     """Check required columns exist"""
     df = pd.read_csv(file, dtype="object")
@@ -82,7 +83,7 @@ def test_list_other_value(file):
 
 
 @pytest.mark.medium
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_arc_strip(file):
     """Check if each required column has empty spaces at the beginning/end"""
     df = pd.read_csv(file, dtype="object")
@@ -96,7 +97,7 @@ def test_arc_strip(file):
 
 
 @pytest.mark.medium
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_valid_selected_values(file):
     """Selected column must be NaN or 1 (not 1.0)"""
     df = pd.read_csv(file, dtype="object", usecols=["Selected"])
@@ -109,7 +110,7 @@ def test_list_valid_selected_values(file):
 
 
 @pytest.mark.medium
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_valid_preset_values(file):
     """Preset columns column must be NaN or 1 (not 1.0)"""
     df = pd.read_csv(file, dtype="object")
@@ -123,7 +124,7 @@ def test_list_valid_preset_values(file):
 
 
 @pytest.mark.medium
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_too_many_presets(file):
     """Check if the Lists file has the same presets as ARC"""
     arc = pd.read_csv(ARC_PATH, nrows=0, dtype="object")
@@ -141,7 +142,7 @@ def test_too_many_presets(file):
 
 
 @pytest.mark.high
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_unique_labels(file):
     """Check if the Lists file has the same presets as ARC"""
     df = pd.read_csv(file, dtype="object")
@@ -149,13 +150,11 @@ def test_unique_labels(file):
     condition = df[df.columns[0]].str.strip().duplicated(keep=False)
     if condition.any():
         invalid = df.loc[condition, df.columns[0]]
-        pytest.fail(
-            f"{str(file)} has repeated labels: {invalid}"
-        )
+        pytest.fail(f"{str(file)} has repeated labels: {invalid}")
 
 
 @pytest.mark.medium
-@pytest.mark.parametrize("file", LIST_FILES)
+@pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_unique_codes(file):
     """Check if the Lists file has the same presets as ARC"""
     df = pd.read_csv(file, dtype="object")
@@ -165,11 +164,12 @@ def test_unique_codes(file):
         if condition.any():
             invalid = df.loc[
                 condition,
-                [df.columns[0], "Code"],
+                [df.columns[0], "Code", "Value"],
             ].to_dict(orient="records")
-            pytest.fail(
-                f"{str(file)} has repeated labels: {invalid}"
+            formatted = "\n".join(
+                str(row) for row in sorted(invalid, key=lambda x: x["Code"])
             )
+            pytest.fail(f"{str(file)} has repeated labels:\n{formatted}")
 
 
 @pytest.mark.high
