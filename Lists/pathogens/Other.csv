@@ -109,7 +109,7 @@ Influenza B virus,407480007,SNOMED,virus,109,1
 Influenza virus,725894000,SNOMED,virus,110,1
 Isospora belli,12633005,SNOMED,"parasite, protozoa",111,1
 Japanese encephalitis virus (JEV),243603004,SNOMED,virus,112,1
-Junin virus ,26352009,SNOMED,virus,113,1
+Junin virus,26352009,SNOMED,virus,113,1
 Lassa virus,85944001,SNOMED,virus,114,1
 Leishmania,79357004,SNOMED,"parasite, protozoa",115,1
 Leishmania Viannia,712933004,SNOMED,"parasite, protozoa",116,1
@@ -120,7 +120,7 @@ Lichthiemia,734206002,SNOMED,fungi,120,1
 Lomentospora prolificans (Scedosporium prlificans),69564000,SNOMED,fungi,121,1
 Lujo virus,450622000,SNOMED,virus,122,1
 Lymphocytic choriomeningitis virus (LCMV),82518003,SNOMED,virus,123,1
-MERS-CoV ,697932005,SNOMED,virus,124,1
+MERS-CoV,697932005,SNOMED,virus,124,1
 Machupo virus,71489006,SNOMED,virus,125,1
 Madurella,23009007,SNOMED,fungi,126,1
 Malassezia pachydermatis,51257000,SNOMED,fungi,127,1
@@ -173,7 +173,7 @@ SARS-CoV-2  Eta - B.1.525,,,virus,173,1
 SARS-CoV-2  Gamma - P.1,,,virus,174,1
 SARS-CoV-2  Iota - B.1.526,,,virus,175,1
 SARS-CoV-2  Kappa - B.1.617.1,,,virus,176,1
-SARS-CoV-2  Omicron ,,,virus,177,1
+SARS-CoV-2  Omicron,,,virus,177,1
 SARS-CoV-2  Omicron - B.1.1.529,,,virus,178,1
 SARS-CoV-2  Omicron - B.1.1.529.2 BA.2,,,virus,179,1
 SARS-CoV-2  Omicron - B.1.1.529.5 BA.5,,,virus,180,1
@@ -196,7 +196,7 @@ Schistosoma mansoni,11168007,SNOMED,"parasite, helminth",196,1
 Schistosoma mekongi,75475007,SNOMED,"parasite, helminth",197,1
 Severe Acute Respiratory Syndrome Coronavirus 2,1240000000000000,SNOMED,virus,198,1
 Severe Acute Respiratory Syndrome-Related Coronavirus,415360003,SNOMED,virus,199,1
-Severe fever with thrombocytopaenia syndrome (SFTS) ,722401001,SNOMED,virus,200,1
+Severe fever with thrombocytopaenia syndrome (SFTS),722401001,SNOMED,virus,200,1
 Simplexvirus (Genus),314797000,SNOMED,virus,201,1
 Sporothrix schenckii,32662000,SNOMED,fungi,202,1
 Strongyloides stercoralis,42625000,SNOMED,"parasite, helminth",203,1
