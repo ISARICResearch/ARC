@@ -144,7 +144,7 @@ def test_too_many_presets(file):
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_unique_labels(file):
-    """Check if the Lists file has the same presets as ARC"""
+    """Check each option in a List file has a unique name"""
     df = pd.read_csv(file, dtype="object")
 
     condition = df[df.columns[0]].str.strip().duplicated(keep=False)
@@ -156,7 +156,7 @@ def test_unique_labels(file):
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_unique_codes(file):
-    """Check if the Lists file has the same presets as ARC"""
+    """Check each option in a List file has a unique code"""
     df = pd.read_csv(file, dtype="object")
 
     if "Code" in df.columns:
