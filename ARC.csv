@@ -1362,14 +1362,14 @@ outcome,DIAGNOSIS,diagn_pathounlist_cont,radio,Other pathogen(s) (if Lab confirm
 outcome,JOINT ASSESSMENT,joint_date,date_dmy,Date of assessment (CHICK-DAS Scale),,,,,,,,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_tjtdsc,descriptive,Instructions:Tick each joint that is tender on palpation. DAS28 joints are listed below. Ankle joints (non-DAS28) are collected separately for CHIK-DAS TJC30.,,,,,,,,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_tjt,radio,Tender Joint Count (DAS28 joints) completed,"1, Yes | 0, No",,,,,,,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_tjt_shoulder,radio,Shoulders (glenohumeral),"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_tjt_elbow,radio,Elbows,"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_tjt_wrist,radio,Wrists (radiocarpal),"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_tjt_mcp,radio,Small joints of hand (MCP joints),"0, 0 | 1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5 | 6, 6 | 7, 7 | 8, 8 | 9, 9 | 10, 10 | 99, Unknown",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_tjt_pip,radio,Small joints of hand (PIP joints),"0, 0 | 1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5 | 6, 6 | 7, 7 | 8, 8 | 9, 9 | 10, 10 | 99, Unknown",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_tjt_knee,radio,Knees,"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_tjt_descankle,descriptive,Tender Ankles (CHIK-DAS addition),,,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_tjt_ankle,radio,Ankles (for CHIK-DAS TJC30),"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_tjt_shoulder,radio,Shoulders (glenohumeral),"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_tjt_elbow,radio,Elbows,"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_tjt_wrist,radio,Wrists (radiocarpal),"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_tjt_mcp,radio,Small joints of hand (MCP joints),"0, 0 | 1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5 | 6, 6 | 7, 7 | 8, 8 | 9, 9 | 10, 10 | 99, Unknown",,,,,[joint_tjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_tjt_pip,radio,Small joints of hand (PIP joints),"0, 0 | 1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5 | 6, 6 | 7, 7 | 8, 8 | 9, 9 | 10, 10 | 99, Unknown",,,,,[joint_tjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_tjt_knee,radio,Knees,"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_tjt_descankle,descriptive,Tender Ankles (CHIK-DAS addition),,,,,,[joint_tjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_tjt_ankle,radio,Ankles (for CHIK-DAS TJC30),"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_tjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_tjt_calc28,calc,TJC28 — Tender Joint Count (DAS28),"if([joint_tjt_shoulder]=99,0,[joint_tjt_shoulder]) +
 if([joint_tjt_elbow]=99,0,[joint_tjt_elbow]) +
 if([joint_tjt_wrist]=99,0,[joint_tjt_wrist]) +
