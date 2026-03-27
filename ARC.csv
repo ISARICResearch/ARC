@@ -1378,7 +1378,7 @@ if([joint_tjt_pip]=99,0,[joint_tjt_pip]) +
 if([joint_tjt_knee]=99,0,[joint_tjt_knee])",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_tjt_calc30,calc,TJC30 — Tender Joint Count (CHIK-DAS),"[joint_tjt_calc28] +if([joint_tjt_knee]=99,0,[joint_tjt_knee]) +
 if([joint_tjt_ankle]=99,0,[joint_tjt_ankle])",,,,,[joint_tjt]-='1',,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_sjtdsc,descriptive,<b>Instructions:</b> Tick each joint that is <u>swollen on examination</u>.,,,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_sjtdsc,descriptive,Instructions: Tick each joint that is swollen on examination,,,,,,,,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_sjt,radio,Swollen Joint Count (DAS28 joints) completed,"1, Yes | 0, No",,,,,,,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_sjt_shoulder,radio,Shoulders (glenohumeral),"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_sjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_sjt_elbow,radio,Elbows,"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_sjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
