@@ -141,13 +141,21 @@ def test_valid_regex():
     condition = arc["Skip Logic"].isna() | arc["Variable"].isin(
         arc_skip_logic["field_name"]
     )
+    '''
     if not condition.all():
-        invalid = invalid = arc_skip_logic.loc[
+        invalid = arc_skip_logic.loc[
             ~condition, ["Variable", "Skip Logic"]
         ].to_dict(orient="records")
         pytest.fail(
             "Skip logic isn't valid regex (change the regex pattern if needed)"
             f": {invalid}"
+        )
+    '''
+    if not condition.all():
+        invalid = arc.loc[~condition, ["Variable", "Skip Logic"]].to_dict(orient="records")
+        pytest.fail(
+            "Skip logic isn't valid regex (change the regex pattern if needed): "
+            f"{invalid}"
         )
 
 

@@ -60,6 +60,7 @@ TYPE_ENUM = [
     "calc",
     "notes",
     "file",
+    "slider"
 ]
 
 # Update if new types are added
@@ -160,7 +161,7 @@ def test_arc_answer_options_exist():
         ARC_PATH, dtype="object", usecols=["Variable", "Type", "Answer Options"]
     )
     condition = (
-        arc["Type"].isin(["radio", "checkbox", "list", "calc", "dropdown"])
+        arc["Type"].isin(["radio", "checkbox", "list", "calc", "dropdown","slider"])
         | arc["Answer Options"].isna()
     )
     if not condition.all():
@@ -236,6 +237,7 @@ def test_arc_valid_validation():
     condition = (
         (arc["Validation"].isin(VALIDATION_ENUM) & arc["Type"].eq(arc["Validation"]))
         | arc["Validation"].isin(["units"])
+        | arc["Type"].isin(["slider"])
         | arc["Validation"].isna()
     )
     if not condition.all():
