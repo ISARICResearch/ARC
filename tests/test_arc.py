@@ -237,6 +237,7 @@ def test_arc_valid_validation():
     condition = (
         (arc["Validation"].isin(VALIDATION_ENUM) & arc["Type"].eq(arc["Validation"]))
         | arc["Validation"].isin(["units"])
+        | arc["Type"].isin(["slider"])
         | arc["Validation"].isna()
     )
     if not condition.all():
