@@ -549,6 +549,27 @@
             }
         ]
     },
+
+    {
+        "field_name": "labs_uric",
+        "units_field_name": "labs_uric_units",
+        "units": [
+            { "unit_label": "µmol/L", "unit_value": 1, "unit_field_name": "labs_uric_umoll" },
+            { "unit_label": "mg/dL", "unit_value": 2, "unit_field_name": "labs_uric_mgdl" }
+        ],
+        "preferred_unit": "µmol/L",
+        "conversion_rules": [
+            {
+            "from_unit": "mg/dL",
+            "to_unit": "µmol/L",
+            "type": "linear",
+            "multiplier": 59.48,
+            "offset": 0,
+            "note": "to_value = from_value * 59.48"
+            }
+        ]
+    },
+    
     {
         "field_name": "labs_crp",
         "units_field_name": "labs_crp_units",
