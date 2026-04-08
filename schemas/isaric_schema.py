@@ -39,13 +39,9 @@ def medications_dosage(arc):
             "attribute": {"const": "medi_dose"},
             "value_num": {"type": "number"},
             "attribute_unit": {"type": "string"},
-            "attribute_status": {
-                "type": "string",
-                "enum": status_codes,
-                "description": "Use to indicate missing data and the reason for missingness.",
-            },
         },
-        "required": ["value_num", "attribute_unit"],
+        "if": {"properties": {"attribute_status": {"const": "VAL"}}},
+        "then": {"required": ["value_num", "attribute_unit"]},
     }
 
     return [rule], arc[~meds_filter]
@@ -66,12 +62,9 @@ def attrs_with_enums(arc, types: list[str]):
             "properties": {
                 "attribute": name,
                 "value": {"type": "string", "enum": enums},
-                "attribute_status": {
-                    "type": "string",
-                    "enum": status_codes,
-                },
             },
-            "required": ["value"],
+            "if": {"properties": {"attribute_status": {"const": "VAL"}}},
+            "then": {"required": ["value"]},
         }
 
         rules.append(rule)
@@ -92,12 +85,9 @@ def attrs_with_lists(arc, types: list[str]):
         rule = {
             "properties": {
                 "attribute": name,
-                "attribute_status": {
-                    "type": "string",
-                    "enum": status_codes,
-                },
             },
-            "required": ["value"],
+            "if": {"properties": {"attribute_status": {"const": "VAL"}}},
+            "then": {"required": ["value"]},
         }
         file_name = (list_file + ".csv").split("_")
         path = Path(*["Lists"] + file_name)
@@ -136,12 +126,9 @@ def attrs_with_units(arc):
                         )
                     },
                     "value_num": {"type": "number"},
-                    "attribute_status": {
-                        "type": "string",
-                        "enum": status_codes,
-                    },
                 },
-                "required": ["value_num", "attribute_unit"],
+                "if": {"properties": {"attribute_status": {"const": "VAL"}}},
+                "then": {"required": ["value_num", "attribute_unit"]},
             }
             for unit_var in unit_options
         ]
@@ -167,12 +154,9 @@ def numeric_attrs(arc, types: list[str]):
             "properties": {
                 "attribute": name,
                 "value_num": {"type": "number"},
-                "attribute_status": {
-                    "type": "string",
-                    "enum": status_codes,
-                },
             },
-            "required": ["value_num"],
+            "if": {"properties": {"attribute_status": {"const": "VAL"}}},
+            "then": {"required": ["value_num"]},
         }
         if not pd.isna(min):
             rule["properties"]["value_num"]["minimum"] = float(min)
@@ -200,12 +184,9 @@ def date_attrs(arc, types: list[str]):
                     "type": "string",
                     "format": "date" if input_type == "date_dmy" else "date-time",
                 },
-                "attribute_status": {
-                    "type": "string",
-                    "enum": status_codes,
-                },
             },
-            "required": ["value"],
+            "if": {"properties": {"attribute_status": {"const": "VAL"}}},
+            "then": {"required": ["value"]},
         }
 
         rules.append(rule)
@@ -226,12 +207,9 @@ def time_attrs(arc, types: list[str]):
             "properties": {
                 "attribute": name,
                 "value": {"type": "string", "format": "time"},
-                "attribute_status": {
-                    "type": "string",
-                    "enum": status_codes,
-                },
             },
-            "required": ["value"],
+            "if": {"properties": {"attribute_status": {"const": "VAL"}}},
+            "then": {"required": ["value"]},
         }
 
         rules.append(rule)
@@ -246,12 +224,9 @@ def generic_str_attrs(arc, types: list[str]):
         "properties": {
             "attribute": {"enum": arc_long_other_str.Variable.tolist()},
             "value": {"type": "string"},
-            "attribute_status": {
-                "type": "string",
-                "enum": status_codes,
-            },
         },
-        "required": ["value"],
+        "if": {"properties": {"attribute_status": {"const": "VAL"}}},
+        "then": {"required": ["value"]},
     }
 
     return [rule], arc[~arc_filter]
@@ -321,6 +296,9 @@ def generate_long_schema(version):
         )
 
     template_long["oneOf"] = one_of_rules
+
+    # Make sure the attribute_status enum is up to date with the codes in `schemas/codes.py`
+    template_long["properties"]["attribute_status"]["enum"] = status_codes
 
     # Generate new long schema
     with open(f"schemas/arc_{version}_isaric_long.schema.json", "w") as f:
