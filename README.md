@@ -77,11 +77,11 @@ ISARIC works closely with experts around the world to create CRFs for priority e
 
 ARChetype CRFs are an important subset of our library of Templates. Templates are sets of ARC questions that we have curated for other outbreak-related contexts, such as clinical severity scores and core outcome sets. The library of Templates is openly available for use and adaptation by the research community. More information about how to download an ARChetype CRF can be found in our [Downloading an ARChetype CRF Guide](https://isaricresearch.github.io/Training/bridge_template_link).
 
-## ARC Version 1.2.1
+## ARC Version 1.2.2
 
-ARC Version 1.2.1 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
+ARC Version 1.2.2 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
 
-The ARC data model supports outbreak responses for **COVID-19, Dengue, Mpox, Influenza H5Nx**, and **Acute Respiratory Infection (ARI)**, and includes enhanced coverage for **pregnant and paediatric populations** through both disease-specific and population-agnostic modules.
+The ARC data model supports outbreak responses for **COVID-19, Dengue, Chikungunya, Mpox, Influenza H5Nx**, and **Acute Respiratory Infection (ARI)**, and includes enhanced coverage for **pregnant and paediatric populations** through both disease-specific and population-agnostic modules.
 
 CRFs are organised into seven core forms: **presentation**, **daily**, **medication**, **pathogen testing**, **outcome**, **follow-up**, and **withdrawal**.
 
@@ -113,6 +113,9 @@ ARC Version 1.2.1 contains the following **ARChetype CRFs and modules**, each st
   A disease-specific CRF supporting COVID-19 outbreak responses.
 
 - **Dengue ARChetype CRF**  
+  A disease-specific CRF supporting Dengue outbreak responses.
+
+- **Chikungunya ARChetype CRF**  
   A disease-specific CRF supporting Dengue outbreak responses.
 
 - **Mpox ARChetype CRF**  
