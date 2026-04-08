@@ -1,3 +1,35 @@
+## ARC v1.2.2 (Release date: 08/04/2026)
+
+### Overview
+ARC v1.2.2 introduces a new disease preset for **Chikungunya**, expanding the ARChetype Disease CRF library to cover arboviral infections with specific epidemiological and clinical relevance.
+
+This release focuses on incorporating exposure-related variables, animal contact classifications, and disease-specific clinical data to support improved surveillance, case reporting, and research use cases.
+
+---
+
+### Column / Preset Changes
+
+| Category | Details |
+|----------|--------|
+| New disease preset (1) | preset_ARChetype Disease CRF_Chikungunya (new) |
+| Expanded disease coverage | Chikungunya-specific CRF with exposure and clinical variables |
+| Other preset changes | No additional structural changes |
+
+---
+
+### Variable-Level Updates
+
+- **Added variables:** 167 new variables.  
+  The majority of these variables focus on **joint-related assessments**, reflecting the clinical importance of musculoskeletal manifestations in Chikungunya (e.g., joint pain, inflammation, severity, and distribution).
+
+---
+
+### Notes
+- This release maintains compatibility with existing ARC structure and naming conventions.
+- Terminology and answer lists remain aligned with existing interoperability standards where applicable (e.g., SNOMED-CT, LOINC, UMLS).
+
+---
+
 ## ARC v1.2.0 (Release date: 07/01/2026)
 
 ### Overview
