@@ -25,7 +25,7 @@ Influenza A H7N9,609444009,SNOMED,,,,,,,,,,,,23
 Influenza A virus,407479009,SNOMED,,,,,,,,,,,,24
 Influenza B virus,407480007,SNOMED,,,,,,,,,,,,25
 Influenza virus,725894000,SNOMED,,,,,,,,,,,,26
-JE ,52947006,SNOMED,,,,,,,,,,1,,27
+Japanese encephalitis,52947006,SNOMED,,,,,,,,,,1,,27
 Lassa fever,19065005,SNOMED,,,,,,,1,,,1,,28
 Lujo virus disease,721784007,SNOMED,,,,,,,1,,,,,29
 Marburg virus disease (MVD),77503002,SNOMED,,,,,,,1,,,,,30
@@ -48,3 +48,5 @@ Viral ARI,312118003,SNOMED,,,,,,,,,1,,,46
 Chikungunya,37109004,SNOMED,,,,,,,,1,,,1,47
 Zika,373722009,SNOMED,,,,,,,,1,,,1,48
 Leptospirosis,61462000,SNOMED,,,,,,,,,,,1,49
+Encephalitis,45170000,SNOMED,,,,,,,,,,1,,50
+Meningitis,7180009,SNOMED,,,,,,,,,,1,,51
