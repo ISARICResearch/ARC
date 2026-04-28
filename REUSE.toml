@@ -1,0 +1,28 @@
+version = 1
+
+# All code and package/config/schema files -> MIT
+[[annotations]]
+  path = [
+    "*.py",
+    "**/*.py",
+    "*.toml",
+    "**/*.toml",
+    "*.json",
+    "**/*.json",
+    ".github/workflows/*.yml",
+    ".gitignore",
+  ]
+  SPDX-FileCopyrightText = "2026 ISARIC"
+  SPDX-License-Identifier = "MIT"
+
+# Data files -> CC-BY-SA-4.0
+[[annotations]]
+  path = ["ARC.csv", "*.csv", "**/*.csv", "*.xlsx", "**/*.xlsx", "CITATION.cff"]
+  SPDX-FileCopyrightText = "2026 ISARIC"
+  SPDX-License-Identifier = "CC-BY-SA-4.0"
+
+# docs also CC-BY-SA-4.0
+[[annotations]]
+  path = ["*.md", "**/*.md", "docs/**"]
+  SPDX-FileCopyrightText = "2026 ISARIC"
+  SPDX-License-Identifier = "CC-BY-SA-4.0"

@@ -7,7 +7,7 @@
   version = "1.2.1"
   description = "ARC (Acute and Rapid onset disease Case report form) - standardised clinical data collection"
   readme = "README.md"
-  license = "MIT"
+  license = "MIT AND CC-BY-SA-4.0"
   requires-python = ">=3.11"
   authors = [{ name = "ISARIC" }]
   dependencies = ["numpy>=2.0", "pandas>=2.0", "jsonschema"]

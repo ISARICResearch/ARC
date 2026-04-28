@@ -177,6 +177,12 @@ If you want to use ARC for your research or study, follow these steps:
 
 3. **Contributions**: While contributions to the document are limited to authorized users, you can open issues or discussions for questions, suggestions, or clarifications.
 
+### Licensing
+
+- Code in this repository is licensed under the MIT License.
+- Data (primarily the `ARC.csv` data standard and associated files in `Lists/*`) is licensed under CC-BY-SA 4.0.
+- See `REUSE.toml` for file-level licensing metadata.
+
 ## Contributors
 
 ### Conceptualization
