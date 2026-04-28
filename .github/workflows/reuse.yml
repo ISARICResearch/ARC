@@ -1,5 +1,9 @@
 name: REUSE compliance check
-on: [push, pull_request]
+on:
+  push:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   test:
