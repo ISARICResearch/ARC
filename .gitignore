@@ -13,3 +13,6 @@ converage.xml
 **/.DS_Store
 
 *.egg-info/
+
+# Sphinx stuff to ignore
+_build/
