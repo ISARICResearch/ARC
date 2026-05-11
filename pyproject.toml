@@ -25,6 +25,7 @@
   docs = [
     "Sphinx",
     "sphinx-autobuild",
+    "sphinxcontrib-email",
     "sphinx-copybutton",
     "sphinx-gallery",
     "sphinx-design",
