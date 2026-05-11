@@ -1,3 +1,7 @@
+[![CodeQL](https://github.com/ISARICResearch/ARC/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/ISARICResearch/ARC/actions/workflows/github-code-scanning/codeql)
+[![Run tests marked as medium or low](https://github.com/ISARICResearch/ARC/actions/workflows/test-medium-low.yml/badge.svg)](https://github.com/ISARICResearch/ARC/actions/workflows/test-medium-low.yml)
+[![Run tests marked as critical or high](https://github.com/ISARICResearch/ARC/actions/workflows/test-critical-high.yml/badge.svg)](https://github.com/ISARICResearch/ARC/actions/workflows/test-critical-high.yml)
+[![Docs](https://app.readthedocs.org/projects/isaric-arc/badge/?version=latest)](https://app.readthedocs.org/projects/isaric-arc/builds/?version__slug=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # ARC - Analysis and Research Compendium
