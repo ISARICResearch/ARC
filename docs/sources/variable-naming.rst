@@ -1,4 +1,4 @@
-.. _arc-variable-naming:
+.. _variable-naming:
 
 ARC Variable Naming Conventions
 ===============================

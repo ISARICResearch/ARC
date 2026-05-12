@@ -59,7 +59,7 @@ This way, `arc.csv` serves not only as a **question bank**, but also as a **meta
 |-------------|-------------------------------------------------------------------------|------------------|-------|--------------|--------------------------|----------------|---------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------|-------------------------------------------------------------|--------------------------------------|------------------|-------------------------------------|
 | Presentation | CO-MORBIDITIES AND RISK FACTORS: Existing prior to this current illness and is ongoing | comor_hypertensi | radio | Hypertension | 1, Yes \| 0, No \| 99, Unknown | Cardiovascular | Defined as elevated arterial blood pressure diagnosed clinically (systolic >140 mmHg and/or diastolic >90 mmHg), or treated with medication. | Indicate 'Yes' if this condition existed prior to admission with this current illness and remains an active medical condition. | SNOMED                      | 38341003, Hypertensive disorder, systemic arterial (disorder) | C0020538, Hypertensive disease       | risk_factor_comor | COVID=1, Dengue=1, Mpox=1, H5Nx=1, ARI=1 |
 
-### `lists/`  
+### `Lists/`  
 A collection of option lists containing standardised reference tables (conditions, demographics, and drugs) that support different response types while ensuring adaptability and consistency in data capture and coding across studies.
 
 ## Data Capture Schema  
@@ -153,11 +153,11 @@ These modules provide shared variables applicable across multiple diseases, impr
 
 ## Files
 
-   - **Clinical Characterization XML:** This XML file provides a recommended configuration and structure for clinical characterization studies. It includes information about users, events, project settings, and functionality, serving as a reference for setting up clinical characterization studies.
+- **Clinical Characterization XML:** This XML file provides a recommended configuration and structure for clinical characterization studies. It includes information about users, events, project settings, and functionality, serving as a reference for setting up clinical characterization studies.
 
-   - **ARC:** The "ARC" file is a machine-readable CSV (Comma-Separated Values) file that forms the core of ARC. It contains a comprehensive list of questions that can be asked in a CRF during outbreaks. Each question is defined with specific parameters, including variable names, coded answers, limits, types, skip logic, and more.
+- **ARC:** The "ARC" file is a machine-readable CSV (Comma-Separated Values) file that forms the core of ARC. It contains a comprehensive list of questions that can be asked in a CRF during outbreaks. Each question is defined with specific parameters, including variable names, coded answers, limits, types, skip logic, and more.
 
-   - **Lists of Standardized Terms:** These files include predefined sets of standardized vocabulary used to describe and categorize various aspects of CRF answers. Standardized terms ensure consistency in data capture, covering items such as comorbidities, symptoms, and medications.
+- **Lists of Standardized Terms:** These files include predefined sets of standardized vocabulary used to describe and categorize various aspects of CRF answers. Standardized terms ensure consistency in data capture, covering items such as comorbidities, symptoms, and medications.
 
 - **Metadata:** For each version of ARC, a version history file is included. This file contains pertinent information about changes made to ARC over time, allowing for easy tracking of modifications. Typical metadata includes the date of upload of the new version and a description of the changes made.
 
@@ -182,6 +182,10 @@ If you want to use ARC for your research or study, follow these steps:
 2. **Integration with BRIDGE**: If you use the [BRIDGE](https://github.com/ISARICResearch/BRIDGE) software tool, it connects to this GitHub repository to access all releases of ARC for CRF generation.
 
 3. **Contributions**: While contributions to the document are limited to authorized users, you can open issues or discussions for questions, suggestions, or clarifications.
+
+## ARC Documentation
+
+Key aspects of ARC, including the core schema, and response option lists, are also documented in HTML [here](https://isaric-arc.readthedocs.io/en/latest/index.html).
 
 ## Contributors
 
