@@ -1,7 +1,7 @@
-.. _arc-field-types:
+.. _special-field-types:
 
-ARC Special Field Types Documentation
-=====================================
+ARC Special Field Types
+=======================
 
 This document provides a detailed explanation of the special field types used within the ISARIC ARC (Analysis and Research Compendium) framework to support dynamic, reusable, and semantically structured Case Report Forms (CRFs). These field types extend beyond standard REDCap functionality to enable complex logic, repeated entries, hierarchical lists, and units management.
 
@@ -38,6 +38,7 @@ Example
 
 | Variable: ``inclu_disease``
 | List source: `Lists/inclusion/Diseases.csv <https://github.com/ISARICResearch/ARC/blob/main/Lists/inclusion/Diseases.csv>`__
+| :doc:`View list source as HTML Table <lists/inclusion/diseases>`
 
 BRIDGE Transformation
 ~~~~~~~~~~~~~~~~~~~~~
@@ -74,6 +75,7 @@ Example
 
 | Variable: ``comor_unlisted``
 | List source: `Lists/conditions/Comorbidities.csv <https://github.com/ISARICResearch/ARC/blob/main/Lists/conditions/Comorbidities.csv>`__
+| :doc:`View list source as HTML Table <lists/conditions/comorbidities>`
 
 .. _bridge-transformation-1:
 
@@ -116,6 +118,7 @@ Example
 
 | Variable: ``demog_race``
 | List source: `Lists/demographics/Race.csv <https://github.com/ISARICResearch/ARC/blob/main/Lists/demographics/Race.csv>`__
+| :doc:`View list source as HTML Table <lists/demographics/race>`
 
 .. _bridge-transformation-2:
 
@@ -228,5 +231,6 @@ Notes
 -----
 
 - Lists are stored in the ARC GitHub repo under `/Lists/… <https://github.com/ISARICResearch/ARC/tree/main/Lists>`__
+- Lists can also be viewed as HTML tables :doc:`here <lists/lists>`
 - The transformation is handled automatically during CRF genration from `ISARIC BRIDGE <https://bridge.isaric.org/>`__
 - These structures support modular, scalable, and interoperable CRFs

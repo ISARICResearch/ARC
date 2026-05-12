@@ -23,14 +23,15 @@ ARC is licensed under the open source compliant `MIT license <https://opensource
 .. image:: _static/osi-badge-light.svg
    :height: 200px
    :width:  200px
+   :target: https://opensource.org/license/mit
 
-For more information use the content links below to navigate to the page(s) of interest.
+Key elements of ARC, including the schema itself, can be explored in more detail below from the linked pages.
 
 .. toctree::
    :maxdepth: 1
    :caption: Contents:
 
-   sources/arc
-   sources/arc-variable-naming
-   sources/arc-field-types
-
+   sources/arc-schema
+   sources/variable-naming
+   sources/special-field-types
+   sources/lists/lists
