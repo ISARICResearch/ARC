@@ -14,7 +14,7 @@ ARC documentation
 
 ARC is designed to serve as a resource for researchers and healthcare professionals involved in the study of outbreaks and emerging public health threats. Here's what you need to know:
 
-- **Machine-Readable**: ARC is provided in CSV format, making it easy for automated systems to read and process the data.
+- **Machine-Readable**: ARC is :doc:`provided <sources/arc-schema>` in CSV format, making it easy for automated systems to read and process the data.
 
 - **Open Access**: ARC is made openly available for the research community. While contributions are limited to authorized individuals, the document can be freely accessed and utilized by others.
 
@@ -29,7 +29,7 @@ ARC is licensed under the `Open Source Initiative (OSI) <https://opensource.org>
    :width:  200px
    :target: https://opensource.org/license/mit
 
-Key elements of ARC, including the schema itself, can be explored in more detail below from the linked pages.
+Key elements of ARC, including the schema itself, and other information, can be explored in more detail below from the linked pages.
 
 .. toctree::
    :maxdepth: 1
