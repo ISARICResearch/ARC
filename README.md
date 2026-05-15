@@ -185,7 +185,7 @@ If you want to use ARC for your research or study, follow these steps:
 
 ## ARC Project Documentation
 
-Most of the key information in this README, including the core schema and other related files, can also be viewed on `ARC project documentation <https://isaric-arc.readthedocs.io/en/latest>`_ site.
+Most of the key information in this README, including the core schema and other related files, can also be viewed on the [ARC project documentation](https://isaric-arc.readthedocs.io/en/latest) site.
 
 The documentation site is generated with [Sphinx](https://www.sphinx-doc.org/en/) from content and configuration defined in the [`docs`](https://github.com/ISARICResearch/ARC/tree/main/docs) subfolder, and deployed to [ReadTheDocs](https://readthedocs.org).
 
