@@ -183,9 +183,23 @@ If you want to use ARC for your research or study, follow these steps:
 
 3. **Contributions**: While contributions to the document are limited to authorized users, you can open issues or discussions for questions, suggestions, or clarifications.
 
-## ARC Documentation
+## ARC Project Documentation
 
-Key aspects of ARC, including the core schema, and response option lists, are also documented in HTML [here](https://isaric-arc.readthedocs.io/en/latest/index.html).
+Most of the key information in this README, including the core schema and other related files, can also be viewed on the [ARC project documentation](https://isaric-arc.readthedocs.io/en/latest) site.
+
+The documentation site is generated with [Sphinx](https://www.sphinx-doc.org/en/) from content and configuration defined in the [`docs`](https://github.com/ISARICResearch/ARC/tree/main/docs) subfolder, and deployed to [ReadTheDocs](https://readthedocs.org).
+
+The site can also be built and viewed locally by first installing all the project dependencies (package + the documentation-specific) required to build the documentation site in your development environment, for example, using a package manager such as [Astral `uv`](https://docs.astral.sh/uv/):
+```shell
+uv sync -v --all-groups --all-extras
+```
+and then running the shell command:
+```shell
+make -C docs html
+```
+from the project rootm and using a browser to open the `index.html` page in `docs/_build`.
+
+Documentation files should be viewed as part of the codebase, and any changes staged and version controlled in the normal way as with changes to code.
 
 ## Contributors
 
