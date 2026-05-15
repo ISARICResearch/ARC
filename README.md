@@ -189,11 +189,15 @@ Most of the key information in this README, including the core schema and other 
 
 The documentation site is generated with [Sphinx](https://www.sphinx-doc.org/en/) from content and configuration defined in the [`docs`](https://github.com/ISARICResearch/ARC/tree/main/docs) subfolder, and deployed to [ReadTheDocs](https://readthedocs.org).
 
-The site can also be built and viewed locally by running:
+The site can also be built and viewed locally by first installing all the project dependencies (package + the documentation-specific) required to build the documentation site in your development environment, for example, using a package manager such as [Astral `uv`](https://docs.astral.sh/uv/):
+```shell
+uv sync -v --all-groups --all-extras
+```
+and then running the shell command:
 ```shell
 make -C docs html
 ```
-from the project root and then using a browser to open the `index.html` page in `docs/_build`.
+from the project rootm and using a browser to open the `index.html` page in `docs/_build`.
 
 Documentation files should be viewed as part of the codebase, and any changes staged and version controlled in the normal way as with changes to code.
 
