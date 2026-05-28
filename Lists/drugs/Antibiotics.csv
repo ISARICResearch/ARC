@@ -1,7 +1,7 @@
 ﻿Drugs,Code,Library,Selected,preset_ARChetype Disease CRF_Covid,preset_ARChetype Disease CRF_Dengue,preset_ARChetype Disease CRF_Mpox,preset_ARChetype Disease CRF_Mpox Pregnancy and Paediatric,preset_ARChetype Disease CRF_H5Nx,preset_ARChetype Syndromic CRF_ARI,preset_ARChetype Syndromic CRF_Arbovirus,preset_ARChetype Syndromic CRF_VHF,preset_ARChetype Syndromic CRF_Encephalitis,Comment,Value
 Amikacin,J01GB06 ,ATC     ,1,,,,,,,,,1,,1
 Amoxicillin,J01CA04 ,ATC     ,1,1,,,,,1,,,1,,2
-Amoxicillin/Beta-lactamase inhibitor,J01CR02 ,ATC     ,1,1,,,,,1,,,1,,3
+Amoxicillin/Beta-lactamase inhibitor,J01CR02 ,ATC     ,1,1,,,,,1,,1,1,,3
 Amphotericin,J02AA01 ,ATC     , ,,,,,,,,,,,4
 Ampicillin,J01CA01,ATC,1,,,,,,,,,1,,5
 Ampicillin/Beta-lactamase inhibitor,J01CR01 ,ATC     ,1,,,,,,,,,1,,6
@@ -112,7 +112,7 @@ Spectinomycin,J01XX04,ATC,2,,,,,,,,,,,112
 Streptomycin,J01GA01,ATC,2,,,,,,,,,,,113
 Sulfadiazine,J01EC02,ATC,2,,,,,,,,,,,114
 Sulfamethoxazole,J01EC01,ATC,1,,,,,,,,,1,,115
-Sulfamethoxazole/Trimethoprim,J01EE01  ,ATC,1,,,,,,,,,1,,116
+Sulfamethoxazole/Trimethoprim,J01EE01  ,ATC,1,,,,,,,,1,1,,116
 Sulfisoxazole,J01EB05,ATC,2,,,,,,,,,,,117
 Teicoplanin,J01XA02,ATC, ,,,,,,,,,,,118
 Telavancin,J01XA03,ATC,2,,,,,,,,,,,119
