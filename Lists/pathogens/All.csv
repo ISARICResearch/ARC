@@ -66,7 +66,7 @@ Clostridium botulinum,13080008,SNOMED,bacteria,,,,,,,,,,,,,,64
 Clostridium difficile,5933001,SNOMED,bacteria,,,,,,,,,,,,,,65
 Clostridium difficile (toxin positive),736050006,SNOMED,bacteria,,,,,,,,,,,,,,66
 Clostridium tetani,30917009,SNOMED,bacteria,,,,,,,,,,,,,,67
-Coagulase negative Staphylococcus,116197008,SNOMED,bacteria,1,,,,,,,,,,1,,,68
+Coagulase negative Staphylococcus,116197008,SNOMED,bacteria,,,,,,,1,,,,1,,,68
 Coccidioides,8672004,SNOMED,fungi,,,,,,,,,,,,,,69
 Coccidioides immitis,23439005,SNOMED,fungi,,,,,,,,,,,,,,70
 Coliform bacteria,77309002,SNOMED,bacteria,,,,,,,,,,,,,,71
@@ -78,7 +78,7 @@ Corynebacterium pseudotuberculosis,55084001,SNOMED,bacteria,,,,,,,,,,,,,,76
 Corynebacterium striatum,63815007,SNOMED,bacteria,,,,,,,,,,,,,,77
 Corynebacterium ulcerans,103428000,SNOMED,bacteria,,,,,,,,,,,,,,78
 Corynebacterium xerosis,27101006,SNOMED,bacteria,,,,,,,,,,,,,,79
-Crimean-Congo Hemorrhagic Fever virus (CCHF),79875007,SNOMED,virus,,1,,,,,1,,,,1,,,80
+Crimean-Congo Hemorrhagic Fever virus (CCHF),79875007,SNOMED,virus,,1,,,,,,1,,,1,,,80
 Cryptococcus,17579001,SNOMED,bacteria,,,,,,,,,,,1,,,81
 Cryptococcus gattii,450862004,SNOMED,fungi,,,,,,,,,,,,,,82
 Cryptococcus neoformans,67168003,SNOMED,fungi,,,,,,,,,,,,,,84
@@ -92,12 +92,12 @@ Cytomegalovirus,407444007,SNOMED,virus,,,,,,,,,,,1,,,92
 Delftia,416493002,SNOMED,bacteria,,,,,,,,,,,,,,93
 Delftia acidovorans,20432002,SNOMED,bacteria,,,,,,,,,,,,,,94
 Deltavirus,83617006,SNOMED,virus,,,,,,,,,,,,,,95
-Dengue virus,34348001,SNOMED,virus,,,1,,,,1,1,,1,,1,,96
+Dengue virus,34348001,SNOMED,virus,,,1,,,,,1,,1,,1,,96
 Dermabacter,413976002,SNOMED,bacteria,,,,,,,,,,,,,,97
 Diphtheroid,54642001,SNOMED,bacteria,,,,,,,,,,,,,,98
 Diphyllobothrium latum,40406002,SNOMED,"parasite, helminth",,,,,,,,,,,,,,100
 Dracunculus medinensis,3824001,SNOMED,"parasite, helminth",,,,,,,,,,,,,,101
-Ebola virus,424206003,SNOMED,virus,,1,,,,,1,,,,1,,,102
+Ebola virus,424206003,SNOMED,virus,,1,,,,,,1,,,1,,,102
 Echinococcus granulosus,243672005,SNOMED,"parasite, helminth",,,,,,,,,,,,,,103
 Eggerthella,414075007,SNOMED,bacteria,,,,,,,,,,,,,,104
 Elizabethkingia,426244005,SNOMED,bacteria,,,,,,,,,,,,,,105
@@ -108,7 +108,7 @@ Enteric bacteria,106544002,SNOMED,bacteria,,,,,,,,,,,,,,109
 Enterobacter,58683007,SNOMED,bacteria,,,,,,,,,,,1,,,110
 Enterobacter aerogenes,62592009,SNOMED,bacteria,,,,,,,,,,,,,,111
 Enterobacter asburiae,33115003,SNOMED,bacteria,,,,,,,,,,,,,,112
-Enterobacter bugandensis,1.14E+14,SNOMED,bacteria,,,,,,,,,,,,,,113
+Enterobacter bugandensis,114000000000000.0,SNOMED,bacteria,,,,,,,,,,,,,,113
 Enterobacter cloacae,14385002,SNOMED,bacteria,,,,,,,,,,,,,,114
 Enterobacter cloacae complex,414102007,SNOMED,bacteria,,,,,,,,,,,,,,115
 Enterobacter hormaechei,114454006,SNOMED,bacteria,,,,,,,,,,,,,,116
@@ -187,8 +187,8 @@ Influenza A virus,407479009,SNOMED,virus,1,,,,,1,,,1,,,,,188
 Influenza B virus,407480007,SNOMED,virus,1,,,,,1,,,1,,,,,189
 Influenza virus,725894000,SNOMED,virus,1,,,,,1,,,1,,1,,,190
 Isospora belli,12633005,SNOMED,"parasite, protozoa",,,,,,,,,,,,,,191
-Japanese encephalitis virus (JEV),243603004,SNOMED,virus,,,,,,,1,,,,1,,,192
-Junin virus ,26352009,SNOMED,virus,,,,,,,,,,,,,,193
+Japanese encephalitis virus (JEV),243603004,SNOMED,virus,,,,,,,,,,,1,,,192
+Junin virus ,26352009,SNOMED,virus,,,,,,,1,,,,,,,193
 Klebsiella,75032006,SNOMED,bacteria,,,,,,,,,,,1,,,194
 Klebsiella aerogenes,62592009,SNOMED,bacteria,,,,,,,,,,,,,,195
 Klebsiella oxytoca,40886007,SNOMED,bacteria,,,,,,,,,,,,,,196
@@ -303,7 +303,7 @@ SARS-CoV-2  Theta- P.3,840533018,SNOMED,virus,,,,,,,,,,,,,,304
 SARS-CoV-2  Zeta - P.2,840533019,SNOMED,virus,,,,,,,,,,,,,,305
 SARS-CoV-2 Alpha - B.1.1.7,840533020,SNOMED,virus,,,,,,,,,,,,,,306
 SARS-CoV-2 Antigen,840536004,SNOMED,virus (substance),,,,,,,,,,,,,,307
-SARS-CoV-2 IgG Antibody,6.30E+13,SNOMED,virus (substance),,,,,,,,,,,,,,308
+SARS-CoV-2 IgG Antibody,6.3E+13,SNOMED,virus (substance),,,,,,,,,,,,,,308
 SARS-CoV-2 IgG/IgM Antibody,840535000,SNOMED,virus (substance),,,,,,,,,,,,,,309
 SARS-CoV-2 IgM Antibody,5.06E+13,SNOMED,virus (substance),,,,,,,,,,,,,,310
 Saccharomyces cerevisiae,765320007,SNOMED,fungi,,,,,,,,,,,,,,311
@@ -322,7 +322,7 @@ Serratia,42025004,SNOMED,bacteria,,,,,,,,,,,,,,323
 Serratia liquefaciens,23787004,SNOMED,bacteria,,,,,,,,,,,,,,324
 Serratia marcescens,33522002,SNOMED,bacteria,,,,,,,,,,,,,,325
 Serratia ureilytica,450416004,SNOMED,bacteria,,,,,,,,,,,,,,326
-Severe Acute Respiratory Syndrome Coronavirus 2,1.24E+15,SNOMED,virus,,,,,,,,,,,,,,327
+Severe Acute Respiratory Syndrome Coronavirus 2,1240000000000000.0,SNOMED,virus,,,,,,,,,,,,,,327
 Severe Acute Respiratory Syndrome-Related Coronavirus,415360003,SNOMED,virus,,,,,,,,,,,,,,328
 Severe fever with thrombocytopaenia syndrome (SFTS) ,722401001,SNOMED,virus,,,,,,,1,,,,,,,329
 Shigella,77352002,SNOMED,bacteria,,,,,,,,,,,,,,330
@@ -396,14 +396,14 @@ Yersinia pestis,54365000,SNOMED,bacteria,,,,,,,,,,,,,,397
 Zika virus,50471002,SNOMED,virus,,,,,,,,1,,,1,1,,398
 Chikungunya virus,387517004,SNOMED,virus,,,,,,,,1,,,,1,,399
 Oropouche virus ,115398005,SNOMED,virus,,,,,,,,1,,,,,,400
-Zaire ebolavirus (ZEBOV),,SNOMED,virus,,,,,,,1,,,,,,,401
-Sudan ebolavirus (SUDV),,SNOMED,virus,,,,,,,1,,,,,,,402
-Reston ebolavirus (RESTV),,SNOMED,virus,,,,,,,1,,,,,,,403
+Zaire ebolavirus (ZEBOV),425092008,SNOMED,virus,,,,,,,1,,,,,,,401
+Sudan ebolavirus (SUDV),424116003,SNOMED,virus,,,,,,,1,,,,,,,402
+Reston ebolavirus (RESTV),422448009,SNOMED,virus,,,,,,,1,,,,,,,403
 Taï Forest ebolavirus (TAFV),,SNOMED,virus,,,,,,,1,,,,,,,404
-Bundibugyo ebolavirus (BDBV),,SNOMED,virus,,,,,,,1,,,,,,,405
-DENV-1 ,,SNOMED,virus,,,,,,,1,,,,,,,406
-DENV-2  ,,SNOMED,virus,,,,,,,1,,,,,,,407
-DENV-3 ,,SNOMED,virus,,,,,,,1,,,,,,,408
-DENV-4 ,,SNOMED,virus,,,,,,,1,,,,,,,409
-Tick-borne encephalitis (TBE) virus,,SNOMED,virus,,,,,,,1,,,,,,,410
-Yellow fever virus,,SNOMED,virus,,,,,,,1,,,,,,,411
+Bundibugyo ebolavirus (BDBV),450597006,SNOMED,virus,,,,,,,1,,,,,,,405
+"Dengue virus, type 1",60588009,SNOMED,virus,,,,,,,1,,,,,,,406
+"Dengue virus, type 2",41328007,SNOMED,virus,,,,,,,1,,,,,,,407
+"Dengue virus, type 3",8467002,SNOMED,virus,,,,,,,1,,,,,,,408
+"Dengue virus, type 4",36700002,SNOMED,virus,,,,,,,1,,,,,,,409
+Tick-borne encephalitis (TBE) virus,32323003,SNOMED,virus,,,,,,,1,,,,,,,410
+Yellow fever virus,26630006,SNOMED,virus,,,,,,,1,,,,,,,411
