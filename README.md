@@ -215,7 +215,7 @@ Key aspects of ARC, including the core schema, and response option lists, are al
 - Rebecca Sconza – [r.sconza@ucl.ac.uk](mailto:r.sconza@ucl.ac.uk)
 - Marthe Le Prevost – [m.leprevost@ucl.ac.uk](mailto:m.leprevost@ucl.ac.uk)
 
-### Technical Expertise
+### Technical and Development Expertise
 - Sara Duque-Vallejo - [sara.duquevallejo@ndm.ox.ac.uk](mailto:sara.duquevallejo@ndm.ox.ac.uk)
 - Tom Edinburgh - [tom.edinburgh@ndm.ox.ac.uk](mailto:tom.edinburgh@ndm.ox.ac.uk)
 - Elise Pesonel - [elise.pesonel@ndm.ox.ac.uk](mailto:elise.pesonel@ndm.ox.ac.uk)
