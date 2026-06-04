@@ -1,9 +1,9 @@
 .. _arc-latest:
 
-ARC Version 1.2.2
-=================
+ARC Release |release|
+=====================
 
-The latest ARC `Version 1.2.2 <https://github.com/ISARICResearch/ARC/releases/tag/v1.2.2>`_ contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
+The latest ARC `release <https://github.com/ISARICResearch/ARC/releases/tag/v1.3.0>`_ contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
 
 The ARC data model supports outbreak responses for
 

@@ -35,7 +35,7 @@ github_repo = f"{github_url}/ISARICResearch/ARC"
 github_version = "main"
 # pypi_project = ''
 project = 'ARC'
-release = "1.2.2"
+release = "v1.3.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -53,15 +53,15 @@ language = "en"
 primary_domain = None
 
 # Global substitutions - not required for the moment
-#rst_epilog = f"""
-#.. |author|                 replace:: **{author}**
-#.. |copyright|              replace:: **{copyright}**
-#.. |docs_url|               replace:: ''
-#.. |project|                replace:: **{project}**
-#.. |project_description|    replace:: {description}
-#.. |release|                replace:: **{release}**
-#.. |github_release_target|  replace:: https://github.com/ISARICResearch/ISARICAnalytics/releases/tag/{release}
-#"""
+rst_epilog = f"""
+.. |author|                 replace:: **{author}**
+.. |copyright|              replace:: **{copyright}**
+.. |docs_url|               replace:: ''
+.. |project|                replace:: **{project}**
+.. |project_description|    replace:: {description}
+.. |release|                replace:: **{release}**
+.. |github_release_target|  replace:: https://github.com/ISARICResearch/ISARICAnalytics/releases/tag/{release}
+"""
 
 # Publish author(s)
 show_authors = True
@@ -133,6 +133,8 @@ doctest_global_setup = "import isaricanalytics"
 todo_include_todos = True
 
 # -- Project file data variables ---------------------------------------------
+
+html_title = f"ARC {release}"
 
 # HTML global context for templates
 html_context = {
