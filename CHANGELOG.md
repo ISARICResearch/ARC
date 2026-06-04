@@ -1,3 +1,48 @@
+## ARC v1.3.0 (Release date: 04/06/2026)
+
+### Overview
+
+ARC v1.3.0 introduces a new syndromic preset for **Viral Haemorrhagic Fever (VHF)**, expanding the ARChetype Syndromic CRF library to support surveillance, outbreak investigations, and clinical research across viral haemorrhagic fever syndromes.
+
+This release also includes enhancements to exposure history capture, comorbidity documentation, laboratory testing classifications, and patient pathway documentation, improving epidemiological characterization and harmonisation across disease-specific and syndromic CRFs.
+
+---
+
+### Column / Preset Changes
+
+| Category | Details |
+|----------|----------|
+| New syndromic preset (1) | `preset_ARChetype Syndromic CRF_VHF` (new) |
+| Expanded syndromic coverage | Viral Haemorrhagic Fever (VHF) |
+| Other preset changes | Exposure history content revised and expanded |
+
+---
+
+### Variable-Level Updates
+
+- **Added variables:** 142 new variables.
+- **Removed variables:** 22 variables.
+- **Updated variables:** 6 variables.
+- **Variable replacements:** 2 legacy variables replaced.
+
+The majority of updates focus on:
+
+- Expanded exposure history and contact tracing information.
+- Enhanced outbreak investigation variables.
+- Additional comorbidity and risk factor documentation.
+- Improved patient transfer and re-admission workflows.
+- Updated laboratory testing classifications and related metadata.
+
+---
+
+### Notes
+
+- This release maintains compatibility with existing ARC structure and naming conventions.
+- Exposure history content has been restructured to improve consistency across disease-specific and syndromic CRFs.
+- Terminology and answer lists remain aligned with existing interoperability standards where applicable (e.g., SNOMED-CT, LOINC, and UMLS).
+
+---
+
 ## ARC v1.2.2 (Release date: 08/04/2026)
 
 ### Overview
