@@ -2,7 +2,7 @@
 
 ### Overview
 
-ARC v1.2.3 introduces a new syndromic preset for **Viral Haemorrhagic Fever (VHF)**, expanding the ARChetype Syndromic CRF library to support surveillance, outbreak investigations, and clinical research across viral haemorrhagic fever syndromes.
+ARC v1.3.0 introduces a new syndromic preset for **Viral Haemorrhagic Fever (VHF)**, expanding the ARChetype Syndromic CRF library to support surveillance, outbreak investigations, and clinical research across viral haemorrhagic fever syndromes.
 
 This release also includes enhancements to exposure history capture, comorbidity documentation, laboratory testing classifications, and patient pathway documentation, improving epidemiological characterization and harmonisation across disease-specific and syndromic CRFs.
 
