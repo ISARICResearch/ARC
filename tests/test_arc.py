@@ -60,7 +60,6 @@ TYPE_ENUM = [
     "calc",
     "notes",
     "file",
-    "slider"
 ]
 
 # Update if new types are added
@@ -161,7 +160,7 @@ def test_arc_answer_options_exist():
         ARC_PATH, dtype="object", usecols=["Variable", "Type", "Answer Options"]
     )
     condition = (
-        arc["Type"].isin(["radio", "checkbox", "list", "calc", "dropdown","slider"])
+        arc["Type"].isin(["radio", "checkbox", "list", "calc", "dropdown"])
         | arc["Answer Options"].isna()
     )
     if not condition.all():
@@ -237,7 +236,6 @@ def test_arc_valid_validation():
     condition = (
         (arc["Validation"].isin(VALIDATION_ENUM) & arc["Type"].eq(arc["Validation"]))
         | arc["Validation"].isin(["units"])
-        | arc["Type"].isin(["slider"])
         | arc["Validation"].isna()
     )
     if not condition.all():
@@ -270,7 +268,9 @@ def test_arc_minimum_maximum_correct_type():
         )
 
 
-@pytest.mark.low
+@pytest.mark.skip(
+    reason="Not currently required. Maximum may not always make sense and can be left blank."
+)
 def test_arc_minimum_maximum_exists():
     """Minimum and maximum must exist for numbers."""
     arc = pd.read_csv(
@@ -287,19 +287,31 @@ def test_arc_minimum_maximum_exists():
 
 
 @pytest.mark.low
-def test_arc_minimum_maximum_exists_dates():
-    """Maximum should exist for dates/times."""
+def test_arc_minimum_less_than_maximum():
+    """Minimum must be less than Maximum for numbers."""
     arc = pd.read_csv(
         ARC_PATH,
-        dtype="object",
-        usecols=["Variable", "Validation", "Maximum"],
+        usecols=["Variable", "Validation", "Minimum", "Maximum"],
     )
-    condition = ~arc["Validation"].isin(["date_dmy", "datetime_dmy", "time"]) | (
-        arc["Maximum"].notna()
+
+    numeric_arc = arc[arc["Validation"] == "number"]
+
+    condition = (
+        numeric_arc["Minimum"].isna()
+        | numeric_arc["Maximum"].isna()
+        | (
+            pd.to_numeric(numeric_arc["Minimum"])
+            < pd.to_numeric(numeric_arc["Maximum"])
+        )
     )
+
     if not condition.all():
-        invalid = arc.loc[~condition].set_index("Variable").to_dict(orient="index")
-        pytest.fail(f"ARC has no Maximum for date Variables: {invalid}")
+        invalid = (
+            numeric_arc.loc[~condition].set_index("Variable").to_dict(orient="index")
+        )
+        pytest.fail(
+            f"ARC has Minimum values greater than Maximum for Variables: {invalid}"
+        )
 
 
 @pytest.mark.medium
