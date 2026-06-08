@@ -232,7 +232,7 @@ def generic_str_attrs(arc, types: list[str]):
     return [rule], arc[~arc_filter]
 
 
-def generate_long_schema(version):
+def generate_long_schema(version, output_path: Path = None):
     arc = pd.read_csv("ARC.csv")
 
     with open("schemas/isaric-core.json", "r") as f:
@@ -290,9 +290,11 @@ def generate_long_schema(version):
     # check no types have been missed
     if len(arc_no_other_str) > 0:
         raise ValueError(
-            "The following rows were not processed: \n",
-            arc_no_other_str,
-            "Please check the ARC.csv file for any new types.",
+            "Rows for the following variables were not processed: "
+            f"{', '.join(repr(v) for v in arc_no_other_str['Variable'])}. "
+            "New ARC type(s): "
+            f"{', '.join(repr(v) for v in arc_no_other_str['Type'].unique())}"
+            " need to be added to the schema generation script.",
         )
 
     template_long["oneOf"] = one_of_rules
@@ -301,7 +303,9 @@ def generate_long_schema(version):
     template_long["properties"]["attribute_status"]["enum"] = status_codes
 
     # Generate new long schema
-    with open(f"schemas/arc_{version}_isaric_long.schema.json", "w") as f:
+    if output_path is None:
+        output_path = Path(f"schemas/arc_{version}_isaric_long.schema.json")
+    with open(output_path, "w") as f:
         json.dump(template_long, f, indent=4)
 
 
