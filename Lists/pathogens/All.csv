@@ -188,7 +188,7 @@ Influenza B virus,407480007,SNOMED,virus,1,,,,,1,,1,,,,,,189
 Influenza virus,725894000,SNOMED,virus,1,,,,,1,,1,,1,,,,190
 Isospora belli,12633005,SNOMED,"parasite, protozoa",,,,,,,,,,,,,,191
 Japanese encephalitis virus (JEV),243603004,SNOMED,virus,,,,,,,,,,1,,,,192
-Junin virus ,26352009,SNOMED,virus,,,,,,,,,,,,1,,193
+Junin virus,26352009,SNOMED,virus,,,,,,,,,,,,1,,193
 Klebsiella,75032006,SNOMED,bacteria,,,,,,,,,,1,,,,194
 Klebsiella aerogenes,62592009,SNOMED,bacteria,,,,,,,,,,,,,,195
 Klebsiella oxytoca,40886007,SNOMED,bacteria,,,,,,,,,,,,,,196
@@ -210,7 +210,7 @@ Listeria monocytogenes,36094007,SNOMED,bacteria,,,,,,,,,,,,,,211
 Lomentospora prolificans (Scedosporium prlificans),69564000,SNOMED,fungi,,,,,,,,,,,,,,212
 Lujo virus,450622000,SNOMED,virus,,,,,,,,,,,,1,,213
 Lymphocytic choriomeningitis virus (LCMV),82518003,SNOMED,virus,,,,,,,,,,,,,,214
-MERS-CoV ,697932005,SNOMED,virus,,,,,,,,1,,1,,,,215
+MERS-CoV,697932005,SNOMED,virus,,,,,,,,1,,1,,,,215
 Machupo virus,71489006,SNOMED,virus,,1,,,,,,,,,,1,,216
 Madurella,23009007,SNOMED,fungi,,,,,,,,,,,,,,217
 Malassezia pachydermatis,51257000,SNOMED,fungi,,,,,,,,,,,,,,218
@@ -295,7 +295,7 @@ SARS-CoV-2  Eta - B.1.525,840533010,SNOMED,virus,,,,,,,,,,,,,,296
 SARS-CoV-2  Gamma - P.1,840533011,SNOMED,virus,,,,,,,,,,,,,,297
 SARS-CoV-2  Iota - B.1.526,840533012,SNOMED,virus,,,,,,,,,,,,,,298
 SARS-CoV-2  Kappa - B.1.617.1,840533013,SNOMED,virus,,,,,,,,,,,,,,299
-SARS-CoV-2  Omicron ,840533014,SNOMED,virus,,,,,,,,,,,,,,300
+SARS-CoV-2  Omicron,840533014,SNOMED,virus,,,,,,,,,,,,,,300
 SARS-CoV-2  Omicron - B.1.1.529,840533015,SNOMED,virus,,,,,,,,,,,,,,301
 SARS-CoV-2  Omicron - B.1.1.529.2 BA.2,840533016,SNOMED,virus,,,,,,,,,,,,,,302
 SARS-CoV-2  Omicron - B.1.1.529.5 BA.5,840533017,SNOMED,virus,,,,,,,,,,,,,,303
@@ -395,7 +395,7 @@ Yeast,62093005,SNOMED,fungi,,,,,,,,,,,,,,396
 Yersinia pestis,54365000,SNOMED,bacteria,,,,,,,,,,,,,,397
 Zika virus,50471002,SNOMED,virus,,,,,,,1,,,1,1,,,398
 Chikungunya virus,,,virus,,,,,,,1,,,,1,,,399
-Oropouche virus ,,,virus,,,,,,,1,,,,,,,400
+Oropouche virus,,,virus,,,,,,,1,,,,,,,400
 Zaire ebolavirus (ZEBOV),425092008,SNOMED,virus,,,,,,,,,,,,1,,401
 Sudan ebolavirus (SUDV),424116003,SNOMED,virus,,,,,,,,,,,,1,,402
 Reston ebolavirus (RESTV),422448009,SNOMED,virus,,,,,,,,,,,,1,,403
