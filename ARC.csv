@@ -1476,7 +1476,7 @@ outcome,JOINT ASSESSMENT,joint_sjt_pip,radio,Small joints of hand (PIP joints),"
 outcome,JOINT ASSESSMENT,joint_sjt_knee,radio,Knees,"0, 0 | 1, 1 | 2, 2 | 99, Unknown",,,,,[joint_sjt]='1',,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_sjt_calc28,calc,SJC28 — Swollen Joint Count (DAS28),"if([joint_sjt_shoulder]=99,0,[joint_sjt_shoulder]) + if([joint_sjt_elbow]=99,0,[joint_sjt_elbow]) + if([joint_sjt_wrist]=99,0,[joint_sjt_wrist]) + if([joint_sjt_mcp]=99,0,[joint_sjt_mcp]) + if([joint_sjt_pip]=99,0,[joint_sjt_pip]) + if([joint_sjt_knee]=99,0,[joint_sjt_knee])",,,,,,,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_crp,number,CRP — C-Reactive Protein (mg/L),,number,,,,,,,,,,,,,,,,1,,,,,,,,,,,
-outcome,JOINT ASSESSMENT,joint_vas,slider,Global Health VAS — Patient-reported,Very well | | Very poor,number,,,,,,,,,,,,,,,,1,,,,,,,,,,,
+outcome,JOINT ASSESSMENT,joint_vas,number,Global Health VAS — Patient-reported (0 = Very well; 100 = Very poor),,number,0,100,,,,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_stiff,radio,Stiffness NRS — Patient-reported (0–10),"0, 0 — No stiffness | 1, 1 | 2, 2 | 3, 3 | 4, 4 | 5, 5 | 6, 6 | 7, 7 | 8, 8 | 9, 9 | 10, 10 — Worst stiffness",,,,,,,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_nrs,text,ESR (mm/hr) — if using DAS28-ESR variant,,,,,,,,,,,,,,,,,,1,,,,,,,,,,,
 outcome,JOINT ASSESSMENT,joint_calc_das28,calc,DAS28 Score,"if([joint_tjt]='1',0.56*sqrt(if([joint_tjt_calc28]=99,0,[joint_tjt_calc28]))+0.28*sqrt(if([joint_sjt_calc28]=99,0,[joint_sjt_calc28]))+0.36*log(if([joint_crp]='',0,[joint_crp])+1)+0.014*[joint_vas]+0.96,'')",,,,,,,,,,,,,,,,,1,,,,,,,,,,,
