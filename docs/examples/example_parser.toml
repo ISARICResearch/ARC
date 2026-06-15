@@ -1,0 +1,267 @@
+# Example ADTL parser: maps a COVID-19 clinical dataset to the ISARIC core and long schemas.
+# Pair with example_data.csv and the tutorial in docs/sources/writing-a-parser.rst.
+
+[adtl]
+  name = "covid-study"
+  description = "Example COVID-19 study parser"
+  emptyFields = "NA"
+
+  # Source TRUE/FALSE → ISARIC Yes/No (used for value fields)
+  [adtl.defs."Y/N/NK"]
+    values = { TRUE = "Yes", FALSE = "No" }
+
+  # Named phase blocks — referenced by long table rows via ref = "phase_*"
+  [adtl.defs.phase_presentation]
+    phase = "presentation"
+    date = { field = "date_admit" }
+
+  [adtl.defs.phase_outcome]
+    phase = "outcome"
+    date = { field = "date_outcome" }
+
+  [adtl.tables]
+    core = { kind = "groupBy", groupBy = "subjid", aggregation = "lastNotNull", schema = "../../schemas/isaric-core.json" }
+
+    [adtl.tables.long]
+      kind = "oneToMany"
+      schema = "../../schemas/arc_1.2.2_isaric_long.schema.json"
+      discriminator = "attribute"
+      common = { subjid = { field = "usubjid" }, dataset_id = { field = "studyid" }, arcver = "1.2.2" }
+
+      # =============================================================================
+      # Core table fields
+      # =============================================================================
+
+[core]
+  subjid = { field = "usubjid" }
+  siteid = { field = "siteid_final" }
+  dataset_id = { field = "studyid" }
+  dataset_disease = "COVID-19"
+  demog_country_iso3 = { field = "country_iso" }
+  pres_adm = "Unknown"
+  pres_date = { field = "date_admit" }
+  outco_date = { field = "date_outcome" }
+
+  # Sex: source strings match the schema directly — explicit mapping for clarity and validation
+  [core.demog_sex]
+    field = "slider_sex"
+    values = { Male = "Male", Female = "Female" }
+
+  # Age in days: source records age in years; pint handles the unit conversion
+  [core.demog_age_days]
+    field = "age"
+    unit = "days"
+    source_unit = "years"
+
+  # Outcome: free-text strings vary across sites; ignoreMissingKey drops unmapped values silently
+  [core.outco_outcome]
+    field = "outcome"
+    ignoreMissingKey = true
+    [core.outco_outcome.values]
+      discharge = "Discharged alive"
+      released = "Discharged alive"
+      "released with home care" = "Discharged alive"
+      "released without instructions" = "Discharged alive"
+      "cured (confirmed by a negative covid test)" = "Discharged alive"
+      "recovery (confirmed by a negative test)" = "Discharged alive"
+      "ongoing care" = "Still hospitalised"
+      transferred = "Transfer to other facility"
+      "moved to facility" = "Transfer to other facility"
+      death = "Death"
+
+      # =============================================================================
+      # Long table rows — one [[long]] block per observation type.
+      # attribute_status is set per block using the attribute_status_fill function,
+      # which infers VAL/UNK/NI from whether the source field contains a value.
+      # =============================================================================
+
+      # --- Symptoms (TRUE/FALSE → Yes/No) ---
+
+[[long]]
+  attribute = "pres_symptpres"
+  value = { field = "slider_symptomatic", ref = "Y/N/NK" }
+  attribute_status = { field = "slider_symptomatic", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_fever"
+  value = { field = "symptoms_history_of_fever", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_history_of_fever", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_cough"
+  value = { field = "symptoms_cough", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_cough", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_shortbreat"
+  value = { field = "symptoms_shortness_of_breath", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_shortness_of_breath", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_fatigue"
+  value = { field = "symptoms_fatigue_malaise", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_fatigue_malaise", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+  # --- Comorbidities ---
+
+[[long]]
+  attribute = "comor_hypertensi"
+  value = { field = "comorbid_hypertension", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_hypertension", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_diabetes"
+  value = { field = "comorbid_diabetes", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_diabetes", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_obesity"
+  value = { field = "comorbid_obesity", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_obesity", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+  # --- Vital signs (numeric) ---
+
+[[long]]
+  attribute = "vital_highesttem_c"
+  value_num = { field = "vs_temp" }
+  attribute_unit = "°C"
+  attribute_status = { field = "vs_temp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_hr"
+  value_num = { field = "vs_hr" }
+  attribute_status = { field = "vs_hr", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_rr"
+  value_num = { field = "vs_resp" }
+  attribute_status = { field = "vs_resp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_spo2room"
+  value_num = { field = "vs_oxysat_room_air" }
+  attribute_status = { field = "vs_oxysat_room_air", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_systolicbp"
+  value_num = { field = "vs_sysbp" }
+  attribute_status = { field = "vs_sysbp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_diastolicbp"
+  value_num = { field = "vs_diabp" }
+  attribute_status = { field = "vs_diabp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+  # --- Lab values ---
+
+[[long]]
+  attribute = "labs_crp_mgl"
+  attribute_unit = "mg/L"
+  value_num = { field = "lab_crp" }
+  attribute_status = { field = "lab_crp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_lymphocyte_109l"
+  attribute_unit = "10^9/L"
+  value_num = { field = "lab_lym" }
+  attribute_status = { field = "lab_lym", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_wbccount"
+  attribute_unit = "10^9/L"
+  value_num = { field = "lab_wbc" }
+  attribute_status = { field = "lab_wbc", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+  # --- Treatments ---
+  # Some fields exist in both a general column and an ICU-specific column.
+  # firstNonNull returns the value from whichever column is non-empty.
+  # [long.attribute_status] mirrors the same combinedType so it reflects the same source.
+
+[[long]]
+  attribute = "medi_medtype"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_corticosteroids", values = { "TRUE" = "Corticosteroid" } },
+      { field = "icu_treat_corticosteroids", values = { "TRUE" = "Corticosteroid" } },
+    ]
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_corticosteroids", apply = { function = "attribute_status_fill" } },
+      { field = "icu_treat_corticosteroids", apply = { function = "attribute_status_fill" } },
+    ]
+
+[[long]]
+  attribute = "medi_medtype"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_antiviral_agents", values = { "TRUE" = "Antiviral" } },
+      { field = "icu_treat_antiviral_agents", values = { "TRUE" = "Antiviral" } },
+    ]
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_antiviral_agents", apply = { function = "attribute_status_fill" } },
+      { field = "icu_treat_antiviral_agents", apply = { function = "attribute_status_fill" } },
+    ]
+
+[[long]]
+  attribute = "inter_suppleo2"
+  value = { field = "treat_oxygen_therapy", ref = "Y/N/NK" }
+  attribute_status = { field = "treat_oxygen_therapy", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+  # --- ICU admission ---
+  # duration computes ICU length of stay in days from icu_in → icu_out.
+
+[[long]]
+  attribute = "crito_icu"
+  value = { field = "slider_icu_ever", ref = "Y/N/NK" }
+  attribute_status = { field = "slider_icu_ever", apply = { function = "attribute_status_fill" } }
+  phase = "during_observation"
+  date = { field = "icu_in" }
+  duration = { field = "icu_in", apply = { function = "durationDays", params = [
+    "$icu_out",
+  ] } }
+
+  # --- Complications ---
+
+[[long]]
+  attribute = "compl_ards"
+  value = { field = "comps_ards", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_ards", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_pneum"
+  value = { field = "comps_bacterial_pneumonia", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_bacterial_pneumonia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+# compl_pneum_type is only emitted when the source is TRUE (no mapping for FALSE)
+[[long]]
+  attribute = "compl_pneum_type"
+  value = { field = "comps_bacterial_pneumonia", values = { "TRUE" = "Bacterial" } }
+  attribute_status = { field = "comps_bacterial_pneumonia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"

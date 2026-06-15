@@ -1,0 +1,6 @@
+adtl_valid,adtl_error,dataset_disease,dataset_id,demog_age_days,demog_country_iso3,demog_sex,outco_date,outco_outcome,pres_adm,pres_date,siteid,subjid
+True,,COVID-19,COVID-STUDY,20088,GBR,Male,2023-01-17,Discharged alive,Unknown,2023-01-10,SITE-GBR-01,C001
+True,,COVID-19,COVID-STUDY,26298,DEU,Female,2023-01-28,Death,Unknown,2023-01-11,SITE-DEU-01,C002
+True,,COVID-19,COVID-STUDY,13879,USA,Male,2023-01-19,Discharged alive,Unknown,2023-01-12,SITE-USA-01,C003
+False,"data must contain ['subjid', 'siteid', 'dataset_id', 'dataset_disease', 'demog_sex', 'demog_age_days', 'demog_country_iso3', 'pres_adm', 'pres_date', 'outco_outcome', 'outco_date'] properties",COVID-19,COVID-STUDY,22280,GBR,Female,,Still hospitalised,Unknown,2023-01-13,SITE-GBR-02,C004
+True,,COVID-19,COVID-STUDY,17532,ESP,Male,2023-01-21,Transfer to other facility,Unknown,2023-01-14,SITE-ESP-01,C005
