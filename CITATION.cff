@@ -5,39 +5,56 @@ message: A comprehensive machine-readable document that contains a library of
          outbreaks. 
 type: database
 authors:
-  - name-particle: Esteban
-    family-names: Garcia-Gallo
+  - family-names: Garcia-Gallo
+    given-names: Esteban
     email: esteban.garcia@ndm.ox.ac.uk
     orcid: 0000-0002-8030-9985
-  - name-particle: Sara
-    family-names: Duque-Vallejo
+  - family-names: Duque-Vallejo
+    given-names: Sara
     email: sara.duquevallejo@ndm.ox.ac.uk
     orcid: 0000-0002-6616-8354
   - family-names: Darji
     given-names: Dhruv
     email: dhruv.darji@gtc.ox.ac.uk
-  - name-particle: Tom
-    family-names: Edinburgh
-    email: tom.edinburgh@ndm.ox.ac.uk
-    orcid: 0000-0002-3599-7133
+  - family-names: Murthy
+    given-names: Sandeep
+    email: sandeep.murthy@ndm.ox.ac.uk
+  - family-names: Edinburgh
+    given-names: Tom
   - family-names: Lunn
     given-names: Miles
-    email: miles.lunn@ndm.ox.ac.uk
   - family-names: Kelly
     given-names: Sadie
     email: sadie.kelly@ndm.ox.ac.uk
+  - family-names: Bourner
+    given-names: Josephine
+  - family-names: Chang
+    given-names: Aileen
+    email: chang@email.gwu.edu
+  - family-names: Chernyavskaya
+    given-names: Anastasiia
   - family-names: Carson
     given-names: Gail
     email: gail.carson@ndm.ox.ac.uk
   - family-names: Cummings
-    given-names: Mattew
-    email: mjc2244@cumc.columbia.edu)
+    given-names: Matthew
+    email: mjc2244@cumc.columbia.edu
+  - family-names: Davtian
+    given-names: Lilit
+  - family-names: de Oliveira
+    given-names: Viviane S B
   - family-names: Diaz
     given-names: Janet
-    email: diazj@who.int)
+    email: diazj@who.int
   - family-names: Dunning
     given-names: Jake
     email: jake.dunning@ndm.ox.ac.uk
+  - family-names: Hashmi
+    given-names: Madiha
+    email: madiha.hashmi@zu.edu.pk
+  - family-names: Hassan
+    given-names: Zakiul
+    email: zakiul.hassan@ndm.ox.ac.uk
   - family-names: Ho
     given-names: Antonia
     email: antonia.ho@glasgow.ac.uk
@@ -50,6 +67,8 @@ authors:
   - family-names: Judd
     given-names: Ali
     email: a.judd@ucl.ac.uk
+  - family-names: Kiseleva
+    given-names: Anastasia
   - family-names: Le Prevost
     given-names: Marthe
     email: m.leprevost@ucl.ac.uk
@@ -60,11 +79,11 @@ authors:
     given-names: Claudia
     email: claudia.mello@emilioribas.sp.gov.br
   - family-names: Murthy
-    given-names: Srin
+    given-names: Srinivas
     email: srinivas.murthy@cw.bc.ca
   - family-names: Olliaro
     given-names: Piero
-    email: pieto.olliaro@ndm.ox.ac.uk
+    email: piero.olliaro@ndm.ox.ac.uk
   - family-names: Reyes
     given-names: Luis Felipe
     email: luis.reyes@ndm.ox.ac.uk
@@ -73,7 +92,7 @@ authors:
     email: amanda.rojek@ndm.ox.ac.uk
   - family-names: Rylance
     given-names: Jamie
-    email: rylancej@who.int)
+    email: rylancej@who.int
   - family-names: Sauer
     given-names: Lauren
     email: lsauer@unmc.edu
@@ -83,12 +102,27 @@ authors:
   - family-names: Sconza
     given-names: Rebecca
     email: r.sconza@ucl.ac.uk
+  - family-names: Sharin
+    given-names: Lubaba
+  - family-names: Siddiqui
+    given-names: Ayesha
+    email: ayesha.siddiqui@ndm.ox.ac.uk
   - family-names: Uyeki
     given-names: Tim
     email: tmu0@cdc.gov
+  - family-names: Watson
+    given-names: Hugh
+  - family-names: Wu
+    given-names: Jan
   - family-names: Pesonel
     given-names: Elise
     email: elise.pesonel@ndm.ox.ac.uk
+  - family-names: Munblit
+    given-names: Daniel
+    email: daniel.munblit@kcl.ac.uk
+  - family-names: Demidova
+    given-names: Anastasiia
+    email: anastasiia.demidova@kcl.ac.uk
   - family-names: Merson
     given-names: Laura
     email: laura.merson@ndm.ox.ac.uk
@@ -112,5 +146,5 @@ keywords:
     - crf
     - data capture
 license: MIT
-version: 1.2.2
+version: 1.3.0
 date-released: April 2026
