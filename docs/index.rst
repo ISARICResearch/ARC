@@ -22,6 +22,8 @@ ARC is designed to serve as a resource for researchers and healthcare profession
 
 - **Integration with the Clinical Epidemiology Platform**: ARC is integrated into `BRIDGE <https://github.com/ISARICResearch/BRIDGE>`_, our software tool for CRF generation.
 
+- **ISARIC Data Schema**: ARC forms the basis of the standardized :doc:`ISARIC data schema <sources/isaric-data-schema>` used across the ISARIC ecosystem, including DataHub. Data collected via BRIDGE-generated CRFs and REDCap can be automatically converted into this schema using auto-generated parsers; data from other sources can be converted using `ADTL <https://adtl.readthedocs.io/en/latest/index.html>`_ with a :doc:`custom parser <sources/writing-a-parser>`.
+
 ARC is licensed under the `Open Source Initiative (OSI) <https://opensource.org>`_-compliant `MIT license <https://opensource.org/license/mit>`_.
 
 .. image:: _static/osi-badge-light.svg
@@ -43,4 +45,6 @@ Key elements of ARC, including the schema itself, and other information, can be 
    sources/archetype-crfs-and-templates
    sources/arc-latest
    sources/using-arc
+   sources/isaric-data-schema
+   sources/writing-a-parser
    sources/contributors
