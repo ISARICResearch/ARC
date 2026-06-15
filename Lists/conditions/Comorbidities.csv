@@ -1,4 +1,4 @@
-﻿Condition,Code,Library,Selected,Charlson,Elixhauser,Value
+Condition,Code,Library,Selected,Charlson,Elixhauser,Value
 Acute-on-chronic renal failure,236433006,SNOMED,1,1,1,1
 Asplenia,707147002,SNOMED,1,,1,2
 Atrial Fibrillation,49436004,SNOMED,1,,1,3

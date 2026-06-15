@@ -83,9 +83,9 @@ ISARIC works closely with experts around the world to create CRFs for priority e
 
 ARChetype CRFs are an important subset of our library of Templates. Templates are sets of ARC questions that we have curated for other outbreak-related contexts, such as clinical severity scores and core outcome sets. The library of Templates is openly available for use and adaptation by the research community. More information about how to download an ARChetype CRF can be found in our [Downloading an ARChetype CRF Guide](https://isaricresearch.github.io/Training/bridge_template_link).
 
-## ARC Version 1.3.0
+## ARC Version 1.4.0
 
-ARC Version 1.3.0 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
+ARC Version 1.4.0 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
 
 The ARC data model supports outbreak responses for
 
@@ -96,6 +96,7 @@ The ARC data model supports outbreak responses for
 - **Influenza H5Nx**,
 - **Acute Respiratory Infection (ARI)**
 - **Viral Haemorrhagic Fever (VHF)**
+- **Encephalitis**
 
 and includes enhanced coverage for **pregnant and paediatric populations** through both disease-specific and population-agnostic modules.
 
@@ -123,7 +124,7 @@ Together, these questions enable comprehensive data capture from **initial prese
 
 ### ARChetype CRFs and Modules Included
 
-ARC Version 1.3.0 contains the following **ARChetype CRFs and modules**, each structured within the forms and sections described above:
+ARC Version 1.4.0 contains the following **ARChetype CRFs and modules**, each structured within the forms and sections described above:
 
 - **COVID-19 ARChetype CRF**  
   A disease-specific CRF supporting COVID-19 outbreak responses.
@@ -149,14 +150,17 @@ ARC Version 1.3.0 contains the following **ARChetype CRFs and modules**, each st
 - **Dengue Recommended Outcomes**  
   A dedicated outcomes module supporting standardised outcome reporting for Dengue.
 
-- **Viral Haemorrhagic Fever (VHF) CRF**
+- **Viral Haemorrhagic Fever (VHF) ARChetype CRF**
   A syndromic CRF supporting Viral Haemorrhagic Fever (VHF) outbreak responses.
+
+- **Encephalitis ARChetype CRF**
+  A syndromic CRF supporting encephalitis surveillance, outbreak investigations, and clinical research, including enhanced neurological assessment and relevant exposure and vaccination history variables.
 
 ---
 
 ### Population-Specific, Disease-Agnostic Modules
 
-ARC Version 1.3.0 also includes **standalone population modules**, designed to be reused across disease-specific CRFs:
+ARC Version 1.4.0 also includes **standalone population modules**, designed to be reused across disease-specific CRFs:
 
 - **Pregnancy Module**  
 - **Paediatric Module**
@@ -237,4 +241,4 @@ Key aspects of ARC, including the core schema, and response option lists, are al
 
 ---
 
-**Note**: ARC is maintained by ISARIC. For inquiries, support, or collaboration, please [contact us](mailto:data@isaric.org). 
+**Note**: ARC is maintained by ISARIC. For inquiries, support, or collaboration, please [contact us](mailto:data@isaric.org).

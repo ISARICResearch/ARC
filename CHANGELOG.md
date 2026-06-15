@@ -1,3 +1,48 @@
+## ARC v1.4.0 (Release date: 15/06/2026)
+
+### Overview
+
+ARC v1.4.0 introduces a new syndromic preset for **Encephalitis**, expanding the ARChetype Syndromic CRF library to support surveillance, outbreak investigations, and clinical research across encephalitic syndromes.
+
+This release also includes enhancements to vaccination history capture, neurological assessment, and daily clinical monitoring, improving characterization of patients presenting with suspected encephalitis and related neurological conditions.
+
+---
+
+### Column / Preset Changes
+
+| Category                    | Details                                                  |
+| --------------------------- | -------------------------------------------------------- |
+| New syndromic preset (1)    | `preset_ARChetype Syndromic CRF_Encephalitis` (new)      |
+| Expanded syndromic coverage | Encephalitis                                             |
+| Other preset changes        | Vaccination and neurological assessment content expanded |
+
+---
+
+### Variable-Level Updates
+
+* **Added variables:** 23 new variables.
+* **Removed variables:** 4 variables.
+* **Updated variables:** 3 variables.
+* **Variable replacements:** 2 legacy variables replaced.
+
+The majority of updates focus on:
+
+* Encephalitis-specific clinical data collection.
+* Expanded vaccination history documentation, including rabies, dengue, Japanese encephalitis, and tick-borne encephalitis vaccines.
+* Improved neurological assessment through structured Glasgow Coma Scale (GCS) variables.
+* Harmonisation of intervention and vascular access terminology.
+* Minor refinements to calculated variables and answer lists.
+
+---
+
+### Notes
+
+* This release maintains compatibility with existing ARC structure and naming conventions.
+* Neurological assessment variables have been restructured to improve consistency across syndromic CRFs.
+* Terminology and answer lists remain aligned with existing interoperability standards where applicable (e.g., SNOMED-CT, LOINC, and UMLS).
+
+---
+
 ## ARC v1.3.0 (Release date: 04/06/2026)
 
 ### Overview
