@@ -2,9 +2,9 @@
 Generate a template parser for transforming ARC data into the ISARIC format.
 """
 
+import argparse
 import json
 import subprocess
-import sys
 from typing import Any
 
 import pandas as pd
@@ -765,12 +765,37 @@ def generate_parser(
 
 
 def main():
-    if len(sys.argv) > 1:
-        tag = sys.argv[1]
-    else:
-        tag = subprocess.check_output(["git", "describe", "--tags"], text=True).strip()
+    parser = argparse.ArgumentParser(description="Generate an ADTL parser from ARC.")
+    parser.add_argument(
+        "tag",
+        nargs="?",
+        help="ARC version tag (default: inferred from git describe --tags)",
+    )
+    parser.add_argument(
+        "--arc-path",
+        default="ARC.csv",
+        help="Path to the ARC CSV file (default: ARC.csv)",
+    )
+    parser.add_argument(
+        "--filename",
+        default=None,
+        help="Output filename without extension (default: schemas/global_arc_{tag}_parser)",
+    )
+    parser.add_argument(
+        "--preset",
+        default=None,
+        help="Preset name to filter variables (e.g. 'preset_ARChetype Disease CRF_Covid'). Must be an existing header in ARC.",
+    )
+    args = parser.parse_args()
+
+    tag = (
+        args.tag
+        or subprocess.check_output(["git", "describe", "--tags"], text=True).strip()
+    )
     print(f"Running parser script with tag: {tag}")
-    generate_parser(tag)
+    generate_parser(
+        tag, arc_path=args.arc_path, filename=args.filename, preset=args.preset
+    )
 
 
 if __name__ == "__main__":
