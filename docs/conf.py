@@ -35,7 +35,7 @@ github_repo = f"{github_url}/ISARICResearch/ARC"
 github_version = "main"
 # pypi_project = ''
 project = 'ARC'
-release = "v1.3.0"
+release = "v1.4.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

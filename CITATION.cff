@@ -19,6 +19,7 @@ authors:
   - family-names: Murthy
     given-names: Sandeep
     email: sandeep.murthy@ndm.ox.ac.uk
+    orcid: 0009-0006-8277-9389
   - family-names: Edinburgh
     given-names: Tom
   - family-names: Lunn
@@ -146,5 +147,5 @@ keywords:
     - crf
     - data capture
 license: MIT
-version: 1.3.0
-date-released: April 2026
+version: 1.4.0
+date-released: 2026-06-15
