@@ -1,0 +1,1000 @@
+#:schema schemas/parser.schema.json
+
+[adtl]
+  name = "isaric-covid"
+  description = "Converts ISARIC processed COVID-19 dataset to the ISARIC-ARC format"
+  emptyFields = "NA"
+
+  [adtl.defs."Y/N/NK"]
+    values = { TRUE = "Yes", FALSE = "No" }
+
+  [adtl.defs."VAL/UNK"]
+    values = { TRUE = "VAL", FALSE = "VAL" }
+
+  [adtl.defs.phase_presentation]
+    phase = "presentation"
+    date = { field = "date_admit" }
+
+  [adtl.defs.phase_outcome]
+    phase = "outcome"
+    date = { field = "date_outcome" }
+
+  [adtl.tables]
+    core = { kind = "groupBy", groupBy = "subjid", aggregation = "lastNotNull", schema = "schemas/isaric-core.schema.json" }
+
+    [adtl.tables.long]
+      kind = "oneToMany"
+      schema = "schemas/arc_1.2.2_isaric_long.schema.json"
+      discriminator = "attribute"
+      common = { subjid = { field = "usubjid" }, arcver = "1.2.2", dataset_id = { field = "studyid" } }
+
+[core]
+  demog_country_iso3 = { field = "country_iso", description = "Country ISO3 code" }
+  siteid = { field = "siteid_final", description = "Site ID" }
+  subjid = { field = "usubjid", description = "Unique Subject Identifier" }
+  dataset_id = { field = "studyid" }
+  dataset_disease = "COVID-19"
+  pres_adm = "Unknown"
+  pres_date = { field = "date_admit" }
+  outco_date = { field = "date_outcome" }
+
+  [core.demog_sex]
+    field = "slider_sex"
+    values = { Male = "Male", Female = "Female" }
+
+  [core.demog_age_days]
+    field = "age"
+    unit = "days"
+    source_unit = "years"
+
+  [core.outco_outcome]
+    field = "outcome"
+    ignoreMissingKey = true
+
+    [core.outco_outcome.values]
+      discharge = "Discharged alive"
+      released = "Discharged alive"
+      "released with home care" = "Discharged alive"
+      "released without instructions" = "Discharged alive"
+      "cured (confirmed by a negative covid test)" = "Discharged alive"
+      "recovery (confirmed by a negative test)" = "Discharged alive"
+      "recovery (confirmed by a negative covid test)" = "Discharged alive"
+      "recovered (confirmed by a negative covid-19 test)" = "Discharged alive"
+      "recovered (confirmed by negative covid-19 test)" = "Discharged alive"
+      "ongoing care" = "Still hospitalised"
+      transferred = "Transfer to other facility"
+      "moved to facility" = "Transfer to other facility"
+      death = "Death"
+
+[[long]]
+  attribute = "demog_race"
+  ref = "phase_presentation"
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "ethnic", values = { unknown = "UNK" } },
+      { field = "ethnic", apply = { function = "attribute_status_fill" } },
+    ]
+
+  [long.value]
+    field = "ethnic"
+    ignoreMissingKey = true
+    [long.value.values]
+      unknown = ""                                                     # ADTL will parse this as None and remove.
+      aboriginal_first_nations = "Aboriginal/First Nations/Indigenous"
+      nz_maori = "Aboriginal/First Nations/Indigenous"
+      arab = "Arab"
+      arab_moroccan = "Arab"
+      moroccan = "Arab"
+      black = "Black or African Descent"
+      negro = "Black or African Descent"
+      gambian = "Black or African Descent"
+      afrocaribean = "Black or African Descent"
+      cape_verdean = "Black or African Descent"
+      pardo = "Brown (Mixed/Multiracial, incl. Latin American Pardo)"
+      chinese = "East Asian (incl. Brazilian Yellow/Amarelo)"
+      china = "East Asian (incl. Brazilian Yellow/Amarelo)"
+      eastasian = "East Asian (incl. Brazilian Yellow/Amarelo)"
+      east_asian = "East Asian (incl. Brazilian Yellow/Amarelo)"
+      latinamerican = "Latin American or Hispanic"
+      latin_american = "Latin American or Hispanic"
+      latin_america = "Latin American or Hispanic"
+      latinamerican_white = "Latin American or Hispanic"
+      hispanic = "Latin American or Hispanic"
+      southasian = "South Asian"
+      south_asian = "South Asian"
+      bangladeshi = "South Asian"
+      bangladesh = "South Asian"
+      indian = "South Asian"
+      india = "South Asian"
+      indian_national = "South Asian"
+      nepalese = "South Asian"
+      nepali = "South Asian"
+      nepal = "South Asian"
+      pakistani = "South Asian"
+      pakistan = "South Asian"
+      southeast_asian = "South-East Asian"
+      southeast_asia = "South-East Asian"
+      south_east_asian = "South-East Asian"
+      south_east_asia = "South-East Asian"
+      eastasian_southasian = "South-East Asian"
+      malay = "South-East Asian"
+      melayu_sarawak = "South-East Asian"
+      indonesia = "South-East Asian"
+      indonesian = "South-East Asian"
+      burmese = "South-East Asian"
+      myanmar = "South-East Asian"
+      filipino = "South-East Asian"
+      phillipino = "South-East Asian"
+      philippine = "South-East Asian"
+      philippines = "South-East Asian"
+      cambodian = "South-East Asian"
+      cambodia = "South-East Asian"
+      westasian = "West Asian"
+      westasian_turkish = "West Asian"
+      turkish = "West Asian"
+      white = "White"
+      white_n_a = "White"
+      caucasian = "White"
+      caucasien = "White"
+      white_dutch = "White"
+
+[[long]]
+  attribute = "demog_country"
+  ref = "phase_presentation"
+  attribute_status = { field = "slider_country", apply = { function = "attribute_status_fill" } }
+
+  [long.value]
+    field = "slider_country"
+    ignoreMissingKey = true
+    [long.value.values]
+      Gambia = "Gambia, The"
+      "Korea, Republic of" = "Korea, Rep."
+      "Palestine, State of" = "West Bank and Gaza"
+      Egypt = "Egypt, Arab Rep."
+      Congo = "Congo, Dem. Rep."
+      Turkey = "T\u00fcrkiye"
+      Taiwan = "Taiwan, China"
+
+[[long]]
+  attribute = "test_pathtested"
+  value = "SARS-CoV-2"
+  attribute_status = "VAL"
+  ref = "phase_presentation"
+  if.any = [
+    { "cov_det_sarscov2" = "POSITIVE" },
+    { "cov_det_sarscov2" = "NEGATIVE" },
+    { "cov_id_sarscov2" = "POSITIVE" },
+    { "cov_id_sarscov2" = "NEGATIVE" },
+  ]
+
+[[long]]
+  attribute = "test_result"
+  value = { field = "cov_det_sarscov2", values = { "POSITIVE" = "Detected", "NEGATIVE" = "Not detected", "NA" = "Unknown" } }
+  ref = "phase_presentation"
+  attribute_status = { field = "cov_det_sarscov2", apply = { function = "attribute_status_fill" } }
+
+[[long]]
+  attribute = "comor_aids"
+  value = { field = "comorbid_aids_hiv", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_aids_hiv", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_asthma"
+  value = { field = "comorbid_asthma", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_asthma", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_chrcardiac"
+  value = { field = "comorbid_chronic_cardiac_disease", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_chronic_cardiac_disease", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_chrhematol"
+  value = { field = "comorbid_chronic_haematological_disease", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_chronic_haematological_disease", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_chrkidney"
+  value = { field = "comorbid_chronic_kidney_disease", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_chronic_kidney_disease", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_chrneurolo"
+  value = { field = "comorbid_chronic_neurological_disorder", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_chronic_neurological_disorder", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_chrpulmona"
+  value = { field = "comorbid_chronic_pulmonary_disease", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_chronic_pulmonary_disease", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_dementia"
+  value = { field = "comorbid_dementia", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_dementia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_diabetes"
+  value = { field = "comorbid_diabetes", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_diabetes", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_hypertensi"
+  value = { field = "comorbid_hypertension", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_hypertension", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_liverdisease"
+  value = { field = "comorbid_liver_disease", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_liver_disease", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_malignantn"
+  value = { field = "comorbid_malignant_neoplasm", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_malignant_neoplasm", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_malnutriti"
+  value = { field = "comorbid_malnutrition", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_malnutrition", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_obesity"
+  value = { field = "comorbid_obesity", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_obesity", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_rheumatolo"
+  value = { field = "comorbid_rheumatologic_disorder", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_rheumatologic_disorder", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_smoking"
+  value = { field = "comorbid_smoking", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_smoking", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_smoking_type"
+  value = { field = "comorbid_smoking", values = { 1 = "Current smoker" } }
+  attribute_status = { field = "comorbid_smoking", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_orgtrans"
+  value = { field = "comorbid_transplantation", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_transplantation", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "comor_tuberculos"
+  value = { field = "comorbid_tuberculosis", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_tuberculosis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "preg_pregnant"
+  value = { field = "comorbid_pregnancy", ref = "Y/N/NK" }
+  attribute_status = { field = "comorbid_pregnancy", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "pres_onsetdate"
+  value = { field = "date_onset" }
+  attribute_status = { field = "date_onset", apply = { function = "attribute_status_fill" } }
+  date = { field = "date_onset" }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "pres_symptpres"
+  value = { field = "slider_symptomatic", ref = "Y/N/NK" }
+  attribute_status = { field = "slider_symptomatic", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_abdpain"
+  value = { field = "symptoms_abdominal_pain", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_abdominal_pain", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_confusion"
+  value = { field = "symptoms_altered_consciousness_confusion", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_altered_consciousness_confusion", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_haemorrhag"
+  value = { field = "symptoms_bleeding", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_bleeding", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_chestpain"
+  value = { field = "symptoms_chest_pain", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_chest_pain", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_redeye"
+  value = { field = "symptoms_conjunctivitis", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_conjunctivitis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_cough"
+  value = { field = "symptoms_cough", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_cough", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_diarrhoea"
+  value = { field = "symptoms_diarrhoea", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_diarrhoea", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_earpain"
+  value = { field = "symptoms_ear_pain", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_ear_pain", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_fatigue"
+  value = { field = "symptoms_fatigue_malaise", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_fatigue_malaise", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_headache"
+  value = { field = "symptoms_headache", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_headache", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_fever"
+  value = { field = "symptoms_history_of_fever", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_history_of_fever", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_anosmia"
+  value = { field = "symptoms_lost_altered_sense_of_smell", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_lost_altered_sense_of_smell", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_ageusia"
+  value = { field = "symptoms_lost_altered_sense_of_taste", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_lost_altered_sense_of_taste", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_rhinorrhoe"
+  value = { field = "symptoms_runny_nose", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_runny_nose", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_seizconv"
+  value = { field = "symptoms_seizures", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_seizures", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "sign_dehyrdation"
+  value = { field = "symptoms_severe_dehydration", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_severe_dehydration", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_shortbreat"
+  value = { field = "symptoms_shortness_of_breath", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_shortness_of_breath", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_skinrash"
+  value = { field = "symptoms_skin_rash", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_skin_rash", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_sorethroat"
+  value = { field = "symptoms_sore_throat", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_sore_throat", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "adsym_wheezing"
+  value = { field = "symptoms_wheezing", ref = "Y/N/NK" }
+  attribute_status = { field = "symptoms_wheezing", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "medi_medtype"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_antibiotic_agents", values = { "TRUE" = "Antibiotic" } },
+      { field = "icu_treat_antibiotic_agents", values = { "TRUE" = "Antibiotic" } },
+    ]
+
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_antibiotic_agents", apply = { function = "attribute_status_fill" } },
+      { field = "icu_treat_antibiotic_agents", apply = { function = "attribute_status_fill" } },
+    ]
+
+[[long]]
+  attribute = "medi_medtype"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_antifungal_agents", values = { "TRUE" = "Antifungal" } },
+      { field = "icu_treat_antifungal_agents", values = { "TRUE" = "Antifungal" } },
+    ]
+
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_antifungal_agents", apply = { function = "attribute_status_fill" } },
+      { field = "icu_treat_antifungal_agents", apply = { function = "attribute_status_fill" } },
+    ]
+
+[[long]]
+  attribute = "medi_medtype"
+  ref = "phase_outcome"
+  [long.value]
+    field = "treat_antimalarial_agents"
+    values = { "TRUE" = "Antiprotozoal" }
+
+  [long.attribute_status]
+    field = "treat_antimalarial_agents"
+    apply = { function = "attribute_status_fill" }
+
+[[long]]
+  attribute = "medi_medtype"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_antiviral_agents", values = { "TRUE" = "Antiviral" } },
+      { field = "icu_treat_antiviral_agents", values = { "TRUE" = "Antiviral" } },
+    ]
+
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_antiviral_agents", apply = { function = "attribute_status_fill" } },
+      { field = "icu_treat_antiviral_agents", apply = { function = "attribute_status_fill" } },
+    ]
+
+[[long]]
+  attribute = "medi_medtype"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_convalescent_plasma", values = { "TRUE" = "Convalescent plasma" } },
+      { field = "icu_treat_convalescent_plasma", values = { "TRUE" = "Convalescent plasma" } },
+    ]
+
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_convalescent_plasma", apply = { function = "attribute_status_fill" } },
+      { field = "icu_treat_convalescent_plasma", apply = { function = "attribute_status_fill" } },
+    ]
+
+[[long]]
+  attribute = "medi_medtype"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_corticosteroids", values = { "TRUE" = "Corticosteroid" } },
+      { field = "icu_treat_corticosteroids", values = { "TRUE" = "Corticosteroid" } },
+    ]
+
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_corticosteroids", apply = { function = "attribute_status_fill" } },
+      { field = "icu_treat_corticosteroids", apply = { function = "attribute_status_fill" } },
+    ]
+
+[[long]]
+  attribute = "inter_hfno"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_high_flow_nasal_cannula", ref = "Y/N/NK" },
+      { field = "icu_treat_high_flow_nasal_cannula", ref = "Y/N/NK" },
+    ]
+
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_high_flow_nasal_cannula", ref = "VAL/UNK" },
+      { field = "icu_treat_high_flow_nasal_cannula", ref = "VAL/UNK" },
+    ]
+
+[[long]]
+  attribute = "medi_medtype"
+  value = { field = "treat_immunoglobuli", values = { "TRUE" = "Intravenous immunoglobulin" } }
+  attribute_status = { field = "treat_immunoglobuli", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "medi_medtype"
+  value = { field = "treat_immunosuppressants", values = { "TRUE" = "Immunosuppressive drugs (non-steroid)" } }
+  attribute_status = { field = "treat_immunosuppressants", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "crito_inotropesv"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_inotropes_vasopressors", ref = "Y/N/NK" },
+      { field = "icu_treat_inotropes_vasopressors", ref = "Y/N/NK" },
+    ]
+
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_inotropes_vasopressors", ref = "VAL/UNK" },
+      { field = "icu_treat_inotropes_vasopressors", ref = "VAL/UNK" },
+    ]
+
+[[long]]
+  attribute = "inter_invent"
+  value = { field = "treat_invasive_ventilation", ref = "Y/N/NK" }
+  attribute_status = { field = "treat_invasive_ventilation", apply = { function = "attribute_status_fill" } }
+  phase = "during_observation"
+  date = { field = "date_imv_st" }
+  duration = { field = "dur_imv" }
+
+[[long]]
+  attribute = "inter_invent"
+  value = { field = "icu_treat_invasive_ventilation", ref = "Y/N/NK" }
+  attribute_status = { field = "icu_treat_invasive_ventilation", apply = { function = "attribute_status_fill" } }
+  phase = "during_observation"
+  date = { field = "icu_in" }
+
+[[long]]
+  attribute = "inter_nivent"
+  value = { field = "treat_non_invasive_ventilation", ref = "Y/N/NK" }
+  attribute_status = { field = "treat_non_invasive_ventilation", apply = { function = "attribute_status_fill" } }
+  phase = "during_observation"
+  date = { field = "date_niv_st" }
+  duration = { field = "dur_niv" }
+
+[[long]]
+  attribute = "inter_nivent"
+  value = { field = "icu_treat_non_invasive_ventilation", ref = "Y/N/NK" }
+  attribute_status = { field = "icu_treat_non_invasive_ventilation", apply = { function = "attribute_status_fill" } }
+  phase = "during_observation"
+  date = { field = "icu_in" }
+
+[[long]]
+  attribute = "inter_other"
+  value = { field = "treat_other_interventions", ref = "Y/N/NK" }
+  attribute_status = { field = "treat_other_interventions", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "inter_suppleo2"
+  ref = "phase_outcome"
+  [long.value]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_oxygen_therapy", ref = "Y/N/NK" },
+      { field = "icu_treat_oxygen_therapy", ref = "Y/N/NK" },
+    ]
+
+  [long.attribute_status]
+    combinedType = "firstNonNull"
+    fields = [
+      { field = "treat_oxygen_therapy", ref = "VAL/UNK" },
+      { field = "icu_treat_oxygen_therapy", ref = "VAL/UNK" },
+    ]
+
+[[long]]
+  attribute = "crito_icu"
+  value = { field = "slider_icu_ever", ref = "Y/N/NK" }
+  phase = "during_observation"
+  date = { field = "icu_in" }
+  duration = { field = "icu_in", apply = { function = "durationDays", params = [
+    "$icu_out",
+  ] } }
+  attribute_status = { field = "slider_icu_ever", ref = "VAL/UNK" }
+
+[[long]]
+  attribute = "crito_neuromuscu"
+  value = { field = "treat_inotropes_vasopressors", ref = "Y/N/NK" }
+  attribute_status = { field = "treat_inotropes_vasopressors", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_altsgpt"
+  value_num = { field = "lab_alt" }
+  attribute_status = { field = "lab_alt", apply = { function = "attribute_status_fill" } }
+  attribute_unit = "U/L"
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_aptt"
+  value_num = { field = "lab_aptt" }
+  attribute_unit = "s"
+  attribute_status = { field = "lab_aptt", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_astsgot"
+  value_num = { field = "lab_ast" }
+  attribute_unit = "U/L"
+  attribute_status = { field = "lab_ast", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_bilirubin_umoll"
+  attribute_unit = "µmol/L"
+  value_num = { field = "lab_bili" }
+  attribute_status = { field = "lab_bili", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_crp_mgl"
+  attribute_unit = "mg/L"
+  value_num = { field = "lab_crp" }
+  attribute_status = { field = "lab_crp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_lymphocyte_109l"
+  attribute_unit = "10^9/L"
+  value_num = { field = "lab_lym" }
+  attribute_status = { field = "lab_lym", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_neutrophil_109l"
+  attribute_unit = "10^9/L"
+  value_num = { field = "lab_neut" }
+  attribute_status = { field = "lab_neut", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_prothrombin"
+  attribute_unit = "s"
+  value_num = { field = "lab_pt" }
+  attribute_status = { field = "lab_pt", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_ureanitro_mmoll"
+  attribute_unit = "mmol/L"
+  value_num = { field = "lab_urean" }
+  attribute_status = { field = "lab_urean", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "labs_wbccount"
+  value_num = { field = "lab_wbc" }
+  attribute_unit = "10^9/L"
+  attribute_status = { field = "lab_wbc", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "vital_diastolicbp"
+  value_num = { field = "vs_diabp" }
+  attribute_status = { field = "vs_diabp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "demog_height_cm"
+  value_num = { field = "vs_height" }
+  attribute_unit = "cm"
+  attribute_status = { field = "vs_height", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_hr"
+  value_num = { field = "vs_hr" }
+  attribute_status = { field = "vs_hr", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_hr"
+  value_num = { field = "vs_pulse" }
+  attribute_status = { field = "vs_pulse", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_meanbp"
+  value_num = { field = "vs_map" }
+  attribute_status = { field = "vs_map", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_o2supp_spo2"
+  value_num = { field = "vs_oxysat_oxygen_therapy" }
+  attribute_status = { field = "vs_oxysat_oxygen_therapy", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_spo2room"
+  value_num = { field = "vs_oxysat_room_air" }
+  attribute_status = { field = "vs_oxysat_room_air", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_rr"
+  value_num = { field = "vs_resp" }
+  attribute_status = { field = "vs_resp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_systolicbp"
+  value_num = { field = "vs_sysbp" }
+  attribute_status = { field = "vs_sysbp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "vital_highesttem_c"
+  attribute_unit = "°C"
+  value_num = { field = "vs_temp" }
+  attribute_status = { field = "vs_temp", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "demog_weight_kg"
+  attribute_unit = "kg"
+  value_num = { field = "vs_weight" }
+  attribute_status = { field = "vs_weight", apply = { function = "attribute_status_fill" } }
+  ref = "phase_presentation"
+
+[[long]]
+  attribute = "compl_shock"
+  value = { field = "comps_shock", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_shock", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_acuterenal"
+  value = { field = "comps_acute_kidney_injury", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_acute_kidney_injury", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_ards"
+  value = { field = "comps_ards", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_ards", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_pneum"
+  value = "Yes"
+  attribute_status = "VAL"
+  ref = "phase_outcome"
+  if.any = [
+    { "comps_pneumonia" = true },
+    { "comps_bacterial_pneumonia" = true },
+    { "comps_viral_pneumonia" = true },
+    { "comps_ventilator.associated_pneumonia" = true },
+  ]
+
+[[long]]
+  attribute = "compl_pneum_type"
+  value = { field = "comps_bacterial_pneumonia", values = { "TRUE" = "Bacterial" } }
+  attribute_status = "VAL"
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_myocardial"
+  value = { field = "comps_myocardial_infarction", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_myocardial_infarction", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_pneumothor"
+  value = { field = "comps_pneumothorax", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_pneumothorax", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_pneum_acq"
+  value = { field = "comps_ventilator.associated_pneumonia", values = { "TRUE" = "Ventilator acquired" } }
+  attribute_status = "VAL"
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_cardiarrest"
+  value = { field = "comps_cardiac_arrest", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_cardiac_arrest", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_liverdysfu"
+  value = { field = "comps_liver_dysfunction", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_liver_dysfunction", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_seizure"
+  value = { field = "comps_seizures", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_seizures", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_sepsis"
+  value = { field = "comps_sepsis", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_sepsis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_coagulatio"
+  value = { field = "comps_coagulation_disorder", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_coagulation_disorder", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_strokecva"
+  value = { field = "comps_stroke", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_stroke", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_endocardit"
+  value = { field = "comps_endocarditis", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_endocarditis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_pneum_type"
+  value = { field = "comps_viral_pneumonia", values = { "TRUE" = "Viral" } }
+  attribute_status = "VAL"
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_severebleed"
+  value = { field = "comps_gastrointestinal_bleeding", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_gastrointestinal_bleeding", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_severebleed_site"
+  value = { field = "comps_gastrointestinal_bleeding", values = { "TRUE" = "GI tract" } }
+  attribute_status = { field = "comps_gastrointestinal_bleeding", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_thrombemb_dvt"
+  value = { field = "comps_deep_vein_thrombosis", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_deep_vein_thrombosis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_anaemia"
+  value = { field = "comps_anaemia", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_anaemia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_bacteraemi"
+  value = { field = "comps_bacteraemia", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_bacteraemia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_cardiarrhy"
+  value = { field = "comps_cardiac_arrhythmia", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_cardiac_arrhythmia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_rhabdomyol"
+  value = { field = "comps_rhabdomyolysis", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_rhabdomyolysis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_copneumoni"
+  value = { field = "comps_cryptogenic_organizing_pneumonia", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_cryptogenic_organizing_pneumonia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_hyperglyce"
+  value = { field = "comps_hyperglycaemia", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_hyperglycaemia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_bronchioli"
+  value = { field = "comps_bronchiolitis", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_bronchiolitis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_pancreatit"
+  value = { field = "comps_pancreatitis", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_pancreatitis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_pleuraleff"
+  value = { field = "comps_pleural_effusion", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_pleural_effusion", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_thrombemb_pe"
+  value = { field = "comps_pulmonary_embolism", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_pulmonary_embolism", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_cardiomyop"
+  value = { field = "comps_cardiomyopathy", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_cardiomyopathy", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_chf"
+  value = { field = "comps_congestive_heart_failure", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_congestive_heart_failure", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_thrombemb"
+  value = { field = "comps_thromboembolsim", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_thromboembolsim", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_hypoglycem"
+  value = { field = "comps_hypoglycaemia", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_hypoglycaemia", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_myocarditis"
+  value = { field = "comps_myocarditis", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_myocarditis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "compl_pericarditis"
+  value = { field = "comps_pericarditis", ref = "Y/N/NK" }
+  attribute_status = { field = "comps_pericarditis", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"
+
+[[long]]
+  attribute = "vital_gcs"
+  value_num = { field = "response_gcs0104" }
+  attribute_status = { field = "response_gcs0104", apply = { function = "attribute_status_fill" } }
+  ref = "phase_outcome"

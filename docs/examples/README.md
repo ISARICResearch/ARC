@@ -14,6 +14,10 @@ This folder contains the example files for the
 | `covid-study-core.csv` | Expected core table output (one row per patient) |
 | `covid-study-long.csv` | Expected long table output (one row per observation) |
 
+It also contains the `one-row-pp-covid.toml` parser, which is used to convert ISARIC's
+existing one-row-per-patient processed Covid-19 dataset into the ISARIC schema. This file can be
+used as an additional reference point, as well as the auto-generated parser(s) in the `schemas/` folder.
+
 ## Running the example
 
 From the repository root:
