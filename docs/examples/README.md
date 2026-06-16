@@ -24,7 +24,7 @@ From the repository root:
 
 ```bash
 pip install adtl
-adtl docs/examples/example_parser.toml docs/examples/example_data.csv
+adtl parse docs/examples/example_parser.toml docs/examples/example_data.csv --include-transform schemas/isaric_transformations.py
 ```
 
 See the [full tutorial](../sources/writing-a-parser.rst) and the
