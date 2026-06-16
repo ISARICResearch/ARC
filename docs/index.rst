@@ -35,7 +35,13 @@ Key elements of ARC, including the schema itself, and other information, can be 
 
 .. toctree::
    :maxdepth: 1
-   :caption: Table of Contents:
+   :caption: Overview:
+
+   sources/using-arc
+
+.. toctree::
+   :maxdepth: 1
+   :caption: ARC as a Question Bank:
 
    sources/arc-schema
    sources/variable-naming
@@ -44,7 +50,16 @@ Key elements of ARC, including the schema itself, and other information, can be 
    sources/data-capture-schema
    sources/archetype-crfs-and-templates
    sources/arc-latest
-   sources/using-arc
+
+.. toctree::
+   :maxdepth: 1
+   :caption: ARC as a Data Schema:
+
    sources/isaric-data-schema
    sources/writing-a-parser
+
+.. toctree::
+   :maxdepth: 1
+   :caption: About:
+
    sources/contributors
