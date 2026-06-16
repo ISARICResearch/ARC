@@ -3,7 +3,7 @@
 ISARIC Data Schema
 ==================
 
-Beyond providing the question bank that drives `BRIDGE <https://bridge.isaric.org>`_ CRF generation, ARC defines the **ISARIC data schema** — the standardized output format used across the ISARIC data ecosystem, including `DataHub <https://isaric.org/>`_ and other tools. Any dataset converted into this schema can be pooled and analysed alongside other ISARIC studies without additional harmonization work.
+Beyond providing the question bank that drives `BRIDGE <https://bridge.isaric.org>`_ CRF generation, ARC defines the **ISARIC data schema** — the standardized output format used across the ISARIC data ecosystem, including DataHub and other tools. Any dataset converted into this schema can be pooled and analysed alongside other ISARIC studies without additional harmonization work.
 
 The schema follows an `entity-attribute-value <https://en.wikipedia.org/wiki/Entity%E2%80%93attribute%E2%80%93value_model>`_ design: a fixed **core** table holds the small set of fields expected for every patient, while a flexible **long** table holds all other observations as (attribute, value) pairs.
 
