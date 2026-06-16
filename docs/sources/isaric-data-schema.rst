@@ -9,6 +9,8 @@ The schema follows an `entity-attribute-value <https://en.wikipedia.org/wiki/Ent
 
 All date fields are strings in ISO 8601 format. A full datetime (``YYYY-MM-DDThh:mm:ss``), full date (``YYYY-MM-DD``), year-month (``YYYY-MM``), or year-only (``YYYY``) are all valid. All other fields are strings unless the type is stated otherwise.
 
+.. _schema-overview:
+
 Schema overview
 ---------------
 
@@ -134,6 +136,8 @@ Schema overview
   the core table for easier access.
 
 The phases in the long table correspond to the :ref:`data capture schema <data-capture-schema>` that ARC is structured around.
+
+.. _schema-files:
 
 Schema files
 ------------
