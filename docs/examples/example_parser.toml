@@ -24,7 +24,7 @@
 
     [adtl.tables.long]
       kind = "oneToMany"
-      schema = "../../schemas/arc_1.2.2_isaric_long.schema.json"
+      schema = "../../schemas/arc_v1.4.0_isaric_long.schema.json"
       discriminator = "attribute"
       common = { subjid = { field = "usubjid" }, dataset_id = { field = "studyid" }, arcver = "1.2.2" }
 
