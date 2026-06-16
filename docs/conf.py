@@ -60,7 +60,7 @@ rst_epilog = f"""
 .. |project|                replace:: **{project}**
 .. |project_description|    replace:: {description}
 .. |release|                replace:: **{release}**
-.. |github_release_target|  replace:: https://github.com/ISARICResearch/ISARICAnalytics/releases/tag/{release}
+.. |github_release_target|  replace:: https://github.com/ISARICResearch/ARC/releases/tag/{release}
 """
 
 # Publish author(s)
@@ -121,12 +121,12 @@ exclude_patterns = [
 # pygments_style = "sphinx"
 
 # A list of prefixes that are ignored when creating the module index.
-# (new in Sphinx 0.6)
-modindex_common_prefix = ["isaricanalytics."]
+# (new in Sphinx 0.6). NOT REQUIRED here as there is no standard package.
+#modindex_common_prefix = ["isaricanalytics."]
 
 # Not currently required but will be useful later once all public
 # library docstrings are complete, with doctest examples
-doctest_global_setup = "import isaricanalytics"
+#doctest_global_setup = "import isaricanalytics"
 
 # If this is True, the ``todo`` and ``todolist`` extension directives
 # produce output, else they produce nothing. The default is ``False``.
