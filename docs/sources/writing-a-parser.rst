@@ -32,6 +32,8 @@ The example files used throughout this tutorial live in ``docs/examples/``:
    * - ``covid-study-long.csv``
      - Expected long table output
 
+.. _what-you-build:
+
 What you are building
 ---------------------
 
@@ -71,6 +73,8 @@ with the auto-generated parser produced by the `draft_parser.py` script in the `
 Running ``adtl check`` with the auto-generated parser and your source data will show you which
 fields are missing; however, it won't look at the mapping so you should check the output data carefully
 to make sure it has been transformed correctly.
+
+.. _step-1-find-data-target:
 
 Step 1: Find where your data goes
 ----------------------------------
@@ -112,6 +116,8 @@ The full ARC variable list, with descriptions and answer options, is in
    below shows how to handle this.
 
    If there is no good match for your field, you should contact the ISARIC team about how best to proceed.
+
+.. _the-source-data:
 
 The source data
 ---------------
@@ -156,6 +162,8 @@ need handling:
    * - Treatments in both ``treat_*`` and ``icu_treat_*`` columns
      - Single ``attribute`` row
      - ``combinedType = "firstNonNull"``
+
+.. _step-2-setup-parser-file:
 
 Step 2: Set up the parser file
 -------------------------------
@@ -203,6 +211,8 @@ them in every observation block.
 
 Replace ``1.2.2`` with the ARC version you are targeting. The schema paths are
 relative to the parser file.
+
+.. _step-3-map-core:
 
 Step 3: Map the core table
 ---------------------------
@@ -307,11 +317,15 @@ Multiple source strings can map to the same schema value. The sub-table
 syntax (``[core.outco_outcome.values]``) is used here instead of inline braces
 because the mapping is too long to fit on one line.
 
+.. _step-4-map-long:
+
 Step 4: Map the long table
 ---------------------------
 
 Each observation type gets its own ``[[long]]`` block. The minimum each block needs is
 an ``attribute`` name, a value source, a phase and an ``attribute_status``.
+
+.. _reuse-definitions:
 
 **Reusing phase and date across many blocks**
 
@@ -331,6 +345,8 @@ date on every single block, define them once as reusable references:
 
 Any ``[[long]]`` block can then include e.g. ``ref = "phase_presentation"`` to
 inherit both ``phase`` and ``date`` from the definition.
+
+.. _string-bool-observations:
 
 **String and boolean observations (symptoms, comorbidities)**
 
@@ -376,6 +392,8 @@ This same pattern — ``ref = "Y/N/NK"`` for the value, ``attribute_status_fill`
 for the status — applies to every boolean field: symptoms, comorbidities,
 treatments, and complications.
 
+.. _numeric-observation:
+
 **Numeric observations (vital signs, lab values)**
 
 For numeric measurements, use ``value_num`` instead of ``value``, and add
@@ -399,6 +417,8 @@ For numeric measurements, use ``value_num`` instead of ``value``, and add
 
 Vital signs are assigned to the ``phase_presentation`` phase; lab values to ``phase_outcome``.
 This may differ for you, depending on the timing of your measurements. Adjust the ``ref`` accordingly.
+
+.. _two-sources-section:
 
 **When the same data is in two source columns**
 
@@ -432,6 +452,8 @@ column as the selected value:
          { field = "treat_corticosteroids",     apply = { function = "attribute_status_fill" } },
          { field = "icu_treat_corticosteroids", apply = { function = "attribute_status_fill" } },
        ]
+
+.. _own-date-section:
 
 **When an observation has its own date**
 
@@ -488,6 +510,8 @@ source value has no entry in the ``values`` map, so patients where
      attribute_status = { field = "comps_bacterial_pneumonia", apply = { function = "attribute_status_fill" } }
      ref              = "phase_outcome"
 
+.. _step-5-run-and-check:
+
 Step 5: Run the parser and check the output
 --------------------------------------------
 
@@ -514,6 +538,8 @@ This creates two files in the current directory — ``covid-study-core.csv`` and
    |---------------|-------|-------|----------------|
    |core           |4      |5      |80.000000%      |
    |long           |109    |109    |100.000000%     |
+
+.. _understanding-errors:
 
 **Understanding validation errors**
 
@@ -549,6 +575,8 @@ Going further
 The patterns above cover the most common cases. Below are a few more that
 appear in real-world datasets.
 
+.. _repeated-columns:
+
 **Repeated columns**
 
 If the source data has multiple follow-up visits as separate columns (e.g.
@@ -566,6 +594,8 @@ identical blocks:
 
 This will expand out into 5 blocks when run, and will create a long table row for each
 follow-up visit that has a non-null value.
+
+.. _event-id:
 
 **Linking related observations**
 
