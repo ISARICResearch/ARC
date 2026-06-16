@@ -16,36 +16,36 @@
     "jsonschema",
   ]
 
-[project.optional-dependencies]
-  dev = [
-    "pytest",
-    "adtl",
-  ]
+  [project.optional-dependencies]
+    dev = [
+      "pytest",
+      "adtl>=0.13.3",
+    ]
 
-  docs = [
-    "Sphinx",
-    "sphinx-autobuild",
-    "sphinxcontrib-email",
-    "sphinx-copybutton",
-    "sphinx-gallery",
-    "sphinx-design",
-    "myst-parser",
-    "pylint",
-    "furo",
-    "numpydoc",
-    "nb2plots",
-    "jupyter-sphinx",
-  ]
+    docs = [
+      "Sphinx",
+      "sphinx-autobuild",
+      "sphinxcontrib-email",
+      "sphinx-copybutton",
+      "sphinx-gallery",
+      "sphinx-design",
+      "myst-parser",
+      "pylint",
+      "furo",
+      "numpydoc",
+      "nb2plots",
+      "jupyter-sphinx",
+    ]
 
-[project.urls]
-  Homepage = "https://github.com/ISARICResearch/ARC"
-  Repository = "https://github.com/ISARICResearch/ARC"
+  [project.urls]
+    Homepage = "https://github.com/ISARICResearch/ARC"
+    Repository = "https://github.com/ISARICResearch/ARC"
 
 [tool.hatch.build.targets.wheel]
   packages = ["schemas", "units", "tests"]
 
-[tool.hatch.build.targets.wheel.force-include]
-  "Lists" = "arc_data/Lists"
+  [tool.hatch.build.targets.wheel.force-include]
+    "Lists" = "arc_data/Lists"
 
 [tool.hatch.build.targets.sdist]
   include = ["schemas/", "units/"]
@@ -55,5 +55,5 @@
     "critical: critical severity test (must pass)",
     "high: high severity test",
     "medium: medium severity test",
-    "low: low severity test"
+    "low: low severity test",
   ]
