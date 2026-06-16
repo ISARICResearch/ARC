@@ -40,6 +40,7 @@
   [project.urls]
     Homepage = "https://github.com/ISARICResearch/ARC"
     Repository = "https://github.com/ISARICResearch/ARC"
+    Documentation = "https://isaric-arc.readthedocs.io"
 
 [tool.hatch.build.targets.wheel]
   packages = ["schemas", "units", "tests"]
