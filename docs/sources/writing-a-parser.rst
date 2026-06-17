@@ -120,7 +120,7 @@ The full ARC variable list, with descriptions and answer options, is in
 .. _the-source-data:
 
 The source data
----------------
+~~~~~~~~~~~~~~~
 
 ``example_data.csv`` represents a COVID-19 hospital study with five patients.
 A selection of columns is shown below:
