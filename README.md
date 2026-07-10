@@ -83,9 +83,9 @@ ISARIC works closely with experts around the world to create CRFs for priority e
 
 ARChetype CRFs are an important subset of our library of Templates. Templates are sets of ARC questions that we have curated for other outbreak-related contexts, such as clinical severity scores and core outcome sets. The library of Templates is openly available for use and adaptation by the research community. More information about how to download an ARChetype CRF can be found in our [Downloading an ARChetype CRF Guide](https://isaricresearch.github.io/Training/bridge_template_link).
 
-## ARC Version 1.4.1
+## ARC Version 1.5.0
 
-ARC Version 1.4.1 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
+ARC Version 1.5.0 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
 
 The ARC data model supports outbreak responses for
 
@@ -97,6 +97,7 @@ The ARC data model supports outbreak responses for
 - **Acute Respiratory Infection (ARI)**
 - **Viral Haemorrhagic Fever (VHF)**
 - **Encephalitis**
+- **Arbobvirus**
 
 and includes enhanced coverage for **pregnant and paediatric populations** through both disease-specific and population-agnostic modules.
 
@@ -155,6 +156,9 @@ ARC Version 1.4.1 contains the following **ARChetype CRFs and modules**, each st
 
 - **Encephalitis ARChetype CRF**
   A syndromic CRF supporting encephalitis surveillance, outbreak investigations, and clinical research, including enhanced neurological assessment and relevant exposure and vaccination history variables.
+
+- **Arboviral ARChetype CRF**
+  A syndromic CRF supporting surveillance, outbreak investigations, and clinical research in ambulatory care settings, enabling standardised data collection for outpatients with   suspected arboviral infections, including clinical features, epidemiological and vector exposures, diagnostic investigations, and clinical outcomes.
 
 ---
 
