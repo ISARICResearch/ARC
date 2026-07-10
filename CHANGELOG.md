@@ -1,3 +1,31 @@
+## ARC v1.5.0 (Release date: 13/07/2026)
+
+ARC v1.5.0 introduces a new syndromic preset for **Arbovirus**, expanding the ARChetype Syndromic CRF library to support harmonised data collection for patients with suspected arboviral infections.
+
+---
+
+### Column / Preset Changes
+
+| Category | Details |
+|----------|---------|
+| New syndromic preset (1) | `preset_ARChetype Syndromic CRF_Arbovirus` (new) |
+| Expanded syndromic coverage | Arbovirus |
+| Other preset changes | None |
+
+---
+
+### Variable-Level Updates
+
+The changes in this release are limited to the introduction of the new **Arbovirus** syndromic preset.
+
+---
+
+### Notes
+
+* This release maintains compatibility with existing ARC structure and naming conventions.
+* The new Arbovirus preset follows the existing ARChetype Syndromic CRF design and naming conventions.
+* Terminology and answer lists remain aligned with existing interoperability standards (e.g., SNOMED-CT, LOINC, and UMLS).
+
 ## ARC v1.4.1 (Release date: 24/06/2026)
 
 ### Overview
