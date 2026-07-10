@@ -15,6 +15,7 @@ The ARC data model supports outbreak responses for
 - **Acute Respiratory Infection (ARI)**  
 - **Viral Haemorrhagic Fever (VHF)**
 - **Encephalitis**
+- **Arbovirus**
 
 and includes enhanced coverage for **pregnant and paediatric populations** through both disease-specific and population-agnostic modules.
 
