@@ -1,3 +1,35 @@
+## ARC v1.4.1 (Release date: 24/06/2026)
+
+### Overview
+
+ARC v1.4.1 is a maintenance release that corrects the placement of a variable within the ARC data dictionary. No new variables, presets, or functional changes have been introduced.
+
+---
+
+### Column / Preset Changes
+
+| Category       | Details |
+| -------------- | ------- |
+| Preset changes | None    |
+| New presets    | None    |
+
+---
+
+### Variable-Level Updates
+
+* **Relocated variables:** 1 variable moved to the appropriate section/category.
+* **Added variables:** 0
+* **Removed variables:** 0
+* **Updated variables:** 0
+
+---
+
+### Notes
+
+* This release contains a minor metadata correction only.
+* No impact on variable names, definitions, answer lists, or existing data collection workflows.
+* Existing ARC implementations remain fully compatible with v1.4.0.
+
 ## ARC v1.4.0 (Release date: 15/06/2026)
 
 ### Overview
