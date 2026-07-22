@@ -85,7 +85,7 @@ ARChetype CRFs are an important subset of our library of Templates. Templates ar
 
 ## ARC Version 1.5.0
 
-ARC Version 1.5.0 contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
+The **latest ARC Version 1.5.0** contains a comprehensive library of harmonised questions designed for use in **Case Report Forms (CRFs)** supporting outbreak responses and clinical surveillance across multiple infectious diseases and populations.
 
 The ARC data model supports outbreak responses for
 
@@ -97,7 +97,7 @@ The ARC data model supports outbreak responses for
 - **Acute Respiratory Infection (ARI)**
 - **Viral Haemorrhagic Fever (VHF)**
 - **Encephalitis**
-- **Arbobvirus**
+- **Arbovirus**
 
 and includes enhanced coverage for **pregnant and paediatric populations** through both disease-specific and population-agnostic modules.
 
