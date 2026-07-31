@@ -28,7 +28,8 @@ from datetime import datetime
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 author = "ISARIC"
-copyright = f"ISARIC, {datetime.now().year}"
+year = datetime.now().year
+copyright = f"ISARIC, {year}"
 description = """ARC (Acute and Rapid onset disease Case report form) - standardised clinical data collection."""
 github_url = "https://github.com"
 github_repo = f"{github_url}/ISARICResearch/ARC"
@@ -52,9 +53,13 @@ language = "en"
 # Set primary domain to null
 primary_domain = None
 
-# Global substitutions - not required for the moment
+# Global substitutions - can be used in RST pages with the syntax
+#
+#     |label|
+#
 rst_epilog = f"""
 .. |author|                 replace:: **{author}**
+.. |year|                   replace:: **{year}**
 .. |copyright|              replace:: **{copyright}**
 .. |docs_url|               replace:: ''
 .. |project|                replace:: **{project}**
