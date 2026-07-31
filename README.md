@@ -217,7 +217,7 @@ ARC is **published** on [GitHub](https://github.com/ISARICResearch/ARC/releases)
 
 ARC can be **cited** as follows:
 
-> Bourner J, Carson G, Chang A, Chernyavskaya A, Cummings M, Davtian L, Darji D, Demidova A, Diaz J, Dunning J, Duque-Vallejo S, Edinburgh T, Garcia-Gallo E, Hashmi M, Hassan Z, Ho A, Horby P, Jackson C, Judd C, Kelly S, Kiseleva A, Lim WS, Lunn M, Mello C, Merson L, Murthy S, de Oliveira VSB, Olliaro P, Pesonel E, Le Prevost M, Reyes LF, Rojek A, Rylance J, Sauer L, Sconza R, Semple C, Sharin L, Siddiqui A, Uyeki T, Watson H, Wu J. ISARIC ARC (v1.5.0). *ISARIC* \|year\|. <doi:%6010.5281/zenodo.14162844> \<https://doi.org/10.5281/zenodo.14162844\>\`\_
+> Bourner J, Carson G, Chang A, Chernyavskaya A, Cummings M, Davtian L, Darji D, Demidova A, Diaz J, Dunning J, Duque-Vallejo S, Edinburgh T, Garcia-Gallo E, Hashmi M, Hassan Z, Ho A, Horby P, Jackson C, Judd C, Kelly S, Kiseleva A, Lim WS, Lunn M, Mello C, Merson L, Murthy S, de Oliveira VSB, Olliaro P, Pesonel E, Le Prevost M, Reyes LF, Rojek A, Rylance J, Sauer L, Sconza R, Semple C, Sharin L, Siddiqui A, Uyeki T, Watson H, Wu J. ISARIC ARC (v1.5.0). *ISARIC* 2026. [doi:10.5281/zenodo.14162844](https://doi.org/10.5281/zenodo.14162844)
 
 ## Contributors
 
