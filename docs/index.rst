@@ -24,6 +24,8 @@ ARC is designed to serve as a resource for researchers and healthcare profession
 
 - **ISARIC Data Schema**: ARC forms the basis of the standardized :doc:`ISARIC data schema <sources/isaric-data-schema>` used across the ISARIC ecosystem, including DataHub. Data collected via BRIDGE-generated CRFs and REDCap can be automatically converted into this schema using auto-generated parsers; data from other sources can be converted using `ADTL <https://adtl.readthedocs.io/en/latest/index.html>`_ with a :doc:`custom parser <sources/writing-a-parser>`.
 
+- **Citable**: Refer :ref:`here <citing-arc>` for more details.
+
 ARC is licensed under the `Open Source Initiative (OSI) <https://opensource.org>`_-compliant `MIT license <https://opensource.org/license/mit>`_.
 
 .. image:: _static/osi-badge-light.svg
