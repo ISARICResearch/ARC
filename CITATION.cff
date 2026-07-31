@@ -5,12 +5,39 @@ message: A comprehensive machine-readable document that contains a library of
          outbreaks. 
 type: dataset
 authors:
+  - family-names: Garcia-Gallo
+    given-names: Esteban
+    email: esteban.garcia@ndm.ox.ac.uk
+    orcid: 0000-0002-8030-9985
+
+  - family-names: Duque-Vallejo
+    given-names: Sara
+    email: sara.duquevallejo@ndm.ox.ac.uk
+    orcid: 0000-0002-6616-8354
+
+  - family-names: Darji
+    given-names: Dhruv
+    email: dhruv.darji@gtc.ox.ac.uk
+
+  - family-names: Murthy
+    given-names: Sandeep
+    email: sandeep.murthy@ndm.ox.ac.uk
+    orcid: 0009-0006-8277-9389
+
+  - family-names: Edinburgh
+    given-names: Tom
+    email: tom.edinburgh@paediatrics.ox.ac.uk
+    orcid: 0000-0002-3599-7133
+
+  - family-names: Lunn
+    given-names: Miles
+
+  - family-names: Kelly
+    given-names: Sadie
+    email: sadie.kelly@ndm.ox.ac.uk
+
   - family-names: Bourner
     given-names: Josephine
-
-  - family-names: Carson
-    given-names: Gail
-    email: gail.carson@ndm.ox.ac.uk
 
   - family-names: Chang
     given-names: Aileen
@@ -19,6 +46,10 @@ authors:
   - family-names: Chernyavskaya
     given-names: Anastasiia
 
+  - family-names: Carson
+    given-names: Gail
+    email: gail.carson@ndm.ox.ac.uk
+
   - family-names: Cummings
     given-names: Matthew
     email: mjc2244@cumc.columbia.edu
@@ -26,13 +57,8 @@ authors:
   - family-names: Davtian
     given-names: Lilit
 
-  - family-names: Darji
-    given-names: Dhruv
-    email: dhruv.darji@gtc.ox.ac.uk
-
-  - family-names: Demidova
-    given-names: Anastasiia
-    email: anastasiia.demidova@kcl.ac.uk
+  - family-names: de Oliveira
+    given-names: Viviane S B
 
   - family-names: Diaz
     given-names: Janet
@@ -41,19 +67,6 @@ authors:
   - family-names: Dunning
     given-names: Jake
     email: jake.dunning@ndm.ox.ac.uk
-
-  - family-names: Duque-Vallejo
-    given-names: Sara
-    email: sara.duquevallejo@ndm.ox.ac.uk
-    orcid: 0000-0002-6616-8354
-
-  - family-names: Edinburgh
-    given-names: Tom
-
-  - family-names: Garcia-Gallo
-    given-names: Esteban
-    email: esteban.garcia@ndm.ox.ac.uk
-    orcid: 0000-0002-8030-9985
 
   - family-names: Hashmi
     given-names: Madiha
@@ -79,51 +92,28 @@ authors:
     given-names: Ali
     email: a.judd@ucl.ac.uk
 
-  - family-names: Kelly
-    given-names: Sadie
-    email: sadie.kelly@ndm.ox.ac.uk
-
   - family-names: Kiseleva
     given-names: Anastasia
+
+  - family-names: Le Prevost
+    given-names: Marthe
+    email: m.leprevost@ucl.ac.uk
 
   - family-names: Lim
     given-names: Wei Shen
     email: WeiShen.Lim@nuh.nhs.uk
 
-  - family-names: Lunn
-    given-names: Miles
-
   - family-names: Mello
     given-names: Claudia
     email: claudia.mello@emilioribas.sp.gov.br
-
-  - family-names: Merson
-    given-names: Laura
-    email: laura.merson@ndm.ox.ac.uk
-    orcid: 0000-0002-4168-1960
-
-  - family-names: Munblit
-    given-names: Daniel
-    email: daniel.munblit@kcl.ac.uk
 
   - family-names: Murthy
     given-names: Srinivas
     email: srinivas.murthy@cw.bc.ca
 
-  - family-names: de Oliveira
-    given-names: Viviane S B
-
   - family-names: Olliaro
     given-names: Piero
     email: piero.olliaro@ndm.ox.ac.uk
-
-  - family-names: Pesonel
-    given-names: Elise
-    email: elise.pesonel@ndm.ox.ac.uk
-
-  - family-names: Le Prevost
-    given-names: Marthe
-    email: m.leprevost@ucl.ac.uk
 
   - family-names: Reyes
     given-names: Luis Felipe
@@ -141,13 +131,13 @@ authors:
     given-names: Lauren
     email: lsauer@unmc.edu
 
-  - family-names: Sconza
-    given-names: Rebecca
-    email: r.sconza@ucl.ac.uk
-
   - family-names: Semple
     given-names: Calum
     email: M.G.Semple@liverpool.ac.uk
+
+  - family-names: Sconza
+    given-names: Rebecca
+    email: r.sconza@ucl.ac.uk
 
   - family-names: Sharin
     given-names: Lubaba
@@ -166,6 +156,23 @@ authors:
 
   - family-names: Wu
     given-names: Jan
+
+  - family-names: Pesonel
+    given-names: Elise
+    email: elise.pesonel@ndm.ox.ac.uk
+
+  - family-names: Munblit
+    given-names: Daniel
+    email: daniel.munblit@kcl.ac.uk
+
+  - family-names: Demidova
+    given-names: Anastasiia
+    email: anastasiia.demidova@kcl.ac.uk
+
+  - family-names: Merson
+    given-names: Laura
+    email: laura.merson@ndm.ox.ac.uk
+    orcid: 0000-0002-4168-1960
 
 repository-code: 'https://github.com/ISARICResearch/ARC'
 url: 'https://github.com/ISARICResearch/ARC'

@@ -213,11 +213,11 @@ Key aspects of ARC, including the core schema, and response option lists, are al
 
 ARC is **published** on [GitHub](https://github.com/ISARICResearch/ARC/releases) and [Zenodo](https://zenodo.org/records/21337201). It has the DOI:
 
-[10.5281/zenodo.14162844](https://doi.org/10.5281/zenodo.14162844)
+[10.5281/zenodo.14113727](https://doi.org/10.5281/zenodo.14113727)
 
 ARC can be **cited** as follows:
 
-> Bourner J, Carson G, Chang A, Chernyavskaya A, Cummings M, Davtian L, Darji D, Demidova A, Diaz J, Dunning J, Duque-Vallejo S, Edinburgh T, Garcia-Gallo E, Hashmi M, Hassan Z, Ho A, Horby P, Jackson C, Judd C, Kelly S, Kiseleva A, Lim WS, Lunn M, Mello C, Merson L, Murthy S, de Oliveira VSB, Olliaro P, Pesonel E, Le Prevost M, Reyes LF, Rojek A, Rylance J, Sauer L, Sconza R, Semple C, Sharin L, Siddiqui A, Uyeki T, Watson H, Wu J. ISARIC ARC (v1.5.0). *ISARIC* 2026. [doi:10.5281/zenodo.14162844](https://doi.org/10.5281/zenodo.14162844)
+> Garcia-Gallo E, Duque-Vallejo S, Darji D, Murthy SR, Edinburgh T, Lunn M, Kelly S, Bourner J, Chang A, Chernyavskaya A, Carson G, Cummings M, Davtian L, de Oliveira VSB, Diaz J, Dunning J, Hashmi M, Hassan Z, Ho A, Horby P, Jackson C, Judd C, Kiseleva A, Le Prevost M, Lim WS, Mello C, Murthy S, Olliaro P, Reyes LF, Rojek A, Rylance J, Sauer L, Semple C, Sconza R, Sharin L, Siddiqui A, Uyeki T, Watson H, Wu J, Pesonel E, Munblit D, Demidova A, Merson L. ISARIC ARC (v1.5.0). *ISARIC* 2026. [10.5281/zenodo.14113727](https://doi.org/10.5281/zenodo.14113727)
 
 ## Contributors
 
@@ -247,12 +247,13 @@ ARC can be **cited** as follows:
 - Rebecca Sconza – [r.sconza@ucl.ac.uk](mailto:r.sconza@ucl.ac.uk)
 - Marthe Le Prevost – [m.leprevost@ucl.ac.uk](mailto:m.leprevost@ucl.ac.uk)
 
-### Technical and Development Expertise
+### Technical Expertise
 - Sara Duque-Vallejo - [sara.duquevallejo@ndm.ox.ac.uk](mailto:sara.duquevallejo@ndm.ox.ac.uk)
 - Tom Edinburgh - [tom.edinburgh@ndm.ox.ac.uk](mailto:tom.edinburgh@ndm.ox.ac.uk)
 - Elise Pesonel - [elise.pesonel@ndm.ox.ac.uk](mailto:elise.pesonel@ndm.ox.ac.uk)
 - Miles Lunn - [miles.lunn@ndm.ox.ac.uk](mailto:miles.lunn@ndm.ox.ac.uk)
 - Sadie Kelly - [sadie.kelly@ndm.ox.ac.uk](mailto:sadie.kelly@ndm.ox.ac.uk)
+- Sandeep Murthy - [sandeep.murthy@ndm.ox.ac.uk](mailto:sandeep.murthy@ndm.ox.ac.uk)
 
 ---
 
