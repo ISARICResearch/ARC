@@ -3,7 +3,7 @@ title: ARC
 message: A comprehensive machine-readable document that contains a library of 
          questions to be used in Clinical Report Forms (CRFs) during disease
          outbreaks. 
-type: database
+type: dataset
 authors:
   - family-names: Bourner
     given-names: Josephine
@@ -175,19 +175,19 @@ abstract: A comprehensive machine-readable document that contains a library of
 keywords:
     - isaric
     - arc
+    - case report form
+    - crf
     - infectious disease
     - pandemic
     - disease outbreak
     - clinical epidemiology
     - disease outbreak response
     - analysis and research compendium
-    - arc
-    - case report form
-    - crf
     - data capture
 license: MIT
 version: 1.5.0
 date-released: 2026-06-15
+identifiers:
   - description: ARC Release v1.5.0
     type: doi
     value: "/10.5281/zenodo.14113727"
