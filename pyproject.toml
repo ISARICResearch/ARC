@@ -18,6 +18,7 @@
 
   [project.optional-dependencies]
     dev = [
+      "pre-commit",
       "pytest",
       "adtl>=0.13.3",
     ]

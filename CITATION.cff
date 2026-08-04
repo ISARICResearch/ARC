@@ -8,33 +8,38 @@ authors:
   - family-names: Garcia-Gallo
     given-names: Esteban
     email: esteban.garcia@ndm.ox.ac.uk
-    orcid: 0000-0002-8030-9985
+    orcid: https://orcid.org/0000-0002-8030-9985
 
   - family-names: Duque-Vallejo
     given-names: Sara
     email: sara.duquevallejo@ndm.ox.ac.uk
-    orcid: 0000-0002-6616-8354
+    orcid: https://orcid.org/0000-0002-6616-8354
 
   - family-names: Darji
     given-names: Dhruv
-    email: dhruv.darji@gtc.ox.ac.uk
+    email: https://orcid.org/dhruv.darji@gtc.ox.ac.uk
+
+  - family-names: Liggins
+    given-names: Philippa
+    email: philippa.liggins@dtc.ox.ac.uk
+    orcid: https://orcid.org/0000-0003-2880-6711
 
   - family-names: Murthy
     given-names: Sandeep
     email: sandeep.murthy@ndm.ox.ac.uk
-    orcid: 0009-0006-8277-9389
+    orcid: https://orcid.org/0009-0006-8277-9389
 
   - family-names: Edinburgh
     given-names: Tom
     email: tom.edinburgh@paediatrics.ox.ac.uk
-    orcid: 0000-0002-3599-7133
+    orcid: https://orcid.org/0000-0002-3599-7133
 
   - family-names: Lunn
     given-names: Miles
 
   - family-names: Kelly
     given-names: Sadie
-    email: sadie.kelly@ndm.ox.ac.uk
+    email: https://orcid.org/sadie.kelly@ndm.ox.ac.uk
 
   - family-names: Bourner
     given-names: Josephine
@@ -145,7 +150,7 @@ authors:
   - family-names: Siddiqui
     given-names: Ayesha
     email: ayesha.siddiqui@ndm.ox.ac.uk
-    orcid: 0000-0003-1555-720X
+    orcid: https://orcid.org/0000-0003-1555-720X
 
   - family-names: Uyeki
     given-names: Tim
@@ -172,7 +177,7 @@ authors:
   - family-names: Merson
     given-names: Laura
     email: laura.merson@ndm.ox.ac.uk
-    orcid: 0000-0002-4168-1960
+    orcid: https://orcid.org/0000-0002-4168-1960
 
 repository-code: 'https://github.com/ISARICResearch/ARC'
 url: 'https://github.com/ISARICResearch/ARC'
@@ -197,4 +202,4 @@ date-released: 2026-06-15
 identifiers:
   - description: ARC Release v1.5.0
     type: doi
-    value: "/10.5281/zenodo.14113727"
+    value: "10.5281/zenodo.14113727"

@@ -253,6 +253,7 @@ ARC can be **cited** as follows:
 - Elise Pesonel - [elise.pesonel@ndm.ox.ac.uk](mailto:elise.pesonel@ndm.ox.ac.uk)
 - Miles Lunn - [miles.lunn@ndm.ox.ac.uk](mailto:miles.lunn@ndm.ox.ac.uk)
 - Sadie Kelly - [sadie.kelly@ndm.ox.ac.uk](mailto:sadie.kelly@ndm.ox.ac.uk)
+- Philippa Liggins - [philippa.liggins@dtc.ox.ac.uk](mailto:philippa.liggins@dtc.ox.ac.uk)
 - Sandeep Murthy - [sandeep.murthy@ndm.ox.ac.uk](mailto:sandeep.murthy@ndm.ox.ac.uk)
 
 ---
