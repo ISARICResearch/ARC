@@ -47,4 +47,5 @@ Technical Expertise
 - Elise Pesonel - :email:`elise.pesonel@ndm.ox.ac.uk`
 - Miles Lunn - :email:`miles.lunn@ndm.ox.ac.uk`
 - Sadie Kelly - :email:`sadie.kelly@ndm.ox.ac.uk`
+- Philippa Liggins - :email:`philippa.liggins@dtc.ox.ac.uk`
 - Sandeep Murthy - :email:`sandeep.murthy@ndm.ox.ac.uk`
