@@ -32,6 +32,13 @@ The example files used throughout this tutorial live in ``docs/examples/``:
    * - ``covid-study-long.csv``
      - Expected long table output
 
+One further file is needed to *run* the parser: ``schemas/isaric_transformations.py``
+in this repository. It contains the ISARIC-specific transformation functions that
+parsers call (such as ``attribute_status_fill``, used throughout
+:ref:`Step 4 <step-4-map-long>`), and is handed to ADTL with the
+``--include-transform`` option — see :ref:`Step 5 <step-5-run-and-check>`. You do
+not need to edit it.
+
 .. _what-you-build:
 
 What you are building
@@ -381,8 +388,13 @@ Then reference it in each observation block:
 ``ref = "phase_presentation"`` expands into ``phase`` and ``date`` at the
 block level. ADTL applies these substitutions before producing output.
 
-The ``attribute_status_fill`` function is defined in ``schemas/isaric_transformations.py``
-(not built into ADTL itself). It determines the status code from the raw source value:
+The ``attribute_status_fill`` function is **not** built into ADTL — it is one of
+the ISARIC-specific functions defined in ``schemas/isaric_transformations.py``.
+Any parser that uses it must be run with that file supplied via
+``--include-transform``, or ADTL will not know what the function is; this is
+covered in :ref:`Step 5 <step-5-run-and-check>`.
+
+It determines the status code from the raw source value:
 
 - A null value (absent, or matched by ``emptyFields``) → row is suppressed entirely
 - A pre-defined status code (``UNK``, ``NI``, ``NASK``, ``NA``) → passed through as-is
@@ -523,11 +535,25 @@ and warns about source columns that are not mapped:
 
    adtl check docs/examples/example_parser.toml docs/examples/example_data.csv
 
-Once you are happy, run the parser to produce the output files:
+Once you are happy, run the parser to produce the output files. The parser calls
+``attribute_status_fill``, so the file defining it must be passed in with
+``--include-transform``:
 
 .. code-block:: bash
 
-   adtl parse docs/examples/example_parser.toml docs/examples/example_data.csv
+   adtl parse docs/examples/example_parser.toml docs/examples/example_data.csv --include-transform schemas/isaric_transformations.py
+
+.. important:: Supplying custom ISARIC transformations
+
+   ``--include-transform`` points ADTL at a Python file containing extra
+   functions to make available to the parser.
+   ``schemas/isaric_transformations.py`` ships with this repository and needs no
+   editing — pass it whenever your parser uses ``attribute_status_fill`` or
+   ``values_strip_missing``, which is the case for the parser built in this
+   tutorial and for every parser produced by ``schemas/draft_parser.py``.
+
+   ``adtl check`` only compares field names against your source data, so it does
+   not need the option.
 
 This creates two files in the current directory — ``covid-study-core.csv`` and
 ``covid-study-long.csv`` — and prints a validation summary:
@@ -567,7 +593,7 @@ For large datasets, add ``--parallel`` for a significant speed improvement:
 
 .. code-block:: bash
 
-   adtl parse docs/examples/example_parser.toml large-study-data.csv --parallel
+   adtl parse docs/examples/example_parser.toml large-study-data.csv --parallel --include-transform schemas/isaric_transformations.py
 
 Going further
 -------------
