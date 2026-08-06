@@ -186,10 +186,11 @@ Once edited, the parser can be used to convert the REDCap export into the ISARIC
 
 .. code-block:: bash
 
-   adtl parse <your parser file> <your-data-file.csv> --include-transform schemas/isaric-transformations.py
+   adtl parse <your parser file> <your-data-file.csv> --include-transform schemas/isaric_transformations.py
 
-Note that the ``--include-transform`` option is required as a source for the ISARIC-specific
-transformations used in the auto-generated parser.
+.. important::
+  Note that the ``--include-transform`` option is required as a source for the
+  ISARIC-specific transformation functions used in the auto-generated parser. The required file has already been written, and is included in this repository as ``schemas/isaric_transformations.py``.
 
 Data collected using other tools
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
