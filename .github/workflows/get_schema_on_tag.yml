@@ -1,4 +1,4 @@
-name: Run Python Script on Tag
+name: Generate Parser/Schema on Tag
 
 on:
   push:
