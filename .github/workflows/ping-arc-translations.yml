@@ -8,8 +8,8 @@ on:
 
 jobs:
   dispatch:
+    if: github.repository == 'aidanmarler/ARC'
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch'
     steps:
       - name: Trigger ARC-Translations update
         run: |
