@@ -8,7 +8,6 @@ on:
 
 jobs:
   dispatch:
-    if: github.repository == 'aidanmarler/ARC'
     runs-on: ubuntu-latest
     steps:
       - name: Trigger ARC-Translations update
@@ -16,5 +15,5 @@ jobs:
           curl -X POST \
             -H "Authorization: Bearer ${{ secrets.ARCTRANSLATIONS_DISPATCH_TOKEN }}" \
             -H "Accept: application/vnd.github+json" \
-            https://api.github.com/repos/aidanmarler/ARC-Translations/dispatches \
+            https://api.github.com/repos/ISARICResearch/ARC-Translations/dispatches \
             -d '{"event_type": "arc-updated"}'
