@@ -40,6 +40,7 @@ Key elements of ARC, including the schema itself, and other information, can be 
    :caption: Overview:
 
    sources/using-arc
+   sources/citing-arc
 
 .. toctree::
    :maxdepth: 1

@@ -144,6 +144,7 @@ html_title = f"ARC {release}"
 # HTML global context for templates
 html_context = {
     "authors": author,
+    "year": year,
     "copyright": copyright,
     "default_mode": "dark",
     "display_github": True,
