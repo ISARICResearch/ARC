@@ -4,6 +4,8 @@ Auto-generates a long schema matching the ISARIC format with the latest ARC vari
 To be run via a github-action when the ARC version is updated.
 """
 
+import importlib.resources
+import pandas as pd
 import json
 import subprocess
 import sys
@@ -12,12 +14,16 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from schemas.codes import status_codes
 from units.utils import ConversionRegistry
+from arc.schemas.codes import status_codes
+
+
+SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
 
 # Create a ConversionRegistry instance for looking up unit values
 _conversion_registry = ConversionRegistry().load_from_json(
-    "units/unit_conversion.json", "units/unit_conversion.schema.json"
+    "units/unit_conversion.json",
+    "units/unit_conversion.schema.json"
 )
 
 

@@ -27,4 +27,4 @@ jobs:
 
       - name: Run unit tests (critical or high)
         run: |
-          uv run pytest -q -m "critical or high"
+          PYTHONPATH="src" uv run pytest -q -m "critical or high"
