@@ -19,12 +19,12 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: install
+      - name: Install UV and all dev. dependencies
         run: |
           python --version
-          python -m pip install --upgrade pip
-          pip install ".[dev]"
+          python -m pip install uv
+          uv sync --verbose --all-groups --no-install-project
 
-      - name: run unit tests (critical or high)
+      - name: Run unit tests (critical or high)
         run: |
-          pytest -q -m "critical or high"
+          uv run pytest -q -m "critical or high"
