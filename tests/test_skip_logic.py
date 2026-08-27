@@ -16,19 +16,19 @@ from pathlib import Path
 Numeric = Union[float, int]
 
 ARC_PKG_PATH = importlib.resources.files("arc")
-BASE_DIR  = ARC_PKG_PATH.parent.parent
+BASE_DIR = ARC_PKG_PATH.parent.parent
 ARC_PATH = BASE_DIR / "ARC.csv"
 LISTS_PATH = importlib.resources.files("Lists")
 LIST_FILES = [
     x
     for x in LISTS_PATH.rglob("*")
-    if x.is_file() and
-    not (
-        x.stem.startswith("__") or
-        x.stem.endswith('__') or
-        x.stem.startswith('.') or
-        x.stem.endswith('.pyc')
-    )    
+    if x.is_file()
+    and not (
+        x.stem.startswith("__")
+        or x.stem.endswith("__")
+        or x.stem.startswith(".")
+        or x.stem.endswith(".pyc")
+    )
 ]
 PRESET_COLUMNS = [
     x for x in pd.read_csv(ARC_PATH, nrows=0).columns if x.startswith("preset_")

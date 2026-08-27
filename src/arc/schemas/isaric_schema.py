@@ -22,8 +22,7 @@ SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
 
 # Create a ConversionRegistry instance for looking up unit values
 _conversion_registry = ConversionRegistry().load_from_json(
-    "units/unit_conversion.json",
-    "units/unit_conversion.schema.json"
+    "units/unit_conversion.json", "units/unit_conversion.schema.json"
 )
 
 

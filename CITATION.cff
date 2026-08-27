@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 title: ARC
-message: A comprehensive machine-readable document that contains a library of 
+message: A comprehensive machine-readable document that contains a library of
          questions to be used in Clinical Report Forms (CRFs) during disease
-         outbreaks. 
+         outbreaks.
 type: dataset
 authors:
   - family-names: Garcia-Gallo
@@ -181,7 +181,7 @@ authors:
 
 repository-code: 'https://github.com/ISARICResearch/ARC'
 url: 'https://arc.docs.isaric.org'
-abstract: A comprehensive machine-readable document that contains a library of 
+abstract: A comprehensive machine-readable document that contains a library of
          questions to be used in Clinical Report Forms (CRFs) during disease
          outbreaks.
 keywords:

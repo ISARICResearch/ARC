@@ -5,7 +5,7 @@
 
 # ARC - Analysis and Research Compendium
 
-ISARIC ARC is a comprehensive library of questions that can be used to rapidly build standardised Case Report Forms (CRFs) for disease outbreaks. It covers a wide range of patient-related information, including demographics, comorbidities, signs and symptoms, medications, outcomes, and more. Each question in ARC has specific guidelines and relevant parameters, such as definitions, answer options, units, minimum and maximum limits, data types, skip logic, and more. 
+ISARIC ARC is a comprehensive library of questions that can be used to rapidly build standardised Case Report Forms (CRFs) for disease outbreaks. It covers a wide range of patient-related information, including demographics, comorbidities, signs and symptoms, medications, outcomes, and more. Each question in ARC has specific guidelines and relevant parameters, such as definitions, answer options, units, minimum and maximum limits, data types, skip logic, and more.
 
 Refer to the [ARC documentation](https://arc.docs.isaric.org) for more details.
 
