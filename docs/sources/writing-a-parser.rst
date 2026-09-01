@@ -199,7 +199,7 @@ each is and where to find the schema file it should validate against:
      kind        = "groupBy"
      groupBy     = "subjid"
      aggregation = "lastNotNull"
-     schema      = "../../schemas/isaric-core.json"
+     schema      = "../../schemas/isaric-core.schema.json"
 
    [adtl.tables.long]
      kind          = "oneToMany"

@@ -144,7 +144,7 @@ Schema files
 
 The JSON schema files that formally define and validate these two tables live in the ``schemas/`` directory:
 
-- ``schemas/isaric-core.json`` — validates the core (wide) table.
+- ``schemas/isaric-core.schema.json`` — validates the core (wide) table.
 - ``schemas/arc_{version}_isaric_long.schema.json`` — validates the long (narrow) table. This file is auto-generated from the current ARC variable list by ``schemas/isaric_schema.py`` each time a new ARC version is released.
 
 Converting data to the ISARIC schema
