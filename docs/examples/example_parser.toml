@@ -20,7 +20,7 @@
     date = { field = "date_outcome" }
 
   [adtl.tables]
-    core = { kind = "groupBy", groupBy = "subjid", aggregation = "lastNotNull", schema = "../../schemas/isaric-core.json" }
+    core = { kind = "groupBy", groupBy = "subjid", aggregation = "lastNotNull", schema = "../../schemas/isaric-core.schema.json" }
 
     [adtl.tables.long]
       kind = "oneToMany"
