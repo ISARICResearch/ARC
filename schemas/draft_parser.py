@@ -5,13 +5,14 @@ Generate a template parser for transforming ARC data into the ISARIC format.
 import argparse
 import json
 import subprocess
+from pathlib import Path
 from typing import Any
 
 import pandas as pd
 
 from schemas import toml_writer as tomli_w
-from units.utils import ConversionRegistry
 from schemas.codes import missing_codes as mc
+from units.utils import ConversionRegistry
 
 # Type aliases
 Rule = dict[str, Any]
@@ -582,7 +583,7 @@ def generate_parser(
     if preset is not None:
         arc = arc[arc[preset] == 1]
 
-    with open("schemas/isaric-core.json", "r") as f:
+    with open(Path(__file__).parent / "isaric-core.schema.json", "r") as f:
         template_core = json.load(f)
 
     parser = {
@@ -595,11 +596,11 @@ def generate_parser(
                     "kind": "groupBy",
                     "groupBy": "subjid",
                     "aggregation": "lastNotNull",
-                    "schema": "schemas/isaric-core.schema.json",
+                    "schema": "isaric-core.schema.json",
                 },
                 "long": {
                     "kind": "oneToMany",
-                    "schema": f"schemas/arc_{version}_isaric_long.schema.json",
+                    "schema": f"arc_{version}_isaric_long.schema.json",
                     "discriminator": "attribute",
                     "common": {
                         "subjid": {"field": "subjid"},
@@ -758,7 +759,7 @@ def generate_parser(
 
     # Generate new long table parser
     if filename is None:
-        filename = f"schemas/global_arc_{version}_parser"
+        filename = f"{Path(__file__).parent}/global_arc_{version}_parser"
 
     with open(f"{filename}.toml", "wb") as f:
         tomli_w.dump(parser, f)
