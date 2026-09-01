@@ -189,11 +189,11 @@ all = [
 kind = "groupBy"
 groupBy = "subjid"
 aggregation = "lastNotNull"
-schema = "schemas/isaric-core.schema.json"
+schema = "isaric-core.schema.json"
 
 [adtl.tables.long]
 kind = "oneToMany"
-schema = "schemas/arc_v1.5.0_isaric_long.schema.json"
+schema = "arc_v1.5.0_isaric_long.schema.json"
 discriminator = "attribute"
 common = { subjid = { field = "subjid" }, arcver = "v1.5.0", dataset_id = "TODO: FILL THIS IN" }
 

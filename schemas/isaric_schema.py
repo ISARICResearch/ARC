@@ -4,15 +4,16 @@ Auto-generates a long schema matching the ISARIC format with the latest ARC vari
 To be run via a github-action when the ARC version is updated.
 """
 
-import pandas as pd
 import json
-import numpy as np
-from pathlib import Path
-import sys
 import subprocess
+import sys
+from pathlib import Path
 
-from units.utils import ConversionRegistry
+import numpy as np
+import pandas as pd
+
 from schemas.codes import status_codes
+from units.utils import ConversionRegistry
 
 # Create a ConversionRegistry instance for looking up unit values
 _conversion_registry = ConversionRegistry().load_from_json(
@@ -232,13 +233,13 @@ def generic_str_attrs(arc, types: list[str]):
     return [rule], arc[~arc_filter]
 
 
-def generate_long_schema(version, output_path: Path = None):
+def generate_long_schema(version, output_path: Path | None = None):
     arc = pd.read_csv("ARC.csv")
 
-    with open("schemas/isaric-core.json", "r") as f:
+    with open(f"{Path(__file__).parent}/isaric-core.schema.json", "r") as f:
         template_core = json.load(f)
 
-    with open("schemas/template-isaric-long.json", "r") as f:
+    with open(f"{Path(__file__).parent}/template-isaric-long.json", "r") as f:
         template_long = json.load(f)
 
     # Drop the core properties from the long schema,
@@ -304,7 +305,9 @@ def generate_long_schema(version, output_path: Path = None):
 
     # Generate new long schema
     if output_path is None:
-        output_path = Path(f"schemas/arc_{version}_isaric_long.schema.json")
+        output_path = Path(
+            f"{Path(__file__).parent}/arc_{version}_isaric_long.schema.json"
+        )
     with open(output_path, "w") as f:
         json.dump(template_long, f, indent=4)
 
