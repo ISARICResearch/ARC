@@ -1,9 +1,9 @@
-"""
-Auto-generates a long schema matching the ISARIC format with the latest ARC variables.
+from __future__ import annotations
 
-To be run via a github-action when the ARC version is updated.
-"""
 
+# -- IMPORTS --
+
+# -- Standard libraries --
 import importlib.resources
 import pandas as pd
 import json
@@ -11,11 +11,19 @@ import subprocess
 import sys
 from pathlib import Path
 
+# -- 3rd party libraries --
 import numpy as np
 
-from units.utils import ConversionRegistry
+# -- Internal libraries --
 from arc.codes import MISSING_ATTRIBUTE_STATUS_CODES
+from units.utils import ConversionRegistry
 
+
+"""
+Auto-generates a long schema matching the ISARIC format with the latest ARC variables.
+
+To be run via a github-action when the ARC version is updated.
+"""
 
 SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 __all__ = [
     "attribute_status_fill",
     "values_strip_missing",

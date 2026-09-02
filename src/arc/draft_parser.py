@@ -1,18 +1,26 @@
-"""
-Generate a template parser for transforming ARC data into the ISARIC format.
-"""
+from __future__ import annotations
 
+
+# -- IMPORTS --
+
+# -- Standard libraries --
 import argparse
 import json
 import subprocess
 from pathlib import Path
 from typing import Any
 
+# -- 3rd party libraries --
 import pandas as pd
 
+# -- Internal libraries --
 from arc import toml_writer as tomli_w
 from arc.codes import MISSING_ATTRIBUTE_STATUS_CODES as mc
 from units.utils import ConversionRegistry
+
+"""
+Generate a template parser for transforming ARC data into the ISARIC format.
+"""
 
 # Type aliases
 Rule = dict[str, Any]
