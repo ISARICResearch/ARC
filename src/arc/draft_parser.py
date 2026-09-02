@@ -11,7 +11,7 @@ from typing import Any
 import pandas as pd
 
 from arc import toml_writer as tomli_w
-from arc.codes import missing_codes as mc
+from arc.codes import MISSING_ATTRIBUTE_STATUS_CODES as mc
 from units.utils import ConversionRegistry
 
 # Type aliases
@@ -23,7 +23,7 @@ _unit_registry = ConversionRegistry().load_from_json(
     "units/unit_conversion.json", "units/unit_conversion.schema.json"
 )
 
-missing_codes = {code.lower(): code for code in mc}
+missing_codes = {code.lower(): code for code in mc.astuple()}
 missing_codes_multilist = {**missing_codes, "88": "OTH"}
 
 

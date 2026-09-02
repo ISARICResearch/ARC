@@ -14,7 +14,7 @@ from pathlib import Path
 import numpy as np
 
 from units.utils import ConversionRegistry
-from arc.codes import status_codes
+from arc.codes import MISSING_ATTRIBUTE_STATUS_CODES
 
 
 SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
@@ -305,7 +305,9 @@ def generate_long_schema(version, output_path: Path | None = None):
     template_long["oneOf"] = one_of_rules
 
     # Make sure the attribute_status enum is up to date with the codes in `schemas/codes.py`
-    template_long["properties"]["attribute_status"]["enum"] = status_codes
+    template_long["properties"]["attribute_status"]["enum"] = (
+        MISSING_ATTRIBUTE_STATUS_CODES.astuple()
+    )
 
     # Generate new long schema
     if output_path is None:
