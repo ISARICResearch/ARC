@@ -9,19 +9,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
       - name: Set up Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
         with:
           python-version: "3.12"
 
-      - name: install
+      - name: Install UV and all dev. dependencies
         run: |
-          python --version
-          python -m pip install --upgrade pip
-          pip install ".[dev]"
+          python3 -m pip install uv
+          make sync-deps-exact
 
-      - name: run unit tests
+      - name: Run unit tests (medium or low)
         run: |
-          pytest -q -m "medium or low"
+          make unittests-medium-low

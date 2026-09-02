@@ -14,6 +14,7 @@
     { name = "ISARIC", email = "isaric-dev@ndm.ox.ac.uk" }
   ]
   dependencies = [
+    "adtl>=0.13.3",
     "aenum>=3.1.17",
     "numpy>=2.0",
     "pandas>=2.0",
@@ -22,9 +23,10 @@
 
 [dependency-groups]
   dev = [
+    "ipdb",
     "pre-commit",
-    "pytest",
-    "adtl>=0.13.3",
+    "pytest>=8.4.2",
+    "pytest-cov>=7.0.0"
   ]
 
   docs = [

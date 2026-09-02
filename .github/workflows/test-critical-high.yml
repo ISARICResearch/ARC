@@ -21,10 +21,9 @@ jobs:
 
       - name: Install UV and all dev. dependencies
         run: |
-          python --version
-          python -m pip install uv
-          uv sync --verbose --active --all-groups --no-install-project
+          python3 -m pip install uv
+          make sync-deps-exact
 
       - name: Run unit tests (critical or high)
         run: |
-          PYTHONPATH="src" uv run --verbose pytest -q -m "critical or high"
+          make unittests-critical-high
