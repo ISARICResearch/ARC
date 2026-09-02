@@ -241,10 +241,10 @@ def generic_str_attrs(arc, types: list[str]):
 def generate_long_schema(version, output_path: Path | None = None):
     arc = pd.read_csv("ARC.csv")
 
-    with open(f"{Path(__file__).parent}/isaric-core.schema.json", "r") as f:
+    with open(SCHEMA_FILES_PATH.joinpath("isaric-core.schema.json"), "r") as f:
         template_core = json.load(f)
 
-    with open(f"{Path(__file__).parent}/template-isaric-long.json", "r") as f:
+    with open(SCHEMA_FILES_PATH.joinpath("template-isaric-long.json"), "r") as f:
         template_long = json.load(f)
 
     # Drop the core properties from the long schema,
@@ -310,9 +310,7 @@ def generate_long_schema(version, output_path: Path | None = None):
 
     # Generate new long schema
     if output_path is None:
-        output_path = Path(
-            f"{Path(__file__).parent}/arc_{version}_isaric_long.schema.json"
-        )
+        output_path = SCHEMA_FILES_PATH.joinpath(f"arc_{version}_isaric_long.schema.json")
     with open(output_path, "w") as f:
         json.dump(template_long, f, indent=4)
 
