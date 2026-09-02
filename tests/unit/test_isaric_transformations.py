@@ -27,7 +27,7 @@ def test_attribute_status_fill(value, expected):
     assert attribute_status_fill(value) == expected
 
 
-@pytest.mark.critical
+@pytest.mark.high
 @pytest.mark.parametrize(
     ("value", "expected"),
     [
