@@ -7,7 +7,7 @@ import pytest
 import pandas as pd
 from unittest.mock import patch
 
-from arc.schemas.draft_parser import (
+from arc.draft_parser import (
     if_all_not_missing,
     get_value_options,
     read_list_file,

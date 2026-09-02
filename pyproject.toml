@@ -79,6 +79,7 @@
   "crf_metadata.csv" = "crf_metadata.csv"
   "paper_like_details.csv" = "paper_like_details.csv"
   "README_ARC_Variable_Conventions.md" = "README_ARC_Variable_Conventions.md"
+  "SCHEMAS-README.md" = "SCHEMAS-README.md"
 
 [tool.hatch.build.targets.wheel]
   packages = ["src/arc", "Lists", "units"]
@@ -89,6 +90,7 @@
   "crf_metadata.csv" = "crf_metadata.csv"
   "paper_like_details.csv" = "paper_like_details.csv"
   "README_ARC_Variable_Conventions.md" = "README_ARC_Variable_Conventions.md"
+  "SCHEMAS-README.md" = "SCHEMAS-README.md"
 
 [tool.pytest.ini_options]
   markers = [

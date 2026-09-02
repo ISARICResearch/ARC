@@ -12,10 +12,9 @@ import sys
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
 
 from units.utils import ConversionRegistry
-from arc.schemas.codes import status_codes
+from arc.codes import status_codes
 
 
 SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
@@ -310,7 +309,9 @@ def generate_long_schema(version, output_path: Path | None = None):
 
     # Generate new long schema
     if output_path is None:
-        output_path = SCHEMA_FILES_PATH.joinpath(f"arc_{version}_isaric_long.schema.json")
+        output_path = SCHEMA_FILES_PATH.joinpath(
+            f"arc_{version}_isaric_long.schema.json"
+        )
     with open(output_path, "w") as f:
         json.dump(template_long, f, indent=4)
 
