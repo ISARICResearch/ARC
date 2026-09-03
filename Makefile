@@ -55,6 +55,8 @@ version-extract:
 # To list functions or classes use:
 #
 #     list-members MEMBER_REGEX="def\|class" FILE_PATH="/path/to/py/file"
+#
+# where the '|' represents an OR operator for grep that needs to be escaped with the backslash '\'.
 list-callables:
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Parametrised command for listing the callable members (functions or classes) of a Python file"
 	grep "$(MEMBER_REGEX)" $(FILE_PATH) | sort | cut -d ' ' -f 2 | cut -d '(' -f 1
