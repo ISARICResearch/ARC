@@ -57,20 +57,6 @@
   ]
 
 [project.optional-dependencies]
-  docs = [
-    "Sphinx",
-    "sphinx-autobuild",
-    "sphinxcontrib-email",
-    "sphinx-copybutton",
-    "sphinx-gallery",
-    "sphinx-design",
-    "myst-parser",
-    "pylint",
-    "furo",
-    "numpydoc",
-    "nb2plots",
-    "jupyter-sphinx",
-  ]
 
 [project.urls]
   Homepage = "https://github.com/ISARICResearch/ARC"
