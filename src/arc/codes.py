@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+
 __all__ = [
     "MISSING_ATTRIBUTE_STATUS_CODES",
     "STATUS_CODES",
