@@ -20,7 +20,9 @@ ARC is designed to serve as a resource for researchers and healthcare profession
 
 - **Version Control**: We continue to improve ARC by adding new questions and implementing structural changes. We maintain a comprehensive `history of changes <https://github.com/ISARICResearch/ARC/commits/main/>`_ made to ARC using GitHub's version control. This ensures document integrity, traceability of changes, and seamless collaboration among researchers. Previous ARC versions may be accessed via this repository’s `releases <https://github.com/ISARICResearch/ARC/releases>`_. Additional questions can be added to future ARC versions by contacting us at: :email:`data@isaric.org`.
 
-- **Integration with the Clinical Epidemiology Platform**: ARC is integrated into `BRIDGE <https://github.com/ISARICResearch/BRIDGE>`_, our software tool for CRF generation.
+- **Integration with the Clinical Epidemiology Platform**: ARC is integrated into `BRIDGE <https://bridge.docs.isaric.org>`_, our software tool for CRF generation. Refer to the `platform documentation <https://docs.isaric.org>`_ for more information on other components of the platform.
+
+- **Python Package**: ARC can be used as an importable Python package (or library). See :ref:`this guide <arc-python>` for more details.
 
 - **ISARIC Data Schema**: ARC forms the basis of the standardized :doc:`ISARIC data schema <sources/isaric-data-schema>` used across the ISARIC ecosystem, including DataHub. Data collected via BRIDGE-generated CRFs and REDCap can be automatically converted into this schema using auto-generated parsers; data from other sources can be converted using `ADTL <https://adtl.readthedocs.io/en/latest/index.html>`_ with a :doc:`custom parser <sources/writing-a-parser>`.
 
@@ -60,6 +62,12 @@ Key elements of ARC, including the schema itself, and other information, can be 
 
    sources/isaric-data-schema
    sources/writing-a-parser
+
+.. toctree::
+   :maxdepth: 1
+   :caption: ARC as a Python Package
+
+   sources/arc-python
 
 .. toctree::
    :maxdepth: 1

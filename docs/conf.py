@@ -34,6 +34,7 @@ description = """ARC (Acute and Rapid onset disease Case report form) - standard
 github_url = "https://github.com"
 github_repo = f"{github_url}/ISARICResearch/ARC"
 github_version = "main"
+rtd_docs_url = "arc.docs.isaric.org"
 # pypi_project = ''
 project = "ARC"
 release = "v1.5.0"
@@ -61,7 +62,8 @@ rst_epilog = f"""
 .. |author|                 replace:: **{author}**
 .. |year|                   replace:: **{year}**
 .. |copyright|              replace:: **{copyright}**
-.. |docs_url|               replace:: ''
+.. |github_repo|             replace:: **{github_repo}**
+.. |docs_url|               replace:: **{rtd_docs_url}**
 .. |project|                replace:: **{project}**
 .. |project_description|    replace:: {description}
 .. |release|                replace:: **{release}**
