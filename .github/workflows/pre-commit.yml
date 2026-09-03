@@ -22,4 +22,4 @@ jobs:
       - name: Run pre-commit hooks
         run: |
           python3 -m pip install pre-commit
-          pre-commit run --all-files
+          make pre-commit
