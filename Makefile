@@ -29,7 +29,7 @@ git-stage:
 .PHONY: clean
 clean:
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Deleting all temporary files"
-	rm -fr docs/_build/* .pytest_cache *.pyc *__pycache__* ./dist/* ./build/* *.egg-info*
+	rm -fr dist/* docs/_build/* .pytest_cache *.pyc *__pycache__* ./dist/* ./build/* *.egg-info*
 
 # --- Version commands ---
 #
@@ -71,6 +71,23 @@ sync-deps-inexact:
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Syncing all package + development dependencies with lockfile, preserving unrelated dependencies"
 	rm -f uv.lock && \
 	uv sync --verbose --active --all-groups --no-install-project --no-cache --refresh --inexact
+
+
+# --- Package artifacts ---
+.PHONY: sdist
+sdist: clean
+	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Building a source distribution of the ARC Python package"
+	uv run hatchling build --target sdist --clean
+
+.PHONY: wheel
+wheel: clean
+	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Building a wheel of the ARC Python package"
+	uv run hatchling build --target wheel --clean
+
+.PHONY: all
+all: clean
+	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Building a source distribution + wheel of the ARC Python package"
+	uv run hatchling build --clean
 
 # --- Documentation ---
 .PHONY: clean
