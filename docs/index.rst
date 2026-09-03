@@ -28,11 +28,11 @@ ARC is designed to serve as a resource for researchers and healthcare profession
 
 - **Citable**: Refer :ref:`here <citing-arc>` for more details.
 
-ARC is licensed under the `Open Source Initiative (OSI) <https://opensource.org>`_-compliant `MIT license <https://opensource.org/license/mit>`_.
+ARC is licensed under the `MIT license <https://opensource.org/license/mit>`_.
 
 .. image:: _static/osi-badge-light.svg
-   :height: 200px
-   :width:  200px
+   :height: 100px
+   :width:  100px
    :target: https://opensource.org/license/mit
 
 Key elements of ARC, including the schema itself, and other information, can be explored in more detail below from the linked pages.
