@@ -7,11 +7,22 @@
   readme = "README.md"
   license = "MIT"
   requires-python = ">=3.12"
+
+  # List of current individual contributors to the ARC GitHub project, in
+  # descending order of commits. If a contributor has left the project or
+  # organisation, the associated email listed here is the one originally
+  # associated with the commits. If the contributor has chosen not to make
+  # email public then only the name is given.
   authors = [
-    { name = "ISARIC", email = "isaric-dev@ndm.ox.ac.uk" }
+    { name = "Sara Duque-Vallejo", email = "sara.duquevallejo@ndm.ox.ac.uk" },
+    { name = "Philippa Liggins", email = "philippa.liggins@dtc.ox.ac.uk" },
+    { name = "Sandeep R. Murthy", email = "sandeep.murthy@ndm.ox.ac.uk" },
+    { name = "Esteban Garcia-Gallo", email = "esteban.garcia@ndm.ox.ac.uk" },
+    { name = "Tom Edinburgh", email = "tom.edinburg@ndm.ox.ac.uk" },
+    { name = "Aidan Marler", email = "" },
   ]
   maintainers = [
-    { name = "ISARIC", email = "isaric-dev@ndm.ox.ac.uk" }
+        { name = "Sandeep R. Murthy", email = "sandeep.murthy@ndm.ox.ac.uk" },
   ]
   dependencies = [
     "adtl>=0.13.3",
