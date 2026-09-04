@@ -31,7 +31,7 @@ or `Astral UV <https://docs.astral.sh/uv/>`_:
 
 .. code:: shell
 
-   uv sync --active --verbose --all-groups --no-cache --refresh --inexact
+   uv sync --active --verbose --all-groups --no-editable --no-cache --refresh --inexact
 
 .. note::
 
