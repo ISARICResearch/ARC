@@ -34,8 +34,9 @@ description = """ARC (Acute and Rapid onset disease Case report form) - standard
 github_url = "https://github.com"
 github_repo = f"{github_url}/ISARICResearch/ARC"
 github_version = "main"
+rtd_docs_url = "arc.docs.isaric.org"
 # pypi_project = ''
-project = 'ARC'
+project = "ARC"
 release = "v1.5.0"
 
 # -- General configuration ---------------------------------------------------
@@ -61,7 +62,8 @@ rst_epilog = f"""
 .. |author|                 replace:: **{author}**
 .. |year|                   replace:: **{year}**
 .. |copyright|              replace:: **{copyright}**
-.. |docs_url|               replace:: ''
+.. |github_repo|             replace:: **{github_repo}**
+.. |docs_url|               replace:: **{rtd_docs_url}**
 .. |project|                replace:: **{project}**
 .. |project_description|    replace:: {description}
 .. |release|                replace:: **{release}**
@@ -127,11 +129,11 @@ exclude_patterns = [
 
 # A list of prefixes that are ignored when creating the module index.
 # (new in Sphinx 0.6). NOT REQUIRED here as there is no standard package.
-#modindex_common_prefix = ["isaricanalytics."]
+# modindex_common_prefix = ["isaricanalytics."]
 
 # Not currently required but will be useful later once all public
 # library docstrings are complete, with doctest examples
-#doctest_global_setup = "import isaricanalytics"
+# doctest_global_setup = "import isaricanalytics"
 
 # If this is True, the ``todo`` and ``todolist`` extension directives
 # produce output, else they produce nothing. The default is ``False``.
@@ -144,6 +146,7 @@ html_title = f"ARC {release}"
 # HTML global context for templates
 html_context = {
     "authors": author,
+    "year": year,
     "copyright": copyright,
     "default_mode": "dark",
     "display_github": True,
@@ -169,8 +172,8 @@ html_context = {
 # HTML theme options
 html_theme = "furo"
 html_theme_options = {
-	# Logos
-	"light_logo": "isaric-logo.png",
+    # Logos
+    "light_logo": "isaric-logo.png",
     # Customisation to make the site light-only (disable dark mode).
     #
     # See: https://github.com/pradyunsg/furo/issues/28
@@ -240,7 +243,7 @@ html_sidebars = {
 # Force pygments style in dark mode back to the light variant
 pygments_dark_style = "tango"
 
-html_logo = '_static/isaric-logo.png'
+html_logo = "_static/isaric-logo.png"
 
 # Relative path (from the ``docs`` folder) to the static files folder - so
 # ``_static`` should be one level below ``docs``.

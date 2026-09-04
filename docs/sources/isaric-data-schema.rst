@@ -144,8 +144,8 @@ Schema files
 
 The JSON schema files that formally define and validate these two tables live in the ``schemas/`` directory:
 
-- ``schemas/isaric-core.schema.json`` — validates the core (wide) table.
-- ``schemas/arc_{version}_isaric_long.schema.json`` — validates the long (narrow) table. This file is auto-generated from the current ARC variable list by ``schemas/isaric_schema.py`` each time a new ARC version is released.
+- :file:`schemas/isaric-core.schema.json` — validates the core (wide) table.
+- :file:`schemas/arc_{version}_isaric_long.schema.json` — validates the long (narrow) table. This file is auto-generated from the current ARC variable list by :file:`schemas/isaric_schema.py` each time a new ARC version is released.
 
 Converting data to the ISARIC schema
 -------------------------------------
@@ -164,13 +164,13 @@ Data collected via BRIDGE / REDCap
 
 If data was collected using a CRF built with `BRIDGE <https://bridge.isaric.org>`_,
 the REDCap export already uses ARC variable names. A parser for this data can
-be **auto-generated** from the ARC file using ``schemas/draft_parser.py``:
+be **auto-generated** from the ARC file using :file:`schemas/draft_parser.py`:
 
 .. code-block:: bash
 
    python schemas/draft_parser.py
 
-This produces a file ``schemas/global_arc_{version}_parser.toml`` that covers
+This produces a file :file:`schemas/global_arc_{version}_parser.toml` that covers
 all ARC variables and handles the REDCap checkbox/radio/list field encoding
 conventions. For a study that uses a defined preset, pass the preset name:
 

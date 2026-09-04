@@ -1,5 +1,5 @@
 import pytest
-from schemas.isaric_schema import generate_long_schema
+from arc.isaric_schema import generate_long_schema
 
 
 @pytest.mark.critical

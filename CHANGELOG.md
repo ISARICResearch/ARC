@@ -169,7 +169,7 @@ This release focuses on incorporating exposure-related variables, animal contact
 
 ### Variable-Level Updates
 
-- **Added variables:** 167 new variables.  
+- **Added variables:** 167 new variables.
   The majority of these variables focus on **joint-related assessments**, reflecting the clinical importance of musculoskeletal manifestations in Chikungunya (e.g., joint pain, inflammation, severity, and distribution).
 
 ---
@@ -202,7 +202,7 @@ This release also introduces **population-specific, disease-agnostic modules** f
 ## ARC v1.1.3 (05 Nov 2025)
 
 ### Highlights
-- Minor adjustments to improve disease selection for ARI  
+- Minor adjustments to improve disease selection for ARI
 
 ## ARC v1.1.1 (02 Jul 2025)
 
@@ -239,13 +239,13 @@ Standardised term code lists have been revised to align with **SNOMED‑CT**, **
 
 ## ARC v1.0.4  (04 Mar 2025)
 
-### Overview  
+### Overview
 The changes in ARC v1.0.4 are designed to enhance the system’s usability and ensure a more coherent structure for data entry and analysis. Users are encouraged to review their workflows and adjust any scripts or processes to reflect the updated variable names and group structures.
 
-### Key Updates  
+### Key Updates
 
-**Renaming of Presets**  
+**Renaming of Presets**
    - The preset "disease" has been renamed to "ARChetype CRF" in the principal ARC CSV and in the lists.
 
-**Updates to Answer Choices**  
+**Updates to Answer Choices**
    - The test_biospecimentype variable has been changed to a userlist.

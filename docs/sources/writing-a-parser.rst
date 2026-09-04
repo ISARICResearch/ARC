@@ -15,7 +15,7 @@ Install ADTL and read through its introductory documentation before continuing:
 
    pip install adtl
 
-The example files used throughout this tutorial live in ``docs/examples/``:
+The example files used throughout this tutorial live in :file:`docs/examples/`:
 
 .. list-table::
    :header-rows: 1
@@ -23,16 +23,16 @@ The example files used throughout this tutorial live in ``docs/examples/``:
 
    * - File
      - Description
-   * - ``example_data.csv``
+   * - :file:`docs/examples/example_data.csv`
      - Synthetic COVID-19 source dataset (5 patients)
-   * - ``example_parser.toml``
+   * - :file:`docs/examples/example_parser.toml`
      - Completed parser — the end result of this tutorial
-   * - ``covid-study-core.csv``
+   * - :file:`docs/covid-study-core.csv`
      - Expected core table output
-   * - ``covid-study-long.csv``
+   * - :file:`docs/covid-study-long.csv`
      - Expected long table output
 
-One further file is needed to *run* the parser: ``schemas/isaric_transformations.py``
+One further file is needed to *run* the parser: :file:`schemas/isaric_transformations.py`
 in this repository. It contains the ISARIC-specific transformation functions that
 parsers call (such as ``attribute_status_fill``, used throughout
 :ref:`Step 4 <step-4-map-long>`), and is handed to ADTL with the
@@ -44,7 +44,7 @@ not need to edit it.
 What you are building
 ---------------------
 
-Running ADTL with the ``example_parser.toml`` file and synthetic data produces two CSV files.
+Running ADTL with the :file:`docs/examples/example_parser.toml` file and synthetic data produces two CSV files.
 The **core table** has one row per patient, with fixed demographic and outcome columns:
 
 .. code-block:: text
@@ -76,8 +76,9 @@ The parser file is what tells ADTL how to turn your source columns into this
 structure. The rest of this tutorial builds it up step by step.
 
 Depending on how closely your dataset resembles one generated using a BRIDGE CRF & REDCap, you may wish to start
-with the auto-generated parser produced by the `draft_parser.py` script in the ``schemas/`` directory, and edit that file rather than writing one from scratch.
-Running ``adtl check`` with the auto-generated parser and your source data will show you which
+with the auto-generated parser produced by the :file:`schemas/draft_parser.py` script in the :file:`schemas/` folder, and edit that file rather than writing one from scratch.
+
+Running :command:`adtl check` with the auto-generated parser and your source data will show you which
 fields are missing; however, it won't look at the mapping so you should check the output data carefully
 to make sure it has been transformed correctly.
 
@@ -103,7 +104,7 @@ Everything else goes in the long table, with the variable name specified in the 
 **What is the ISARIC attribute name?**
 
 The long table uses ARC variable names in the ``attribute`` column. To find
-the right name for your field, search ``ARC.csv`` for a matching concept. For
+the right name for your field, search :file:`ARC.csv` for a matching concept. For
 example, if your dataset has a column called ``comorbid_hypertension``, search
 for "hypertension".
 
@@ -129,7 +130,7 @@ The full ARC variable list, with descriptions and answer options, is in
 The source data
 ~~~~~~~~~~~~~~~
 
-``example_data.csv`` represents a COVID-19 hospital study with five patients.
+The :file:`docs/examples/example_data.csv` file is an example dataset of a COVID-19 hospital study with five patients.
 A selection of columns is shown below:
 
 .. code-block:: text
@@ -175,7 +176,7 @@ need handling:
 Step 2: Set up the parser file
 -------------------------------
 
-Create a new file (e.g. ``my-study-parser.toml``) and start with the metadata
+Create a new file (e.g. :file:`my-study-parser.toml`) and start with the metadata
 block. The ``name`` value determines the output filenames:
 
 .. code-block:: toml
@@ -389,7 +390,7 @@ Then reference it in each observation block:
 block level. ADTL applies these substitutions before producing output.
 
 The ``attribute_status_fill`` function is **not** built into ADTL — it is one of
-the ISARIC-specific functions defined in ``schemas/isaric_transformations.py``.
+the ISARIC-specific functions defined in :file:`schemas/isaric_transformations.py`.
 Any parser that uses it must be run with that file supplied via
 ``--include-transform``, or ADTL will not know what the function is; this is
 covered in :ref:`Step 5 <step-5-run-and-check>`.
@@ -555,8 +556,8 @@ Once you are happy, run the parser to produce the output files. The parser calls
    ``adtl check`` only compares field names against your source data, so it does
    not need the option.
 
-This creates two files in the current directory — ``covid-study-core.csv`` and
-``covid-study-long.csv`` — and prints a validation summary:
+This creates two files in the current directory — :file:`covid-study-core.csv` and
+:file:`covid-study-long.csv` — and prints a validation summary:
 
 .. code-block:: text
 

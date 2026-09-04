@@ -1,19 +1,45 @@
+from __future__ import annotations
+
+
+__all__ = [
+    "attrs_with_enums",
+    "attrs_with_lists",
+    "attrs_with_units",
+    "date_attrs",
+    "generate_long_schema",
+    "generic_str_attrs",
+    "get_enums",
+    "main",
+    "medications_dosage",
+    "numeric_attrs",
+    "time_attrs",
+]
+
+# -- IMPORTS --
+
+# -- Standard libraries --
+import importlib.resources
+import pandas as pd
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+# -- 3rd party libraries --
+import numpy as np
+
+# -- Internal libraries --
+from arc.codes import MISSING_ATTRIBUTE_STATUS_CODES
+from units.utils import ConversionRegistry
+
+
 """
 Auto-generates a long schema matching the ISARIC format with the latest ARC variables.
 
 To be run via a github-action when the ARC version is updated.
 """
 
-import json
-import subprocess
-import sys
-from pathlib import Path
-
-import numpy as np
-import pandas as pd
-
-from schemas.codes import status_codes
-from units.utils import ConversionRegistry
+SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
 
 # Create a ConversionRegistry instance for looking up unit values
 _conversion_registry = ConversionRegistry().load_from_json(
@@ -236,10 +262,10 @@ def generic_str_attrs(arc, types: list[str]):
 def generate_long_schema(version, output_path: Path | None = None):
     arc = pd.read_csv("ARC.csv")
 
-    with open(f"{Path(__file__).parent}/isaric-core.schema.json", "r") as f:
+    with open(SCHEMA_FILES_PATH.joinpath("isaric-core.schema.json"), "r") as f:
         template_core = json.load(f)
 
-    with open(f"{Path(__file__).parent}/template-isaric-long.json", "r") as f:
+    with open(SCHEMA_FILES_PATH.joinpath("template-isaric-long.json"), "r") as f:
         template_long = json.load(f)
 
     # Drop the core properties from the long schema,
@@ -301,12 +327,14 @@ def generate_long_schema(version, output_path: Path | None = None):
     template_long["oneOf"] = one_of_rules
 
     # Make sure the attribute_status enum is up to date with the codes in `schemas/codes.py`
-    template_long["properties"]["attribute_status"]["enum"] = status_codes
+    template_long["properties"]["attribute_status"]["enum"] = (
+        MISSING_ATTRIBUTE_STATUS_CODES.astuple()
+    )
 
     # Generate new long schema
     if output_path is None:
-        output_path = Path(
-            f"{Path(__file__).parent}/arc_{version}_isaric_long.schema.json"
+        output_path = SCHEMA_FILES_PATH.joinpath(
+            f"arc_{version}_isaric_long.schema.json"
         )
     with open(output_path, "w") as f:
         json.dump(template_long, f, indent=4)

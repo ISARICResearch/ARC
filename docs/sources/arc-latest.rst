@@ -7,12 +7,12 @@ The latest ARC `release <https://github.com/ISARICResearch/ARC/releases/tag/v1.4
 
 The ARC data model supports outbreak responses for
 
-- **COVID-19**  
-- **Dengue**  
-- **Chikungunya**  
-- **Mpox**  
-- **H5Nx**  
-- **Acute Respiratory Infection (ARI)**  
+- **COVID-19**
+- **Dengue**
+- **Chikungunya**
+- **Mpox**
+- **H5Nx**
+- **Acute Respiratory Infection (ARI)**
 - **Viral Haemorrhagic Fever (VHF)**
 - **Encephalitis**
 - **Arbovirus**

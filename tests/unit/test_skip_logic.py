@@ -5,6 +5,7 @@ It cannot do the following:
 - REDCap smart variables e.g. datediff
 """
 
+import importlib.resources
 import pathlib
 import pytest
 import pandas as pd
@@ -14,10 +15,21 @@ from pathlib import Path
 
 Numeric = Union[float, int]
 
-BASE_DIR = pathlib.Path(".")
+ARC_PKG_PATH = importlib.resources.files("arc")
+BASE_DIR = ARC_PKG_PATH.parent.parent
 ARC_PATH = BASE_DIR / "ARC.csv"
-LIST_FILES = [x for x in pathlib.Path("Lists").rglob("*") if x.is_file()]
-
+LISTS_PATH = importlib.resources.files("Lists")
+LIST_FILES = [
+    x
+    for x in LISTS_PATH.rglob("*")
+    if x.is_file()
+    and not (
+        x.stem.startswith("__")
+        or x.stem.endswith("__")
+        or x.stem.startswith(".")
+        or x.stem.endswith(".pyc")
+    )
+]
 PRESET_COLUMNS = [
     x for x in pd.read_csv(ARC_PATH, nrows=0).columns if x.startswith("preset_")
 ]
@@ -129,6 +141,7 @@ def get_codes_from_answer_options(s: str) -> str:
     return codes
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_valid_regex():
     """
@@ -151,6 +164,7 @@ def test_valid_regex():
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_events():
     """Check that fields mentioned in the skip logic exist"""
@@ -168,6 +182,7 @@ def test_events():
         pytest.fail(f"Skip logic includes variable not in ARC: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_fields_exist():
     """Check that fields mentioned in the skip logic exist"""
@@ -184,6 +199,7 @@ def test_fields_exist():
         pytest.fail(f"Skip logic includes variable not in ARC: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_checkboxes():
     """Check that fields mentioned in the skip logic exist"""
@@ -212,6 +228,7 @@ def test_checkboxes():
         pytest.fail(f"Skip logic incorrectly uses checkbox variable: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("preset_column", PRESET_COLUMNS)
 def test_fields_exist_presets(preset_column):
@@ -266,6 +283,7 @@ def test_fields_exist_presets(preset_column):
         pytest.fail(f"Skip logic has no valid branches:\n{formatted}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_values_exist():
     """Check that values in the skip logic exist as answer options"""
@@ -275,7 +293,7 @@ def test_values_exist():
         usecols=["Variable", "Type", "Skip Logic", "Answer Options", "List"],
     )
 
-    relative_list_files = [x.relative_to(pathlib.Path("Lists")) for x in LIST_FILES]
+    relative_list_files = [x.relative_to(LISTS_PATH) for x in LIST_FILES]
     list_enum = [str(x.parent) + "_" + x.stem for x in relative_list_files]
     list_answer_options = {
         x: get_answer_options_from_list(pathlib.Path("Lists") / y)
