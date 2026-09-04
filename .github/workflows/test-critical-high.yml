@@ -26,4 +26,4 @@ jobs:
 
       - name: Run unit tests (critical or high)
         run: |
-          make unittests-critical-high
+          test MARKER="critical or high"
