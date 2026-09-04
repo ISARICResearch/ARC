@@ -29,6 +29,7 @@ LIST_FILES_WITH_ARCHETYPE_PRESETS = [
 ]
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_arc_list_missing():
     """Check if an ARC list entry refers to an existing Lists file"""
@@ -45,6 +46,7 @@ def test_arc_list_missing():
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_list_file_used_in_arc():
     """Check if a Lists file is used in ARC. If not, should be removed"""
@@ -57,6 +59,7 @@ def test_list_file_used_in_arc():
         pytest.fail(f"ARC contains unused Lists CSV file. Variables: {unused_list}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_csv_loads(file):
@@ -72,6 +75,7 @@ def test_list_csv_loads(file):
         pytest.fail(f"{str(file)} failed to load for an unexpected reason: {e}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_required_columns_exist(file):
@@ -82,6 +86,7 @@ def test_list_required_columns_exist(file):
         pytest.fail(f"{str(file)} missing required columns: {missing}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_other_value(file):
@@ -95,6 +100,7 @@ def test_list_other_value(file):
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_arc_strip(file):
@@ -109,6 +115,7 @@ def test_arc_strip(file):
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_valid_selected_values(file):
@@ -122,6 +129,7 @@ def test_list_valid_selected_values(file):
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_valid_preset_values(file):
@@ -136,6 +144,7 @@ def test_list_valid_preset_values(file):
         pytest.fail(f"{str(file)} has invalid preset values for index: {invalid_index}")
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_too_many_presets(file):
@@ -154,6 +163,7 @@ def test_too_many_presets(file):
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_unique_labels(file):
@@ -166,6 +176,7 @@ def test_unique_labels(file):
         pytest.fail(f"{str(file)} has repeated labels: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_unique_codes(file):
@@ -185,6 +196,7 @@ def test_unique_codes(file):
             pytest.fail(f"{str(file)} has repeated labels:\n{formatted}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES_WITH_ARCHETYPE_PRESETS)
 def test_missing_presets(file):

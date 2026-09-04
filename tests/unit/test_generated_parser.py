@@ -5,7 +5,6 @@ Unit tests for schema draft parser functions.
 import adtl
 import pytest
 import pandas as pd
-from unittest.mock import patch
 
 from arc.draft_parser import (
     if_all_not_missing,
@@ -25,14 +24,8 @@ from arc.draft_parser import (
 )
 
 
-@pytest.fixture
-def mock_read_list_file():
-    """Fixture that patches read_list_file and returns a configurable mock."""
-    with patch("schemas.draft_parser.read_list_file") as mock:
-        mock.return_value = {"1": "Option A", "2": "Option B"}
-        yield mock
-
-
+@pytest.mark.all
+@pytest.mark.critical
 class TestIfAllNotMissing:
     """Tests for the if_all_not_missing helper function."""
 
@@ -69,6 +62,8 @@ class TestIfAllNotMissing:
         assert result == expected
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestGetValueOptions:
     """Tests for the get_value_options function."""
 
@@ -101,6 +96,8 @@ class TestGetValueOptions:
         assert result == {"1": "yes", "2": "no"}
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestReadListFile:
     """Tests for the read_list_file function."""
 
@@ -118,6 +115,8 @@ class TestReadListFile:
         assert len(result_selected) <= len(result_all)
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestAttrsWithUnits:
     """Tests for the attrs_with_units function."""
 
@@ -228,6 +227,8 @@ class TestAttrsWithUnits:
         assert len(filtered_arc) == 3
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestAttrsWithEnums:
     """Tests for the attrs_with_enums function."""
 
@@ -266,6 +267,8 @@ class TestAttrsWithEnums:
         }
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestAttrsWithCheckboxes:
     """Tests for the attrs_with_checkboxes function."""
 
@@ -303,6 +306,8 @@ class TestAttrsWithCheckboxes:
         }
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestNumericAttrs:
     """Tests for the numeric_attrs function."""
 
@@ -351,6 +356,8 @@ class TestNumericAttrs:
         }
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestGenericStrAttrs:
     """Tests for the generic_str_attrs function."""
 
@@ -395,6 +402,8 @@ class TestGenericStrAttrs:
         }
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestFormDefinitions:
     """Tests for the form_definitions function."""
 
@@ -426,6 +435,8 @@ class TestFormDefinitions:
             assert "date" in form_def, f"Form {form_name} missing 'date'"
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestAttrsWithLists:
     """Tests for the attrs_with_lists function."""
 
@@ -473,6 +484,8 @@ class TestAttrsWithLists:
         ]
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestAttrsWithUserlists:
     """Tests for the attrs_with_userlists function."""
 
@@ -521,6 +534,8 @@ class TestAttrsWithUserlists:
             assert rule["value"].get("can_skip") is True
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestAttrsWithMultilists:
     """Tests for the attrs_with_multilists function."""
 
@@ -544,6 +559,8 @@ class TestAttrsWithMultilists:
         assert len(value_rules) == 3
 
 
+@pytest.mark.all
+@pytest.mark.critical
 class TestParserGeneration:
     """
     Integration test for parser full parser generation. Checks the format against ADTL's

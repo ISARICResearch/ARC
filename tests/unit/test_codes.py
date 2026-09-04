@@ -12,6 +12,7 @@ from arc.codes import (
 )
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_missing_attribute_status_codes():
     assert MISSING_ATTRIBUTE_STATUS_CODES.UNKNOWN.value == "UNK"
@@ -20,6 +21,7 @@ def test_missing_attribute_status_codes():
     assert MISSING_ATTRIBUTE_STATUS_CODES.NOT_APPLICABLE.value == "NA"
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_status_codes():
     assert STATUS_CODES.UNKNOWN.value == "UNK"

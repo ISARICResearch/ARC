@@ -7,44 +7,7 @@ from pandas.testing import assert_frame_equal
 from arc import arc_tree
 
 
-@pytest.fixture
-def df_tree_units():
-    data_tree = {
-        "Form": [
-            "presentation",
-            "presentation",
-            "presentation",
-            "presentation",
-        ],
-        "Sec_name": [
-            "DEMOGRAPHICS",
-            "DEMOGRAPHICS",
-            "DEMOGRAPHICS",
-            "DEMOGRAPHICS",
-        ],
-        "vari": [
-            "height",
-            "height",
-            "height",
-            "height",
-        ],
-        "Variable": [
-            "demog_height",
-            "demog_height_units",
-            "demog_height_cm",
-            "demog_height_in",
-        ],
-        "_row_order": [
-            48,
-            49,
-            50,
-            51,
-        ],
-    }
-    df_tree = pd.DataFrame.from_dict(data_tree)
-    return df_tree
-
-
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_tree._get_units_parent_units_dataframes")
 @mock.patch("bridge.arc.arc_tree._create_tree_item_dataframe")
 @mock.patch("bridge.arc.arc_core.get_dynamic_units_conversion_bool", return_value=True)
@@ -127,6 +90,7 @@ def test_get_tree_items_with_units(
     assert output == expected
 
 
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_tree._get_units_parent_units_dataframes")
 @mock.patch("bridge.arc.arc_tree._create_tree_item_dataframe")
 @mock.patch("bridge.arc.arc_core.get_dynamic_units_conversion_bool", return_value=True)
@@ -209,38 +173,7 @@ def test_get_tree_items_with_units_remove_select_units(
     assert output == expected
 
 
-@pytest.fixture
-def df_tree_single():
-    data_tree = {
-        "Form": [
-            "presentation",
-        ],
-        "Sec_name": [
-            "INCLUSION CRITERIA",
-        ],
-        "vari": [
-            "reason",
-        ],
-        "Question": [
-            "Is the suspected or confirmed infection the reason for hospital admission?",
-        ],
-        "Variable": [
-            "inclu_reason",
-        ],
-        "Type": [
-            "radio",
-        ],
-        "_row_order": [
-            1,
-        ],
-        "n_in_vari_total": [
-            1,
-        ],
-    }
-    df_tree = pd.DataFrame.from_dict(data_tree)
-    return df_tree
-
-
+@pytest.mark.all
 @mock.patch(
     "bridge.arc.arc_tree._get_units_parent_units_dataframes",
     return_value=[pd.DataFrame(), pd.DataFrame()],
@@ -288,68 +221,7 @@ def test_get_tree_items_no_units_single_var(
     assert output == expected
 
 
-@pytest.fixture
-def df_tree_multiple():
-    data_tree = {
-        "Form": [
-            "presentation",
-            "presentation",
-            "presentation",
-            "presentation",
-        ],
-        "Sec_name": [
-            "INCLUSION CRITERIA",
-            "INCLUSION CRITERIA",
-            "INCLUSION CRITERIA",
-            "INCLUSION CRITERIA",
-        ],
-        "vari": [
-            "testreason",
-            "testreason",
-            "testreason",
-            "testreason",
-        ],
-        "Question": [
-            "Reason why the patient was tested",
-            "Specify other reason",
-            "Specify other reason 1",
-            "Specify other reason 2",
-        ],
-        "Variable": [
-            "inclu_testreason",
-            "inclu_testreason_otth",
-            "inclu_testreason_otth1",
-            "inclu_testreason_otth2",
-        ],
-        "Type": [
-            "radio",
-            "text",
-            "text",
-            "text",
-        ],
-        "_row_order": [
-            3,
-            4,
-            5,
-            6,
-        ],
-        "n_in_vari_total": [
-            4,
-            4,
-            4,
-            4,
-        ],
-        "first_question": [
-            "Reason why the patient was tested",
-            "Reason why the patient was tested",
-            "Reason why the patient was tested",
-            "Reason why the patient was tested",
-        ],
-    }
-    df_tree = pd.DataFrame.from_dict(data_tree)
-    return df_tree
-
-
+@pytest.mark.all
 @mock.patch(
     "bridge.arc.arc_tree._get_units_parent_units_dataframes",
     return_value=[pd.DataFrame(), pd.DataFrame()],
@@ -418,6 +290,7 @@ def test_get_tree_items_no_units_multiple_vars(
     assert output == expected
 
 
+@pytest.mark.all
 def test_get_units_parent_units_dataframes_dynamic_false():
     dynamic_units_conversion = False
     data_variable = {
@@ -465,6 +338,7 @@ def test_get_units_parent_units_dataframes_dynamic_false():
     assert_frame_equal(df_output_units, df_expected_units)
 
 
+@pytest.mark.all
 def test_get_units_parent_units_dataframes_dynamic_true():
     dynamic_units_conversion = True
     data_variable = {
@@ -510,6 +384,7 @@ def test_get_units_parent_units_dataframes_dynamic_true():
     assert_frame_equal(df_output_units, df_expected_units)
 
 
+@pytest.mark.all
 def test_format_question_text_user_list():
     row_data = {
         "Type": "user_list",
@@ -521,6 +396,7 @@ def test_format_question_text_user_list():
     assert output == expected
 
 
+@pytest.mark.all
 def test_format_question_text_multi_list():
     row_data = {
         "Type": "multi_list",
@@ -532,6 +408,7 @@ def test_format_question_text_multi_list():
     assert output == expected
 
 
+@pytest.mark.all
 def test_create_tree_item_dataframe_dynamic_false():
     dynamic_units_conversion = False
     data = {
@@ -696,6 +573,7 @@ def test_create_tree_item_dataframe_dynamic_false():
     assert_frame_equal(df_output, df_expected)
 
 
+@pytest.mark.all
 def test_create_tree_item_dataframe_dynamic_true():
     dynamic_units_conversion = True
     data = {

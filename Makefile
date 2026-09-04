@@ -103,11 +103,15 @@ pre-commit: clean
 
 # --- Tests ---
 #
-# Unit tests - "critical or high"
-unittests-critical-high: clean
+# Unit tests - use the `MARKER` variable to indicate markers, e.g.
+# "critical or high", or "medium or low". Note that in the `test` target
+# command below, the `MARKER` variable must be quoted to prevent expansion
+# in case of spaces in the marker.
+.PHONY: test
+test: clean
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Running critical/high unit tests + measuring coverage"
 	PYTHONPATH="src" uv run --verbose --active pytest \
-                                               -q -m "critical or high" \
+                                               -q -m "$(MARKER)" \
 			                                   --cache-clear \
 				                               --capture=no \
 				                               --code-highlight=yes \
@@ -118,22 +122,6 @@ unittests-critical-high: clean
 				                               --tb=native \
 				                               --verbosity=3 \
 				                               tests/unit
-
-# Unit tests - "medium or low"
-unittests-medium-low: clean
-	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Running medium/low unit tests + measuring coverage"
-	PYTHONPATH="src" uv run --verbose --active pytest \
- 		                                       -q -m "medium or low" \
-					                           --cache-clear \
-						                       --capture=no \
-						                       --code-highlight=yes \
-						                       --color=yes \
-						                       --cov=src \
-						                       --cov-report=term-missing:skip-covered \
-						                       -ra \
-						                       --tb=native \
-						                       --verbosity=3 \
-						                       tests/unit
 
 # Doctests
 .PHONY: clean

@@ -8,22 +8,7 @@ from pandas._testing import assert_frame_equal, assert_series_equal
 from arc.arc_lists import ArcList
 
 
-@pytest.fixture
-def translation_dict():
-    translation_dict = {
-        "any_additional": "Any additional",
-        "other": "Other",
-        "other_agent": "other agents administered",
-        "select": "Select",
-        "select_additional": "Select additional",
-        "specify": "Specify",
-        "specify_other": "Specify other",
-        "specify_other_infection": "Specify other infection",
-        "units": "Units",
-    }
-    return translation_dict
-
-
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_lists.logger")
 @mock.patch("bridge.arc.arc_lists.ArcApiClient.get_dataframe_arc_list_version_language")
 @mock.patch("bridge.arc.arc_lists.arc_translations.get_translations")
@@ -239,6 +224,7 @@ def test_get_list_content(
     assert list_output == list_expected
 
 
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_lists.logger")
 @mock.patch("bridge.arc.arc_lists.arc_translations.get_translations")
 def test_get_list_content_no_list(
@@ -269,6 +255,7 @@ def test_get_list_content_no_list(
     assert not list_output
 
 
+@pytest.mark.all
 def test_set_cont_lo():
     data = {
         "Condition": [
@@ -298,6 +285,7 @@ def test_set_cont_lo():
     assert output_int == expected_int
 
 
+@pytest.mark.all
 def test_set_cont_lo_88():
     data = {
         "Condition": [
@@ -319,6 +307,7 @@ def test_set_cont_lo_88():
     assert output_int == expected_int
 
 
+@pytest.mark.all
 def test_set_cont_lo_99():
     data = {
         "Condition": [
@@ -340,6 +329,7 @@ def test_set_cont_lo_99():
     assert output_int == expected_int
 
 
+@pytest.mark.all
 def test_set_cont_lo_no_value():
     data = {
         "Condition": [
@@ -356,6 +346,7 @@ def test_set_cont_lo_no_value():
     assert output_int == expected_int
 
 
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_lists.logger")
 @mock.patch("bridge.arc.arc_lists.ArcApiClient.get_dataframe_arc_list_version_language")
 @mock.patch("bridge.arc.arc_lists.arc_translations.get_translations")
@@ -458,6 +449,7 @@ def test_get_list_data(
     assert_series_equal(all_rows_output[1], all_rows_expected[1])
 
 
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_lists.logger")
 @mock.patch("bridge.arc.arc_lists.arc_translations.get_translations")
 def test_get_list_data_no_list(mock_get_translations, _mock_logger, translation_dict):
@@ -487,77 +479,7 @@ def test_get_list_data_no_list(mock_get_translations, _mock_logger, translation_
     assert not all_rows_output
 
 
-@pytest.fixture()
-def mock_list_choices():
-    mock_list_choices = [
-        [
-            "inclu_disease",
-            [
-                [1, "Adenovirus", 0],
-                [2, "Dengue", 0],
-                [5, "Mpox", 1],
-            ],
-        ]
-    ]
-    return mock_list_choices
-
-
-@pytest.fixture()
-def mock_all_rows():
-    dict1 = {
-        "Variable": "inclu_disease",
-        "Type": "some_list",
-        "List": "inclusion_Diseases",
-    }
-    series1 = pd.Series(dict1, name=0)
-    dict2 = {
-        "Variable": "inclu_disease_otherl3",
-        "Type": "text",
-        "List": None,
-    }
-    series2 = pd.Series(dict2, name=0)
-    mock_all_rows = [
-        series1,
-        series2,
-    ]
-    return mock_all_rows
-
-
-@pytest.fixture()
-def df_expected_get_list_content():
-    data_expected = {
-        "Variable": [
-            "inclu_disease",
-            "inclu_disease_otherl3",
-        ],
-        "Type": [
-            "some_list",
-            "text",
-        ],
-        "List": [
-            "inclusion_Diseases",
-            None,
-        ],
-    }
-    df_expected = pd.DataFrame.from_dict(data_expected)
-    return df_expected
-
-
-@pytest.fixture()
-def list_expected_get_list_content():
-    list_expected = [
-        [
-            "inclu_disease",
-            [
-                [1, "Adenovirus", 0],
-                [2, "Dengue", 0],
-                [5, "Mpox", 1],
-            ],
-        ]
-    ]
-    return list_expected
-
-
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_lists.ArcList._get_list_data")
 def test_get_user_list_content(
     mock_list_data,
@@ -580,6 +502,7 @@ def test_get_user_list_content(
     assert list_output == list_expected_get_list_content
 
 
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_lists.ArcList._get_list_data")
 def test_get_multi_list_content(
     mock_list_data,

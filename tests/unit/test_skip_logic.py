@@ -141,6 +141,7 @@ def get_codes_from_answer_options(s: str) -> str:
     return codes
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_valid_regex():
     """
@@ -163,6 +164,7 @@ def test_valid_regex():
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_events():
     """Check that fields mentioned in the skip logic exist"""
@@ -180,6 +182,7 @@ def test_events():
         pytest.fail(f"Skip logic includes variable not in ARC: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_fields_exist():
     """Check that fields mentioned in the skip logic exist"""
@@ -196,6 +199,7 @@ def test_fields_exist():
         pytest.fail(f"Skip logic includes variable not in ARC: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_checkboxes():
     """Check that fields mentioned in the skip logic exist"""
@@ -224,6 +228,7 @@ def test_checkboxes():
         pytest.fail(f"Skip logic incorrectly uses checkbox variable: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("preset_column", PRESET_COLUMNS)
 def test_fields_exist_presets(preset_column):
@@ -278,6 +283,7 @@ def test_fields_exist_presets(preset_column):
         pytest.fail(f"Skip logic has no valid branches:\n{formatted}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_values_exist():
     """Check that values in the skip logic exist as answer options"""

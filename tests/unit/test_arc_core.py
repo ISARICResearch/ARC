@@ -8,6 +8,7 @@ from pandas.testing import assert_frame_equal
 from arc import arc_core
 
 
+@pytest.mark.all
 def test_add_required_datadicc_columns():
     data = {
         "Section": [
@@ -49,6 +50,7 @@ def test_add_required_datadicc_columns():
     assert_frame_equal(df_output, df_expected)
 
 
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_core.logger")
 @mock.patch("bridge.arc.arc_core.ArcApiClient.get_arc_version_list")
 def test_get_arc_versions(mock_get_versions, _mock_logger):
@@ -61,6 +63,7 @@ def test_get_arc_versions(mock_get_versions, _mock_logger):
     assert latest_version_output == "v1.1.3"
 
 
+@pytest.mark.all
 def test_get_variable_order():
     data = {
         "Sec": [
@@ -87,6 +90,7 @@ def test_get_variable_order():
     assert list_output == list_expected
 
 
+@pytest.mark.all
 @mock.patch("bridge.arc.arc_core.logger")
 @mock.patch("bridge.arc.arc_core.get_dependencies")
 @mock.patch("bridge.arc.arc_core.ArcApiClient.get_dataframe_arc_sha")
@@ -186,6 +190,7 @@ def test_get_arc(mock_sha, mock_arc, mock_dependencies, _mock_logger):
     assert commit_output == sha_str
 
 
+@pytest.mark.all
 def test_get_dependencies():
     data = {
         "Variable": [
@@ -243,6 +248,7 @@ def test_get_dependencies():
     assert_frame_equal(df_output, df_expected)
 
 
+@pytest.mark.all
 def test_add_transformed_rows():
     data = {
         "Variable": [
@@ -296,6 +302,7 @@ def test_add_transformed_rows():
     assert_frame_equal(df_output, df_expected)
 
 
+@pytest.mark.all
 @pytest.mark.parametrize(
     "version, expected_output",
     [

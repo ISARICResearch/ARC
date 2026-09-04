@@ -1,4 +1,3 @@
-import os
 from unittest import mock
 
 import pandas as pd
@@ -10,73 +9,22 @@ from arc import arc_api
 from arc.arc_api import ArcApiClient, ArcApiClientError
 
 
-@pytest.fixture(scope="session")
-def client_production():
-    os.environ["ENV"] = "production"
-    os.environ["GITHUB_TOKEN"] = "abc123"
-    return ArcApiClient()
-
-
-@pytest.fixture(scope="session")
-def client_development():
-    os.environ["ENV"] = "development"
-    os.environ["GITHUB_TOKEN"] = "def456"
-    return ArcApiClient()
-
-
-@pytest.fixture()
-def data_path():
-    data_path = "my/test/path"
-    return data_path
-
-
-@pytest.fixture()
-def mock_language_json():
-    language_json = [
-        {
-            "_links": {
-                "self": "https://api.github.com/repos/ISARICResearch/ARC-Translations/contents/ARCH1.1.3/English?ref=main"
-            },
-            "name": "English",
-            "path": "ARCH1.1.3/English",
-        },
-        {
-            "_links": {
-                "self": "https://api.github.com/repos/ISARICResearch/ARC-Translations/contents/ARCH1.1.3/French?ref=main"
-            },
-            "name": "French",
-            "path": "ARCH1.1.3/French",
-        },
-        {
-            "_links": {
-                "self": "https://api.github.com/repos/ISARICResearch/ARC-Translations/contents/ARCH1.1.3/Portuguese?ref=main"
-            },
-            "name": "Portuguese",
-            "path": "ARCH1.1.3/Portuguese",
-        },
-        {
-            "_links": {
-                "self": "https://api.github.com/repos/ISARICResearch/ARC-Translations/contents/ARCH1.1.3/Spanish?ref=main"
-            },
-            "name": "Spanish",
-            "path": "ARCH1.1.3/Spanish",
-        },
-    ]
-    return language_json
-
-
-@mock.patch("bridge.arc.arc_api.logger")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.logger")
 def test_get_api_response_exception(_mock_logger, client_production):
     class FakeResponse:
         def raise_for_status(self):
             raise RequestException
 
-    with mock.patch("bridge.arc.arc_api.requests.get", return_value=FakeResponse()):
+    with mock.patch("arc.arc_api.requests.get", return_value=FakeResponse()):
         with pytest.raises(ArcApiClientError):
             client_production._get_api_response("test_url")
 
 
-@mock.patch("bridge.arc.arc_api.logger")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.logger")
 def test_get_api_response(_mock_logger, mock_language_json, client_production):
     class FakeResponse:
         def raise_for_status(self):
@@ -86,13 +34,15 @@ def test_get_api_response(_mock_logger, mock_language_json, client_production):
         def json():
             return mock_language_json
 
-    with mock.patch("bridge.arc.arc_api.requests.get", return_value=FakeResponse()):
+    with mock.patch("arc.arc_api.requests.get", return_value=FakeResponse()):
         output = client_production._get_api_response("test_url")
         assert output == mock_language_json
 
 
-@mock.patch("bridge.arc.arc_api.pd.read_csv")
-@mock.patch("bridge.arc.arc_api.logger")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.pd.read_csv")
+@mock.patch("arc.arc_api.logger")
 def test_write_to_dataframe_csv(_mock_logger, mock_read_csv, data_path):
     data = {
         "Variable": [
@@ -107,8 +57,10 @@ def test_write_to_dataframe_csv(_mock_logger, mock_read_csv, data_path):
     assert_frame_equal(output, df_mock)
 
 
-@mock.patch("bridge.arc.arc_api.pd.read_json")
-@mock.patch("bridge.arc.arc_api.logger")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.pd.read_json")
+@mock.patch("arc.arc_api.logger")
 def test_write_to_dataframe_json(_mock_logger, mock_read_json, data_path):
     data = {
         "Variable": [
@@ -123,7 +75,9 @@ def test_write_to_dataframe_json(_mock_logger, mock_read_json, data_path):
     assert_frame_equal(output, df_mock)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._get_api_response")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._get_api_response")
 def test_get_arc_version_list_no_cache(mock_release_json, client_production):
     release_json = [
         {"name": "v1.1.0", "tag_name": "v1.1.0"},
@@ -143,8 +97,10 @@ def test_get_arc_version_list_no_cache(mock_release_json, client_production):
         assert output == expected
 
 
-@mock.patch("bridge.arc.arc_api.monotonic", return_value=1234567890)
-@mock.patch("bridge.arc.arc_api.ArcApiClient._get_api_response")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.monotonic", return_value=1234567890)
+@mock.patch("arc.arc_api.ArcApiClient._get_api_response")
 def test_get_arc_version_list_with_cache_old(
     mock_release_json, _mock_mono, client_production
 ):
@@ -168,7 +124,9 @@ def test_get_arc_version_list_with_cache_old(
         assert output == expected
 
 
-@mock.patch("bridge.arc.arc_api.monotonic", return_value=0)
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.monotonic", return_value=0)
 def test_get_arc_version_list_with_cache_not_old(_mock_mono, client_production):
     cache_key = ("production",)
     cache_dict = {cache_key: (["v1.0.4", "v1.0.0"], 5)}
@@ -182,7 +140,9 @@ def test_get_arc_version_list_with_cache_not_old(_mock_mono, client_production):
         assert output == expected
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._get_api_response")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._get_api_response")
 def test_get_arc_version_list_development(mock_release_json, client_development):
     release_json = [
         {
@@ -245,7 +205,9 @@ def test_get_arc_version_list_development(mock_release_json, client_development)
     assert output == expected
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._get_api_response")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._get_api_response")
 def test_get_arc_version_sha(mock_tag_json, client_production):
     expected_sha = "87e78283e0412d78e247fd2a2618e2bb09a0ca17"
     tag_json = [
@@ -269,6 +231,8 @@ def test_get_arc_version_sha(mock_tag_json, client_production):
     assert output == expected_sha
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_arc_version_sha_with_cache(client_production):
     cache_key = ("production", "v1.1.1")
     cache_dict = {cache_key: "abc123def4561111"}
@@ -278,7 +242,9 @@ def test_get_arc_version_sha_with_cache(client_production):
         assert output == expected_sha
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._get_api_response")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._get_api_response")
 def test_get_arc_version_sha_development(mock_tag_json, client_development):
     expected_sha = "000000a"
     tag_json = [
@@ -304,8 +270,10 @@ def test_get_arc_version_sha_development(mock_tag_json, client_development):
     assert output == expected_sha
 
 
-@mock.patch("bridge.arc.arc_api.logger")
-@mock.patch("bridge.arc.arc_api.ArcApiClient._get_api_response")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.logger")
+@mock.patch("arc.arc_api.ArcApiClient._get_api_response")
 def test_get_arc_version_sha_exception(mock_tag_json, _mock_logger, client_production):
     tag_json = [
         {
@@ -323,7 +291,9 @@ def test_get_arc_version_sha_exception(mock_tag_json, _mock_logger, client_produ
         client_production.get_arc_version_sha("v2.0.0")
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_arc_list_version_language(mock_write_to_df, client_production):
     data_list = {
         "Condition": [
@@ -358,6 +328,8 @@ def test_get_dataframe_arc_list_version_language(mock_write_to_df, client_produc
     assert_frame_equal(df_output, df_expected)
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_dataframe_arc_list_version_language_with_cache(client_production):
     cache_key = ("production", "v1.1.1", "English", "My List")
     df_cache = pd.DataFrame(
@@ -374,7 +346,9 @@ def test_get_dataframe_arc_list_version_language_with_cache(client_production):
     assert_frame_equal(df_output, df_cache)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_arc_list_version_language_development(
     mock_write_to_df, client_development
 ):
@@ -411,7 +385,9 @@ def test_get_dataframe_arc_list_version_language_development(
     assert_frame_equal(df_output, df_expected)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._get_api_response")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._get_api_response")
 def test_get_arc_language_list_version(
     mock_response, mock_language_json, client_production
 ):
@@ -427,6 +403,8 @@ def test_get_arc_language_list_version(
     assert output == expected
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_arc_language_list_version_with_cache(client_production):
     cache_key = ("production", "v1.1.1")
     cache_dict = {cache_key: ["a", "b", "c"]}
@@ -435,6 +413,8 @@ def test_get_arc_language_list_version_with_cache(client_production):
     assert output == ["a", "b", "c"]
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_arc_language_list_version_development(client_development):
     version = "v1.1.1"
     expected = [
@@ -444,6 +424,8 @@ def test_get_arc_language_list_version_development(client_development):
     assert output == expected
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_arch_version_string(client_production):
     version = "v1.1.1"
     expected = "ARCH1.1.1"
@@ -451,6 +433,8 @@ def test_get_arch_version_string(client_production):
     assert output == expected
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_version_string(client_production):
     version = "ARCH1.1.1"
     expected = "v1.1.1"
@@ -458,20 +442,26 @@ def test_get_version_string(client_production):
     assert output == expected
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_arc_sha_prod(mock_write_to_df, client_production):
     client_production.get_dataframe_arc_sha("abc123mysha", "v1.1.1")
     url = "https://raw.githubusercontent.com/ISARICResearch/ARC/abc123mysha/ARC.csv"
     mock_write_to_df.assert_called_with(url)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_arc_sha_dev(mock_write_to_df, client_development):
     client_development.get_dataframe_arc_sha("abc123mysha", "v1.1.1")
     url = "https://raw.githubusercontent.com/ISARICResearch/DataPlatform/abc123mysha/ARCH/ARCH1.1.1/ARCH.csv"
     mock_write_to_df.assert_called_with(url)
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_dataframe_arc_sha_with_cache(client_production):
     cache_key = ("production", "abc123mysha", "v1.1.1")
     df_cache = pd.DataFrame(
@@ -486,20 +476,26 @@ def test_get_dataframe_arc_sha_with_cache(client_production):
     assert_frame_equal(df_output, df_cache)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_arc_version_language_prod(mock_write_to_df, client_production):
     client_production.get_dataframe_arc_version_language("v1.1.1", "English")
     url = "https://raw.githubusercontent.com/ISARICResearch/ARC-Translations/main/ARCH1.1.1/English/ARCH.csv"
     mock_write_to_df.assert_called_with(url)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_arc_version_language_dev(mock_write_to_df, client_development):
     client_development.get_dataframe_arc_version_language("v1.1.1", "English")
     url = "https://raw.githubusercontent.com/ISARICResearch/DataPlatform/main/ARCH/ARCH1.1.1/ARCH.csv"
     mock_write_to_df.assert_called_with(url)
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_dataframe_arc_version_language_with_cache(client_production):
     cache_key = ("production", "v1.1.1", "English")
     df_cache = pd.DataFrame(
@@ -516,7 +512,9 @@ def test_get_dataframe_arc_version_language_with_cache(client_production):
     assert_frame_equal(df_output, df_cache)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_paper_like_details_prod__no_api_client_error(
     mock_write_to_df, client_production
 ):
@@ -525,8 +523,10 @@ def test_get_dataframe_paper_like_details_prod__no_api_client_error(
     mock_write_to_df.assert_called_with(url)
 
 
+@pytest.mark.all
+@pytest.mark.high
 @mock.patch(
-    "bridge.arc.arc_api.ArcApiClient._write_to_dataframe", side_effect=ArcApiClientError
+    "arc.arc_api.ArcApiClient._write_to_dataframe", side_effect=ArcApiClientError
 )
 def test_get_dataframe_paper_like_details_prod__api_client_error_caught_and_raised(
     mock_write_to_df, client_production
@@ -537,7 +537,9 @@ def test_get_dataframe_paper_like_details_prod__api_client_error_caught_and_rais
         mock_write_to_df.assert_called_with(url)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_paper_like_details_dev__no_api_client_error(
     mock_write_to_df, client_development
 ):
@@ -546,8 +548,10 @@ def test_get_dataframe_paper_like_details_dev__no_api_client_error(
     mock_write_to_df.assert_called_with(url)
 
 
+@pytest.mark.all
+@pytest.mark.high
 @mock.patch(
-    "bridge.arc.arc_api.ArcApiClient._write_to_dataframe", side_effect=ArcApiClientError
+    "arc.arc_api.ArcApiClient._write_to_dataframe", side_effect=ArcApiClientError
 )
 def test_get_dataframe_paper_like_details_dev__api_client_error_caught_and_raised(
     mock_write_to_df, client_development
@@ -558,7 +562,9 @@ def test_get_dataframe_paper_like_details_dev__api_client_error_caught_and_raise
         mock_write_to_df.assert_called_with(url)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_supplemental_phrases_prod__no_api_client_error(
     mock_write_to_df, client_production
 ):
@@ -567,8 +573,10 @@ def test_get_dataframe_supplemental_phrases_prod__no_api_client_error(
     mock_write_to_df.assert_called_with(url)
 
 
+@pytest.mark.all
+@pytest.mark.high
 @mock.patch(
-    "bridge.arc.arc_api.ArcApiClient._write_to_dataframe", side_effect=ArcApiClientError
+    "arc.arc_api.ArcApiClient._write_to_dataframe", side_effect=ArcApiClientError
 )
 def test_get_dataframe_supplemental_phrases_prod__api_client_error_caught_and_raised(
     mock_write_to_df, client_production
@@ -579,12 +587,16 @@ def test_get_dataframe_supplemental_phrases_prod__api_client_error_caught_and_ra
         mock_write_to_df.assert_called_with(url)
 
 
+@pytest.mark.all
+@pytest.mark.high
 def test_get_dataframe_crf_metadata__prod__no_matching_version(client_production):
     with pytest.raises(ArcApiClientError):
         client_production.get_dataframe_crf_metadata("non matching version")
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_crf_metadata__prod__no_api_client_error(
     mock_write_to_df, client_production
 ):
@@ -593,8 +605,10 @@ def test_get_dataframe_crf_metadata__prod__no_api_client_error(
     mock_write_to_df.assert_called_with(url)
 
 
+@pytest.mark.all
+@pytest.mark.high
 @mock.patch(
-    "bridge.arc.arc_api.ArcApiClient._write_to_dataframe", side_effect=ArcApiClientError
+    "arc.arc_api.ArcApiClient._write_to_dataframe", side_effect=ArcApiClientError
 )
 def test_get_dataframe_crf_metadata__prod__api_client_error_caught_and_raised(
     mock_write_to_df, client_production
@@ -605,8 +619,10 @@ def test_get_dataframe_crf_metadata__prod__api_client_error_caught_and_raised(
         mock_write_to_df.assert_called_with(url)
 
 
-@mock.patch("bridge.arc.arc_api.ArcApiClient._get_api_response")
-@mock.patch("bridge.arc.arc_api.ArcApiClient._write_to_dataframe")
+@pytest.mark.all
+@pytest.mark.high
+@mock.patch("arc.arc_api.ArcApiClient._get_api_response")
+@mock.patch("arc.arc_api.ArcApiClient._write_to_dataframe")
 def test_get_dataframe_supplemental_phrases_dev(
     mock_write_to_df, mock_release_json, client_development
 ):

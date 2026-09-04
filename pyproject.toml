@@ -100,6 +100,7 @@
 
 [tool.pytest.ini_options]
   markers = [
+    "all",
     "critical: critical severity test (must pass)",
     "high: high severity test",
     "medium: medium severity test",

@@ -8,6 +8,7 @@ from pandas._testing import assert_frame_equal
 from arc import arc_translations
 
 
+@pytest.mark.all
 @mock.patch("arc.arc_translations.process_skip_logic")
 @mock.patch("arc.arc_translations.ArcApiClient.get_dataframe_arc_version_language")
 def test_get_arc_translation(mock_arc, mock_skip_logic):
@@ -103,6 +104,7 @@ def test_get_arc_translation(mock_arc, mock_skip_logic):
     assert_frame_equal(df_output, df_expected)
 
 
+@pytest.mark.all
 @pytest.mark.parametrize(
     "skip_logic_column, variables_expected, values_expected, comparison_operators_expected, logical_operators_expected",
     [
@@ -132,6 +134,7 @@ def test_extract_logic_components(
     assert logical_operators_output == logical_operators_expected
 
 
+@pytest.mark.all
 @mock.patch("arc.arc_translations._extract_logic_components")
 def test_process_skip_logic(mock_extract):
     mock_extract.return_value = (
@@ -164,6 +167,7 @@ def test_process_skip_logic(mock_extract):
     assert output == expected
 
 
+@pytest.mark.all
 @mock.patch("arc.arc_translations._extract_logic_components")
 def test_process_skip_logic_no_answers(mock_extract):
     mock_extract.return_value = (
@@ -196,6 +200,7 @@ def test_process_skip_logic_no_answers(mock_extract):
     assert output == expected
 
 
+@pytest.mark.all
 @mock.patch("arc.arc_translations._extract_logic_components")
 def test_process_skip_logic_index_error(mock_extract):
     mock_extract.return_value = (
@@ -228,6 +233,7 @@ def test_process_skip_logic_index_error(mock_extract):
     assert output == expected
 
 
+@pytest.mark.all
 def test_get_translations():
     english_dict = arc_translations.get_translations("English")
     spanish_dict = arc_translations.get_translations("Spanish")
@@ -242,6 +248,7 @@ def test_get_translations():
     assert english_dict["select"] == "Select"
 
 
+@pytest.mark.all
 def test_get_translations_exception():
     with pytest.raises(ValueError):
         arc_translations.get_translations("Klingon")

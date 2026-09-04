@@ -24,9 +24,9 @@ __all__ = [
 
 # -- Standard libraries --
 import argparse
+import importlib.resources
 import json
 import subprocess
-from pathlib import Path
 from typing import Any
 
 # -- 3rd party libraries --
@@ -41,13 +41,19 @@ from units.utils import ConversionRegistry
 Generate a template parser for transforming ARC data into the ISARIC format.
 """
 
+# Package paths
+ARC_PKG_PATH = importlib.resources.files("arc")
+SCHEMAS_PATH = ARC_PKG_PATH / "data"
+UNITS_PATH = importlib.resources.files("units")
+
 # Type aliases
 Rule = dict[str, Any]
 RuleList = list[Rule]
 
 # Create a ConversionRegistry instance for looking up unit values
 _unit_registry = ConversionRegistry().load_from_json(
-    "units/unit_conversion.json", "units/unit_conversion.schema.json"
+    UNITS_PATH.joinpath("unit_conversion.json"),
+    UNITS_PATH.joinpath("unit_conversion.schema.json"),
 )
 
 missing_codes = {code.lower(): code for code in mc.astuple()}
@@ -610,7 +616,7 @@ def generate_parser(
     if preset is not None:
         arc = arc[arc[preset] == 1]
 
-    with open(Path(__file__).parent / "isaric-core.schema.json", "r") as f:
+    with open(SCHEMAS_PATH / "isaric-core.schema.json", "r") as f:
         template_core = json.load(f)
 
     parser = {
@@ -786,7 +792,7 @@ def generate_parser(
 
     # Generate new long table parser
     if filename is None:
-        filename = f"{Path(__file__).parent}/global_arc_{version}_parser"
+        filename = SCHEMAS_PATH.joinpath(f"global_arc_{version}_parser")
 
     with open(f"{filename}.toml", "wb") as f:
         tomli_w.dump(parser, f)
