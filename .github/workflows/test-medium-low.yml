@@ -23,4 +23,4 @@ jobs:
 
       - name: Run unit tests (medium or low)
         run: |
-          test MARKER="medium or low"
+          make test MARKER="medium or low"

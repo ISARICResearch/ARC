@@ -40,8 +40,8 @@ jobs:
 
       - name: Run scripts with tag
         run: |
-          uv run python3 schemas/isaric_schema.py "$TAG_NAME"
-          uv run python3 schemas/draft_parser.py "$TAG_NAME"
+          python3 schemas/isaric_schema.py "$TAG_NAME"
+          python3 schemas/draft_parser.py "$TAG_NAME"
 
       - name: Test generated files
         run: |

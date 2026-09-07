@@ -30,6 +30,7 @@ git-stage:
 clean:
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Deleting all temporary files"
 	rm -fr dist/* docs/_build/* .pytest_cache *.pyc *__pycache__* ./dist/* ./build/* *.egg-info*
+	python3 -m pip uninstall -y isaric-arc
 
 # --- Version commands ---
 #
@@ -42,17 +43,17 @@ version-check:
 version-extract:
 	echo "$(PACKAGE_VERSION)"
 
-# --- Member inspection of Python files ---
+# --- Listing callables in Python modules lexicographically ---
 #
-# To list functions use:
+# To list all functions use:
 #
 #     list-members MEMBER_REGEX="def" FILE_PATH="/path/to/py/file"
 #
-# To list classes use:
+# To list all classes use:
 #
 #     list-members MEMBER_REGEX="class" FILE_PATH="/path/to/py/file"
 #
-# To list functions or classes use:
+# To list all functions or classes use:
 #
 #     list-members MEMBER_REGEX="def\|class" FILE_PATH="/path/to/py/file"
 #
@@ -65,12 +66,12 @@ list-callables:
 sync-deps-exact:
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Syncing all package + development dependencies with lockfile, removing unrelated dependencies"
 	rm -f uv.lock && \
-	uv sync --verbose --active --all-groups --no-install-project --no-cache --refresh
+	uv sync --verbose --active --all-groups --no-editable --no-install-project --no-cache --refresh --no-managed-python
 
 sync-deps-inexact:
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Syncing all package + development dependencies with lockfile, preserving unrelated dependencies"
 	rm -f uv.lock && \
-	uv sync --verbose --active --all-groups --no-install-project --no-cache --refresh --inexact
+	uv sync --verbose --active --all-groups --no-editable --no-install-project --no-cache --refresh --inexact --no-managed-python
 
 
 # --- Package artifacts ---
