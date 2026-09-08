@@ -79,16 +79,20 @@ sync-deps-inexact:
 sdist: clean
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Building a source distribution of the ARC Python package"
 	uv run hatchling build --target sdist --clean
+	ls -al dist/isaric*.tar.gz
 
 .PHONY: wheel
 wheel: clean
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Building a wheel of the ARC Python package"
 	uv run hatchling build --target wheel --clean
+	ls -al dist/isaric*.whl
 
 .PHONY: all
 all: clean
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Building a source distribution + wheel of the ARC Python package"
 	uv run hatchling build --clean
+	ls -al dist/isaric*.tar.gz
+	ls -al dist/isaric*.whl
 
 # --- Documentation ---
 .PHONY: clean
