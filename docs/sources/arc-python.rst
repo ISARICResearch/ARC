@@ -48,8 +48,10 @@ Note that the displayed version is **not the ARC schema version** but the Python
 
 A more detailed package usage will guide will follow.
 
-Direct Use from Source
-~~~~~~~~~~~~~~~~~~~~~~
+.. _use-from-source:
+
+Use from Source
+~~~~~~~~~~~~~~~
 
 You can also use the ARC package source files directly, provided you install all the project dependencies - but not the project itself -  into the working environment, for example, with ``uv``, using a variant of the command above with the addition of the ``--no-install-project`` flag, e.g.:
 
