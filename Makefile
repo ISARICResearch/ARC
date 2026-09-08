@@ -112,6 +112,7 @@ pre-commit: clean
 test: clean
 	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Running critical/high unit tests + measuring coverage"
 	PYTHONPATH="src" uv run --verbose --active pytest \
+	                                           -p pytest_cov \
                                                -q -m "$(MARKER)" \
 			                                   --cache-clear \
 				                               --capture=no \
