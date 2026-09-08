@@ -30,3 +30,4 @@ jobs:
       - name: Test wheel import
         run: |
           python3 -c "import arc; print(arc.__version__)"
+          python3 -c "from arc.arc_core import get_arc_versions, get_arc; latest = get_arc_versions()[1]; print(latest); print(get_arc(latest))"
