@@ -30,7 +30,7 @@ import numpy as np
 
 # -- Internal libraries --
 from arc.codes import MISSING_ATTRIBUTE_STATUS_CODES
-from units.utils import ConversionRegistry
+from arc.utils import ConversionRegistry
 
 
 """
@@ -43,7 +43,8 @@ SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
 
 # Create a ConversionRegistry instance for looking up unit values
 _conversion_registry = ConversionRegistry().load_from_json(
-    "units/unit_conversion.json", "units/unit_conversion.schema.json"
+    SCHEMA_FILES_PATH / "unit_conversion.json",
+    SCHEMA_FILES_PATH / "unit_conversion.schema.json",
 )
 
 
@@ -338,6 +339,7 @@ def generate_long_schema(version, output_path: Path | None = None):
         )
     with open(output_path, "w") as f:
         json.dump(template_long, f, indent=4)
+        print(f"Generated schema file at: {str(output_path)}")
 
 
 def main():
