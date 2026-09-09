@@ -66,6 +66,7 @@ TYPE_ENUM = [
 VALIDATION_ENUM = ["number", "date_dmy", "datetime_dmy", "time"]
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_arc_required_columns_exist():
     """Check required ARC columns exist"""
@@ -76,6 +77,7 @@ def test_arc_required_columns_exist():
         pytest.fail(f"Missing required columns: {missing}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_arc_valid_form():
     """Only specific forms are allowed."""
@@ -91,11 +93,13 @@ def test_arc_valid_form():
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 def test_arc_valid_section():
     """TODO: Section should be a 1-1 match for the Variable prefix."""
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_arc_valid_variable_regex():
     """Check all variable names match the naming convention regex."""
@@ -107,6 +111,7 @@ def test_arc_valid_variable_regex():
         pytest.fail(f"Variables do not following naming convention regex: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_arc_valid_type():
     """Only specific types are allowed."""
@@ -122,6 +127,7 @@ def test_arc_valid_type():
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("column", REQUIRED_COLUMNS)
 def test_arc_strip(column):
@@ -138,6 +144,7 @@ def test_arc_strip(column):
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("column", REQUIRED_COLUMNS)
 def test_arc_newline(column):
@@ -153,6 +160,7 @@ def test_arc_newline(column):
         )
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_arc_answer_options_exist():
     """Answer options for exist where relevant (radio, checkbox, list, calc, dropdown)"""
@@ -199,6 +207,7 @@ def is_valid_redcap_field_options(s: str) -> bool:
     return True
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_arc_answer_options_valid_redcap():
     """Answer options for radio/checkbox variables must be valid REDCap format"""
@@ -216,6 +225,7 @@ def test_arc_answer_options_valid_redcap():
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_arc_valid_validation():
     """Validation must be consistent with Type."""
@@ -246,6 +256,7 @@ def test_arc_valid_validation():
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_arc_minimum_maximum_correct_type():
     """
@@ -268,6 +279,7 @@ def test_arc_minimum_maximum_correct_type():
         )
 
 
+@pytest.mark.all
 @pytest.mark.skip(
     reason="Not currently required. Maximum may not always make sense and can be left blank."
 )
@@ -286,6 +298,7 @@ def test_arc_minimum_maximum_exists():
         pytest.fail(f"ARC has no Minimum or Maximum for number Variables: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.low
 def test_arc_minimum_less_than_maximum():
     """Minimum must be less than Maximum for numbers."""
@@ -314,6 +327,7 @@ def test_arc_minimum_less_than_maximum():
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 def test_arc_definition_exists():
     """
@@ -335,6 +349,7 @@ def test_arc_definition_exists():
         pytest.fail(f"ARC has no Definition for Variables: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_arc_type_consistent_with_list():
     """
@@ -349,6 +364,7 @@ def test_arc_type_consistent_with_list():
         pytest.fail(f"ARC List missing or falsely included for Variables: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.medium
 def test_arc_valid_preset_values():
     """Preset columns column must be NaN or 1 (not 1.0)"""

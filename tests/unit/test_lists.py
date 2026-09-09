@@ -1,11 +1,24 @@
+import importlib.resources
 import pytest
 import pathlib
 import pandas as pd
 
-BASE_DIR = pathlib.Path(".")
+ARC_PKG_PATH = importlib.resources.files("arc")
+BASE_DIR = ARC_PKG_PATH.parent.parent
 ARC_PATH = BASE_DIR / "ARC.csv"
 TEST_PATH = pathlib.Path(__file__)
-LIST_FILES = [x for x in pathlib.Path("Lists").rglob("*") if x.is_file()]
+LISTS_PATH = importlib.resources.files("Lists")
+LIST_FILES = [
+    x
+    for x in LISTS_PATH.rglob("*")
+    if x.is_file()
+    and not (
+        x.stem.startswith("__")
+        or x.stem.endswith("__")
+        or x.stem.startswith(".")
+        or x.stem.endswith(".pyc")
+    )
+]
 LIST_FILE_NAMES = [f"{f.parent.stem}_{f.stem}" for f in LIST_FILES]
 
 REQUIRED_COLUMNS = ["Selected", "Value"]
@@ -16,11 +29,12 @@ LIST_FILES_WITH_ARCHETYPE_PRESETS = [
 ]
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_arc_list_missing():
     """Check if an ARC list entry refers to an existing Lists file"""
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "List"])
-    relative_list_files = [x.relative_to(pathlib.Path("Lists")) for x in LIST_FILES]
+    relative_list_files = [x.relative_to(LISTS_PATH) for x in LIST_FILES]
     list_enum = [str(x.parent) + "_" + x.stem for x in relative_list_files]
 
     condition = arc["List"].isin(list_enum) | arc["List"].isna()
@@ -32,11 +46,12 @@ def test_arc_list_missing():
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 def test_list_file_used_in_arc():
     """Check if a Lists file is used in ARC. If not, should be removed"""
     arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable", "List"])
-    relative_list_files = [x.relative_to(pathlib.Path("Lists")) for x in LIST_FILES]
+    relative_list_files = [x.relative_to(LISTS_PATH) for x in LIST_FILES]
     list_enum = [str(x.parent) + "_" + x.stem for x in relative_list_files]
 
     unused_list = [x for x in list_enum if x not in arc["List"].unique().tolist()]
@@ -44,6 +59,7 @@ def test_list_file_used_in_arc():
         pytest.fail(f"ARC contains unused Lists CSV file. Variables: {unused_list}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_csv_loads(file):
@@ -59,6 +75,7 @@ def test_list_csv_loads(file):
         pytest.fail(f"{str(file)} failed to load for an unexpected reason: {e}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_required_columns_exist(file):
@@ -69,6 +86,7 @@ def test_list_required_columns_exist(file):
         pytest.fail(f"{str(file)} missing required columns: {missing}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_other_value(file):
@@ -82,6 +100,7 @@ def test_list_other_value(file):
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_arc_strip(file):
@@ -96,6 +115,7 @@ def test_arc_strip(file):
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_valid_selected_values(file):
@@ -109,6 +129,7 @@ def test_list_valid_selected_values(file):
         )
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_list_valid_preset_values(file):
@@ -123,6 +144,7 @@ def test_list_valid_preset_values(file):
         pytest.fail(f"{str(file)} has invalid preset values for index: {invalid_index}")
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_too_many_presets(file):
@@ -141,6 +163,7 @@ def test_too_many_presets(file):
         )
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_unique_labels(file):
@@ -153,6 +176,7 @@ def test_unique_labels(file):
         pytest.fail(f"{str(file)} has repeated labels: {invalid}")
 
 
+@pytest.mark.all
 @pytest.mark.medium
 @pytest.mark.parametrize("file", LIST_FILES, ids=LIST_FILE_NAMES)
 def test_unique_codes(file):
@@ -172,6 +196,7 @@ def test_unique_codes(file):
             pytest.fail(f"{str(file)} has repeated labels:\n{formatted}")
 
 
+@pytest.mark.all
 @pytest.mark.high
 @pytest.mark.parametrize("file", LIST_FILES_WITH_ARCHETYPE_PRESETS)
 def test_missing_presets(file):

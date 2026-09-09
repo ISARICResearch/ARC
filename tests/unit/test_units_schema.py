@@ -3,9 +3,9 @@ import pathlib
 import pytest
 from jsonschema import Draft7Validator, exceptions
 
-BASE_DIR = pathlib.Path("units")
-SCHEMA_PATH = BASE_DIR / "unit_conversion.schema.json"
-DATA_PATH = BASE_DIR / "unit_conversion.json"
+UNITS_PATH = pathlib.Path("units")
+SCHEMA_PATH = UNITS_PATH / "unit_conversion.schema.json"
+DATA_PATH = UNITS_PATH / "unit_conversion.json"
 
 
 def load_json(path: pathlib.Path):
@@ -13,6 +13,7 @@ def load_json(path: pathlib.Path):
         return json.load(f)
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_valid_schema():
     """
@@ -26,6 +27,7 @@ def test_valid_schema():
         pytest.fail(f"Schema is not a valid Draft-07 schema:\n{e}")
 
 
+@pytest.mark.all
 @pytest.mark.critical
 def test_valid_json_against_schema():
     """

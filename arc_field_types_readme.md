@@ -126,7 +126,7 @@ Below is a simplified flowchart of how each ARC type expands into REDCap-compati
 ```
 user_list
   └── radio field (Selected options) if Selected options < 15
-  └── dropdown field (Selected options) if Selected options >= 15 
+  └── dropdown field (Selected options) if Selected options >= 15
       └── dropdown (Other options)
           └── text (Specify other)
 
