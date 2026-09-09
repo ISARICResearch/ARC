@@ -1,23 +1,108 @@
 #!/usr/bin/env python
+
+
+__all__ = [
+    "BaseUnit",
+    "BaseUnitCollection",
+    "ConversionEntry",
+    "ConversionRegistry",
+    "ConversionRule",
+    "convert_units",
+    "LinearConversion",
+    "SchemaValidationError",
+    "setup_logger",
+    "UnitConverter",
+    "ValidationError",
+]
+
+
+# -- IMPORTS --
+
+# -- Standard libraries --
+import importlib.resources
+import logging
+import sys
+import typing
+from dataclasses import dataclass, field
+from pathlib import Path
+from logging.handlers import TimedRotatingFileHandler
+from typing import Union, Optional, List, Dict, Self
+
+# -- 3rd party libraries --
+import pandas as pd
+import numpy as np
+import json
+from jsonschema import Draft7Validator
+
+# -- Internal libraries --
+
+
 """
 unit_conversion_classes.py: Defines classes for units and unit conversions.
 
 This is for one-way unit conversions based on the ARC unit_conversion JSON file.
 """
 
-import importlib.resources
-from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Union, Optional, List, Dict, Self
-
-import pandas as pd
-import numpy as np
-import json
-from jsonschema import Draft7Validator
 
 Numeric = Union[float, int]
 
 SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
+
+
+def setup_logger(name: str, **kwargs: typing.Any) -> None:
+    """:py:class:`types.NoneType` : Sets up logging.
+
+    Only the logger name is required. All other arguments are optional and
+    keyword-based: see the :py:func:`logging.basicConfig` function definition
+    for the full list of configurable logging properties.
+
+    Parameters
+    ----------
+    name : str
+        The logger name.
+
+    **kwargs
+        Optional keyword arguments for other logging properties such as level,
+        message format, date format, stream, filename for the file handler etc.
+
+    Examples
+    --------
+    >>> import logging; from arc.utils import setup_logger
+    >>> logger = logging.getLogger("test")
+    >>> logger.handlers
+    []
+    >>> logger = setup_logger("test")
+    >>> assert logger.handlers
+    >>> logger.handlers  # doctest: +SKIP
+    [<StreamHandler (INFO)>, <TimedRotatingFileHandler /path/to/ARC/arc.log (INFO)>]
+    >>> logger.info("A test logger")  # doctest: +SKIP
+    2026-09-04 09:22:30 [INFO] test: A test logger
+    """
+    logger = logging.getLogger(name or "arc.log")
+    level = kwargs.get("level", logging.INFO)
+    logger.setLevel(level)
+
+    if not logger.handlers:
+        handlers = kwargs.get(
+            "handlers",
+            [
+                logging.StreamHandler(kwargs.get("stream", sys.stdout)),
+                TimedRotatingFileHandler(
+                    "arc.log", when="d", interval=1, backupCount=5
+                ),
+            ],
+        )
+        formatter = logging.Formatter(
+            kwargs.get("format", "%(asctime)s [%(levelname)s] %(name)s: %(message)s"),
+            kwargs.get("datefmt", "%Y-%m-%d %H:%M:%S"),
+        )
+
+        for handler in handlers:
+            handler.setLevel(level)
+            handler.setFormatter(formatter)
+            logger.addHandler(handler)
+
+    return logger
 
 
 class ValidationError(Exception):

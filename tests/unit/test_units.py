@@ -3,13 +3,15 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from units.utils import ConversionRegistry, UnitConverter
+from arc.utils import ConversionRegistry, UnitConverter
 
-ROOT_PATH = importlib.resources.files("arc").parent.parent
-UNITS_PATH = importlib.resources.files("units")
+ARC_PKG_PATH = importlib.resources.files("arc")
+ROOT_PATH = ARC_PKG_PATH.parent.parent
+SCHEMA_FILES_PATH = ARC_PKG_PATH / "data"
+
 ARC_PATH = ROOT_PATH / "ARC.csv"
-UNIT_CONVERSION_PATH = UNITS_PATH / "unit_conversion.json"
-UNIT_CONVERSION_SCHEMA_PATH = UNITS_PATH / "unit_conversion.schema.json"
+UNIT_CONVERSION_PATH = SCHEMA_FILES_PATH / "unit_conversion.json"
+UNIT_CONVERSION_SCHEMA_PATH = SCHEMA_FILES_PATH / "unit_conversion.schema.json"
 
 EXCEPTIONS = ["demog_age_units", "medi_units"]
 
