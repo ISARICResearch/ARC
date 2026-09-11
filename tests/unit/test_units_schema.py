@@ -1,9 +1,10 @@
+import importlib.resources
 import json
 import pathlib
 import pytest
 from jsonschema import Draft7Validator, exceptions
 
-UNITS_PATH = pathlib.Path("units")
+UNITS_PATH = importlib.resources.files("arc").parent.parent / "units"
 SCHEMA_PATH = UNITS_PATH / "unit_conversion.schema.json"
 DATA_PATH = UNITS_PATH / "unit_conversion.json"
 

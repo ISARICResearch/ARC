@@ -3,9 +3,8 @@ import pytest
 import pathlib
 import pandas as pd
 
-ARC_PKG_PATH = importlib.resources.files("arc")
-BASE_DIR = ARC_PKG_PATH.parent.parent
-ARC_PATH = BASE_DIR / "ARC.csv"
+ROOT_PATH = importlib.resources.files("arc").parent.parent
+ARC_PATH = ROOT_PATH / "ARC.csv"
 TEST_PATH = pathlib.Path(__file__)
 LISTS_PATH = importlib.resources.files("Lists")
 LIST_FILES = [
