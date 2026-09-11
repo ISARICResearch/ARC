@@ -86,7 +86,7 @@ def translation_dict():
 @pytest.fixture
 def mock_read_list_file():
     """Fixture that patches read_list_file and returns a configurable mock."""
-    with patch("arc.draft_parser.read_list_file") as mock:
+    with patch("schemas.draft_parser.read_list_file") as mock:
         mock.return_value = {"1": "Option A", "2": "Option B"}
         yield mock
 

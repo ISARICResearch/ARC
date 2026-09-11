@@ -4,9 +4,9 @@ import pathlib
 import pytest
 from jsonschema import Draft7Validator, exceptions
 
-SCHEMA_FILES_PATH = importlib.resources.files("arc") / "data"
-SCHEMA_PATH = SCHEMA_FILES_PATH / "unit_conversion.schema.json"
-DATA_PATH = SCHEMA_FILES_PATH / "unit_conversion.json"
+UNITS_PATH = importlib.resources.files("arc").parent.parent / "units"
+SCHEMA_PATH = UNITS_PATH / "unit_conversion.schema.json"
+DATA_PATH = UNITS_PATH / "unit_conversion.json"
 
 
 def load_json(path: pathlib.Path):

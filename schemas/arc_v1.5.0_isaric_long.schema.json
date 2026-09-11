@@ -102,6 +102,7 @@
                 "string"
             ],
             "enum": [
+                "VAL",
                 "UNK",
                 "NI",
                 "NASK",

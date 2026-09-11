@@ -1,61 +1,34 @@
-from __future__ import annotations
-
-
-__all__ = [
-    "attrs_with_checkboxes",
-    "attrs_with_enums",
-    "attrs_with_lists",
-    "attrs_with_multilists",
-    "attrs_with_units",
-    "attrs_with_userlists",
-    "form_definitions",
-    "generate_parser",
-    "generic_str_attrs",
-    "get_value_options",
-    "if_all_not_missing",
-    "main",
-    "make_long_row",
-    "numeric_attrs",
-    "read_list_file",
-]
-
-
-# -- IMPORTS --
-
-# -- Standard libraries --
-import argparse
-import importlib.resources
-import json
-import subprocess
-from typing import Any
-
-# -- 3rd party libraries --
-import pandas as pd
-
-# -- Internal libraries --
-from arc import toml_writer as tomli_w
-from arc.codes import MISSING_ATTRIBUTE_STATUS_CODES as mc
-from arc.utils import ConversionRegistry
-
 """
 Generate a template parser for transforming ARC data into the ISARIC format.
 """
 
-# Package paths
-ARC_PKG_PATH = importlib.resources.files("arc")
-SCHEMA_FILES_PATH = ARC_PKG_PATH / "data"
+import argparse
+import importlib.resources
+import json
+import subprocess
+from pathlib import Path
+from typing import Any
+
+import pandas as pd
+
+from schemas import toml_writer as tomli_w
+from schemas.codes import missing_codes as mc
+from units.units import ConversionRegistry
+
+
+UNITS_PATH = importlib.resources.files("arc").parent.parent / "units"
 
 # Type aliases
 Rule = dict[str, Any]
 RuleList = list[Rule]
 
+
 # Create a ConversionRegistry instance for looking up unit values
-_conversion_registry = ConversionRegistry().load_from_json(
-    SCHEMA_FILES_PATH / "unit_conversion.json",
-    SCHEMA_FILES_PATH / "unit_conversion.schema.json",
+_unit_registry = ConversionRegistry().load_from_json(
+    UNITS_PATH / "unit_conversion.json", UNITS_PATH / "unit_conversion.schema.json"
 )
 
-missing_codes = {code.lower(): code for code in mc.astuple()}
+missing_codes = {code.lower(): code for code in mc}
 missing_codes_multilist = {**missing_codes, "88": "OTH"}
 
 
@@ -147,7 +120,7 @@ def attrs_with_units(arc: pd.DataFrame) -> tuple[RuleList, pd.DataFrame]:
                         {opt: {"!=": ""}, "can_skip": True},
                         {var: {"!=": ""}, "can_skip": True},
                         {
-                            f"{var}_units": _conversion_registry.get_unit_value_from_unit_field_name(
+                            f"{var}_units": _unit_registry.get_unit_value_from_unit_field_name(
                                 var, opt
                             )
                         },
@@ -171,7 +144,7 @@ def attrs_with_units(arc: pd.DataFrame) -> tuple[RuleList, pd.DataFrame]:
                     ],
                 },
                 "attribute_unit": (
-                    _conversion_registry.get_unit_label_from_unit_field_name(var, opt)
+                    _unit_registry.get_unit_label_from_unit_field_name(var, opt)
                 ),
                 "attribute_status": {
                     "combinedType": "firstNonNull",
@@ -615,7 +588,7 @@ def generate_parser(
     if preset is not None:
         arc = arc[arc[preset] == 1]
 
-    with open(SCHEMA_FILES_PATH / "isaric-core.schema.json", "r") as f:
+    with open(Path(__file__).parent / "isaric-core.schema.json", "r") as f:
         template_core = json.load(f)
 
     parser = {
@@ -791,11 +764,10 @@ def generate_parser(
 
     # Generate new long table parser
     if filename is None:
-        filename = SCHEMA_FILES_PATH.joinpath(f"global_arc_{version}_parser")
+        filename = f"{Path(__file__).parent}/global_arc_{version}_parser"
 
     with open(f"{filename}.toml", "wb") as f:
         tomli_w.dump(parser, f)
-        print(f"Generated parser file at: {str(f.name)}")
 
 
 def main():

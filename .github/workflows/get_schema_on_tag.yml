@@ -40,8 +40,8 @@ jobs:
 
       - name: Run scripts with tag
         run: |
-          python3 src/arc/isaric_schema.py "$TAG_NAME"
-          python3 src/arc/draft_parser.py "$TAG_NAME"
+          python3 schemas/isaric_schema.py "$TAG_NAME"
+          python3 schemas/draft_parser.py "$TAG_NAME"
 
       - name: Test generated files
         run: |
@@ -51,8 +51,8 @@ jobs:
         run: |
             git config --global user.name "github-actions[bot]"
             git config --global user.email "github-actions[bot]@users.noreply.github.com"
-            git add src/arc/data/arc_${TAG_NAME}_isaric_long.schema.json
-            git add src/arc/data/global_arc_${TAG_NAME}_parser.toml
+            git add schemas/arc_${TAG_NAME}_isaric_long.schema.json
+            git add schemas/global_arc_${TAG_NAME}_parser.toml
 
             if git diff --cached --quiet; then
               echo "No changes to commit"
