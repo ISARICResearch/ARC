@@ -45,7 +45,7 @@ jobs:
 
       - name: Test generated files
         run: |
-          python -m pytest tests/test_generated_parser.py
+          python3 -m pytest tests/unit/test_generated_parser.py
 
       - name: Commit and push changes
         run: |
