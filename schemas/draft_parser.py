@@ -3,7 +3,6 @@ Generate a template parser for transforming ARC data into the ISARIC format.
 """
 
 import argparse
-import importlib.resources
 import json
 import subprocess
 from pathlib import Path
@@ -16,7 +15,7 @@ from schemas.codes import missing_codes as mc
 from units.units import ConversionRegistry
 
 
-UNITS_PATH = importlib.resources.files("arc").parent.parent / "units"
+UNITS_PATH = Path(__file__).parent.parent / "units"
 
 # Type aliases
 Rule = dict[str, Any]
