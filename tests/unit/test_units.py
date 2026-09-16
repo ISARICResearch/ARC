@@ -3,18 +3,17 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from units.utils import ConversionRegistry, UnitConverter
+from units.units import ConversionRegistry, UnitConverter
 
 ROOT_PATH = importlib.resources.files("arc").parent.parent
-UNITS_PATH = importlib.resources.files("units")
+UNITS_PATH = ROOT_PATH / "units"
 ARC_PATH = ROOT_PATH / "ARC.csv"
-UNIT_CONVERSION_PATH = UNITS_PATH / "unit_conversion.json"
-UNIT_CONVERSION_SCHEMA_PATH = UNITS_PATH / "unit_conversion.schema.json"
+UNITS_CONVERSION_PATH = UNITS_PATH / "unit_conversion.json"
+UNITS_CONVERSION_SCHEMA_PATH = UNITS_PATH / "unit_conversion.schema.json"
 
 EXCEPTIONS = ["demog_age_units", "medi_units"]
 
 
-@pytest.mark.all
 @pytest.mark.high
 def test_arc_units_correct_type_validation():
     """
@@ -37,7 +36,6 @@ def test_arc_units_correct_type_validation():
         )
 
 
-@pytest.mark.all
 @pytest.mark.high
 def test_arc_numeric_variables_exist():
     """
@@ -89,7 +87,6 @@ def test_arc_numeric_variables_exist():
         )
 
 
-@pytest.mark.all
 @pytest.mark.high
 def test_arc_consistent_min_max():
     """
@@ -147,7 +144,6 @@ def test_arc_consistent_min_max():
         )
 
 
-@pytest.mark.all
 @pytest.mark.high
 def test_fields_in_arc_exist_in_conversions():
     arc = pd.read_csv(
@@ -171,8 +167,8 @@ def test_fields_in_arc_exist_in_conversions():
     }
 
     conversion_registry = ConversionRegistry().load_from_json(
-        path=UNIT_CONVERSION_PATH,
-        schema_path=UNIT_CONVERSION_SCHEMA_PATH,
+        path=UNITS_CONVERSION_PATH,
+        schema_path=UNITS_CONVERSION_SCHEMA_PATH,
     )
     entries = conversion_registry.conversion_entries
 
@@ -180,7 +176,7 @@ def test_fields_in_arc_exist_in_conversions():
     if missing_field_names:
         pytest.fail(
             f"ARC variables {missing_field_names} need to be added to units "
-            f"conversion JSON file {UNIT_CONVERSION_PATH}"
+            f"conversion JSON file {UNITS_CONVERSION_PATH}"
         )
 
     inconsistent_units_field_names = [
@@ -191,7 +187,7 @@ def test_fields_in_arc_exist_in_conversions():
     if inconsistent_units_field_names:
         pytest.fail(
             f"ARC variables {inconsistent_units_field_names} does not match the entry in "
-            f"conversion JSON file {UNIT_CONVERSION_PATH}"
+            f"conversion JSON file {UNITS_CONVERSION_PATH}"
         )
 
     missing_unit_specific_field_names = [
@@ -204,11 +200,10 @@ def test_fields_in_arc_exist_in_conversions():
     if missing_unit_specific_field_names:
         pytest.fail(
             f"ARC variables {missing_unit_specific_field_names} have units not listed in "
-            f"conversion JSON file {UNIT_CONVERSION_PATH}. Please update the JSON file."
+            f"conversion JSON file {UNITS_CONVERSION_PATH}. Please update the JSON file."
         )
 
 
-@pytest.mark.all
 @pytest.mark.medium
 def test_fields_in_conversions_exist_in_arc():
     arc = pd.read_csv(
@@ -232,8 +227,8 @@ def test_fields_in_conversions_exist_in_arc():
     }
 
     conversion_registry = ConversionRegistry().load_from_json(
-        path=UNIT_CONVERSION_PATH,
-        schema_path=UNIT_CONVERSION_SCHEMA_PATH,
+        path=UNITS_CONVERSION_PATH,
+        schema_path=UNITS_CONVERSION_SCHEMA_PATH,
     )
     entries = conversion_registry.conversion_entries
     entries = {k: v for k, v in entries.items() if v.units_field_name not in EXCEPTIONS}
@@ -241,7 +236,7 @@ def test_fields_in_conversions_exist_in_arc():
     missing_field_names = [x for x in entries.keys() if x not in field_names]
     if missing_field_names:
         pytest.fail(
-            f"Conversion JSON file {UNIT_CONVERSION_PATH} contains variables "
+            f"Conversion JSON file {UNITS_CONVERSION_PATH} contains variables "
             f"{missing_field_names} that are not in ARC."
         )
 
@@ -255,11 +250,10 @@ def test_fields_in_conversions_exist_in_arc():
     if missing_unit_specific_field_names:
         pytest.fail(
             f"ARC variables {missing_unit_specific_field_names} does not include units "
-            f"listed in conversion JSON file {UNIT_CONVERSION_PATH}. Please update the JSON file."
+            f"listed in conversion JSON file {UNITS_CONVERSION_PATH}. Please update the JSON file."
         )
 
 
-@pytest.mark.all
 @pytest.mark.high
 def test_valid_conversions_for_min_max():
     """
@@ -295,8 +289,8 @@ def test_valid_conversions_for_min_max():
     )
 
     conversion_registry = ConversionRegistry().load_from_json(
-        path=UNIT_CONVERSION_PATH,
-        schema_path=UNIT_CONVERSION_SCHEMA_PATH,
+        path=UNITS_CONVERSION_PATH,
+        schema_path=UNITS_CONVERSION_SCHEMA_PATH,
     )
 
     entries = conversion_registry.conversion_entries

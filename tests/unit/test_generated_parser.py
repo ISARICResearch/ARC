@@ -6,7 +6,7 @@ import adtl
 import pytest
 import pandas as pd
 
-from arc.draft_parser import (
+from schemas.draft_parser import (
     if_all_not_missing,
     get_value_options,
     read_list_file,

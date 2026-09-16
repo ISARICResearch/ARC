@@ -1,6 +1,3 @@
-from __future__ import annotations
-
-
 __all__ = [
     "setup_logger",
 ]
@@ -12,8 +9,8 @@ __all__ = [
 import logging
 import sys
 import typing
-
 from logging.handlers import TimedRotatingFileHandler
+
 
 # -- 3rd party libraries --
 
