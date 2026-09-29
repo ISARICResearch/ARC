@@ -45,7 +45,7 @@ jobs:
 
       - name: Test generated files
         run: |
-          python3 -m pytest tests/unit/test_generated_parser.py
+          PYTHONPATH="src" python3 -m pytest -vv tests/unit/test_generated_parser.py
 
       - name: Commit and push changes
         run: |
