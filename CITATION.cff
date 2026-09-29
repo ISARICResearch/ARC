@@ -197,9 +197,9 @@ keywords:
     - analysis and research compendium
     - data capture
 license: MIT
-version: 1.5.0
-date-released: 2026-06-15
+version: 1.6.0
+date-released: 2026-09-29
 identifiers:
-  - description: ARC Release v1.5.0
+  - description: ARC Release v1.6.0
     type: doi
     value: "10.5281/zenodo.14113727"
