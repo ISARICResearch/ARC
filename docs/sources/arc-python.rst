@@ -42,7 +42,7 @@ This will result in a Python package named ``isaric-arc`` in the working environ
 .. code:: python
 
    >>> import arc; arc.__version__
-   '0.1.0'
+   '0.2.0'
 
 Note that the displayed version is **not the ARC schema version** but the Python package version - the two are versioned separately. Also note that not all the Python modules in ``arc`` are pure libraries - some are intended to be used as command line scripts, e.g. for generating parsers for the :ref:`ISARIC data schema <isaric-data-schema>`.
 
@@ -63,7 +63,7 @@ You can then import the ``arc`` package in a Python shell as normally, with a pr
 
    >>> import sys; sys.path.insert(0, 'src')
    >>> import arc; arc.__version__
-   '0.1.0'
+   '0.2.0'
 
 
 .. _usage:
@@ -80,7 +80,7 @@ The following snippet shows how the latest ARC release version can be obtained, 
    >>> from arc.arc_core import get_arc_versions, get_arc
    >>> latest_version = get_arc_versions()[1]
    >>> latest_version
-   'v1.5.0'
+   'v1.6.0'
    >>> arc_data_dictionary, presets_list, commit_sha = get_arc(latest_version)
    >>> arc_data_dictionary
                  Form             Section  ... Branch                                   Question_english
