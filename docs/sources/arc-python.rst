@@ -80,7 +80,7 @@ The following snippet shows how the latest ARC release version can be obtained, 
    >>> from arc.arc_core import get_arc_versions, get_arc
    >>> latest_version = get_arc_versions()[1]
    >>> latest_version
-   'v1.6.0'
+   'v1.6.1'
    >>> arc_data_dictionary, presets_list, commit_sha = get_arc(latest_version)
    >>> arc_data_dictionary
                  Form             Section  ... Branch                                   Question_english

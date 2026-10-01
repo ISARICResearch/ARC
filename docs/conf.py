@@ -37,7 +37,7 @@ github_version = "main"
 rtd_docs_url = "arc.docs.isaric.org"
 # pypi_project = ''
 project = "ARC"
-release = "v1.5.0"
+release = "v1.6.1"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
