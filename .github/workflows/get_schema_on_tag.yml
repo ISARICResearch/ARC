@@ -40,12 +40,12 @@ jobs:
 
       - name: Run scripts with tag
         run: |
-          PYTHONPATH="." python3 schemas/isaric_schema.py "$TAG_NAME"
-          PYTHONPATH="." python3 schemas/draft_parser.py "$TAG_NAME"
+          python3 schemas/isaric_schema.py "$TAG_NAME"
+          python3 schemas/draft_parser.py "$TAG_NAME"
 
       - name: Test generated files
         run: |
-          PYTHONPATH="src" python3 -m pytest -vv tests/unit/test_generated_parser.py
+          python3 -m pytest -vv tests/unit/test_generated_parser.py
 
       - name: Commit and push changes
         run: |
