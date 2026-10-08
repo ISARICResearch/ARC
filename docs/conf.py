@@ -101,6 +101,48 @@ extensions = [
     "sphinx_design",
 ]
 
+# Autodoc settings -
+#     For more on all available autodoc defaults see
+#         https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autodoc_default_options
+autodoc_default_options = {
+    "exclude-members": "",
+    "member-order": "alphabetical",
+    "private-members": False,
+    "special-members": "",
+}
+
+
+# Sphinx autodoc autosummary settings
+autosummary_generate = False
+
+
+# Numpydoc settings
+numpydoc_show_class_members = True
+numpydoc_show_inherited_class_members = False
+numpydoc_class_members_toctree = False
+numpydoc_attributes_as_param_list = False
+numpydoc_xref_param_type = False
+
+
+# Intersphinx mappings to reference external documentation domains - ATM
+# the only external references are to Plotly Go Figure class, but
+# potentially there could be many other external API references.
+intersphinx_mapping = {
+    "isaric-bridge": ("https://bridge.docs.isaric.org/en/latest", None),
+    "isaric-vertex": ("https://vertex.docs.isaric.org/en/latest", None),
+    "isaric-analytics": ("https://analytics.docs.isaric.org/en/latest", None),
+    #'dash': ('https://dash.plotly.com/', None),
+    "numpy": ("https://numpy.org/doc/stable/", None),
+    "pandas": ("https://pandas.pydata.org/pandas-docs/stable/", None),
+    "plotly": ("https://plotly.com/python-api-reference/", None),
+    "Python": ("https://docs.python.org/3", None),
+    "scikit-learn": ("https://scikit-learn.org/stable/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
+    #'sphinx': ('https://www.sphinx-doc.org/en/master/', None),
+    "statsmodels": ("https://www.statsmodels.org/stable", None),
+}
+
+
 # Obfuscate all mailto links in the docs sources, instead using the `email`
 # role from `sphinxcontrib-email`.
 email_automode = True
