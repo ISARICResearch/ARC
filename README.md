@@ -3,6 +3,7 @@
 [![Run tests marked as critical or high](https://github.com/ISARICResearch/ARC/actions/workflows/test-critical-high.yml/badge.svg)](https://github.com/ISARICResearch/ARC/actions/workflows/test-critical-high.yml)
 [![Docs](https://app.readthedocs.org/projects/isaric-arc/badge/?version=latest)](https://app.readthedocs.org/projects/isaric-arc/builds/?version__slug=latest)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23082689.svg)](https://doi.org/10.5281/zenodo.23082689)
 
 # ARC - Analysis and Research Compendium
 
