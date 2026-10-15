@@ -768,5 +768,302 @@
                 "note": "to_value = from_value * 365.25 / 12"
             }
         ]
-    }
+    },
+    {
+        "field_name": "labs_lowesthaemo",
+        "units_field_name": "labs_lowesthaemo_units",
+        "units": [
+            {
+                "unit_label": "g/dL",
+                "unit_value": 1,
+                "unit_field_name": "labs_lowesthaemo_gdl"
+            },
+            {
+                "unit_label": "g/L",
+                "unit_value": 2,
+                "unit_field_name": "labs_lowesthaemo_gl"
+            }
+        ],
+        "preferred_unit": "g/dL",
+        "conversion_rules": [
+            {
+                "from_unit": "g/L",
+                "to_unit": "g/dL",
+                "type": "linear",
+                "multiplier": 0.1,
+                "offset": 0,
+                "note": "to_value = from_value / 10"
+            }
+        ]
+    },
+    {
+        "field_name": "labs_lowestplatelets",
+        "units_field_name": "labs_lowestplatelets_units",
+        "units": [
+            {
+                "unit_label": "10^9/L",
+                "unit_value": 1,
+                "unit_field_name": "labs_lowestplatelets_109l"
+            },
+            {
+                "unit_label": "10^3/µL",
+                "unit_value": 2,
+                "unit_field_name": "labs_lowestplatelets_103ul"
+            }
+        ],
+        "preferred_unit": "10^9/L",
+        "conversion_rules": [
+            {
+                "from_unit": "10^3/µL",
+                "to_unit": "10^9/L",
+                "type": "linear",
+                "multiplier": 1,
+                "offset": 0,
+                "note": "to_value = from_value * 1"
+            }
+        ]
+    },
+    {
+        "field_name": "labs_lowestfibrinogen",
+        "units_field_name": "labs_lowestfibrinogen_units",
+        "units": [
+            {
+                "unit_label": "g/L",
+                "unit_value": 1,
+                "unit_field_name": "labs_lowestfibrinogen_gl"
+            },
+            {
+                "unit_label": "mg/dL",
+                "unit_value": 2,
+                "unit_field_name": "labs_lowestfibrinogen_mgdl"
+            }
+        ],
+        "preferred_unit": "g/L",
+        "conversion_rules": [
+            {
+                "from_unit": "mg/dL",
+                "to_unit": "g/L",
+                "type": "linear",
+                "multiplier": 0.01,
+                "offset": 0,
+                "note": "to_value = from_value * 0.01"
+            }
+        ]
+    },
+    {
+        "field_name": "labs_highestbilirubin",
+        "units_field_name": "labs_highestbilirubin_units",
+        "units": [
+            {
+                "unit_label": "µmol/L",
+                "unit_value": 1,
+                "unit_field_name": "labs_highestbilirubin_umoll"
+            },
+            {
+                "unit_label": "mg/dL",
+                "unit_value": 2,
+                "unit_field_name": "labs_highestbilirubin_mgdl"
+            }
+        ],
+        "preferred_unit": "µmol/L",
+        "conversion_rules": [
+            {
+                "from_unit": "mg/dL",
+                "to_unit": "µmol/L",
+                "type": "linear",
+                "multiplier": 17.1,
+                "offset": 0,
+                "note": "to_value = from_value * 17.1"
+            }
+        ]
+    },
+    {
+        "field_name": "labs_highestbilirubinconj",
+        "units_field_name": "labs_highestbilirubinconj_units",
+        "units": [
+            {
+                "unit_label": "µmol/L",
+                "unit_value": 1,
+                "unit_field_name": "labs_highestbilirubinconj_umoll"
+            },
+            {
+                "unit_label": "mg/dL",
+                "unit_value": 2,
+                "unit_field_name": "labs_highestbilirubinconj_mgdl"
+            }
+        ],
+        "preferred_unit": "µmol/L",
+        "conversion_rules": [
+            {
+                "from_unit": "mg/dL",
+                "to_unit": "µmol/L",
+                "type": "linear",
+                "multiplier": 17.1,
+                "offset": 0,
+                "note": "to_value = from_value * 17.1"
+            }
+        ]
+    },
+    {
+        "field_name": "labs_highestbilirubinunconj",
+        "units_field_name": "labs_highestbilirubinunconj_units",
+        "units": [
+            {
+                "unit_label": "µmol/L",
+                "unit_value": 1,
+                "unit_field_name": "labs_highestbilirubinunconj_umoll"
+            },
+            {
+                "unit_label": "mg/dL",
+                "unit_value": 2,
+                "unit_field_name": "labs_highestbilirubinunconj_mgdl"
+            }
+        ],
+        "preferred_unit": "µmol/L",
+        "conversion_rules": [
+            {
+                "from_unit": "mg/dL",
+                "to_unit": "µmol/L",
+                "type": "linear",
+                "multiplier": 17.1,
+                "offset": 0,
+                "note": "to_value = from_value * 17.1"
+            }
+        ]
+    },
+    {
+        "field_name": "labs_highestcreatinine",
+        "units_field_name": "labs_highestcreatinine_units",
+        "units": [
+            {
+                "unit_label": "µmol/L",
+                "unit_value": 1,
+                "unit_field_name": "labs_highestcreatinine_umoll"
+            },
+            {
+                "unit_label": "mg/dL",
+                "unit_value": 2,
+                "unit_field_name": "labs_highestcreatinine_mgdl"
+            }
+        ],
+        "preferred_unit": "µmol/L",
+        "conversion_rules": [
+            {
+                "from_unit": "mg/dL",
+                "to_unit": "µmol/L",
+                "type": "linear",
+                "multiplier": 88.4,
+                "offset": 0,
+                "note": "to_value = from_value * 88.4"
+            }
+        ]
+    },
+    {
+        "field_name": "labs_highestchlor",
+        "units_field_name": "labs_highestchlor_units",
+        "units": [
+            {
+                "unit_label": "mmol/L",
+                "unit_value": 1,
+                "unit_field_name": "labs_highestchlor_mmoll"
+            },
+            {
+                "unit_label": "mg/dL",
+                "unit_value": 2,
+                "unit_field_name": "labs_highestchlor_mgdl"
+            }
+        ],
+        "preferred_unit": "mmol/L",
+        "conversion_rules": [
+            {
+                "from_unit": "mg/dL",
+                "to_unit": "mmol/L",
+                "type": "linear",
+                "multiplier": 0.282087447109,
+                "offset": 0,
+                "note": "to_value = from_value * 10 / 35.45"
+            }
+        ]
+    },
+    {
+        "field_name": "vital_lowesttem",
+        "units_field_name": "vital_lowesttem_units",
+        "units": [
+            {
+                "unit_label": "°C",
+                "unit_value": 1,
+                "unit_field_name": "vital_lowesttem_c"
+            },
+            {
+                "unit_label": "°F",
+                "unit_value": 2,
+                "unit_field_name": "vital_lowesttem_f"
+            }
+        ],
+        "preferred_unit": "°C",
+        "conversion_rules": [
+            {
+                "from_unit": "°F",
+                "to_unit": "°C",
+                "type": "linear",
+                "multiplier": 0.555555555556,
+                "offset": -17.7777777778,
+                "note": "to_value = (from_value - 32) * 5/9"
+            }
+        ]
+    },
+    {
+        "field_name": "treat_po2",
+        "units_field_name": "treat_po2_units",
+        "units": [
+            {
+                "unit_label": "mmHg",
+                "unit_value": 1,
+                "unit_field_name": "treat_po2_mmhg"
+            },
+            {
+                "unit_label": "kPa",
+                "unit_value": 2,
+                "unit_field_name": "treat_po2_kpa"
+            }
+        ],
+        "preferred_unit": "mmHg",
+        "conversion_rules": [
+            {
+                "from_unit": "kPa",
+                "to_unit": "mmHg",
+                "type": "linear",
+                "multiplier": 7.50061575846,
+                "offset": 0,
+                "note": "to_value = from_value / 0.133322387415"
+            }
+        ]
+    },
+    {
+        "field_name": "labs_pco2",
+        "units_field_name": "labs_pco2_units",
+        "units": [
+            {
+                "unit_label": "mmHg",
+                "unit_value": 1,
+                "unit_field_name": "labs_pco2_mmhg"
+            },
+            {
+                "unit_label": "kPa",
+                "unit_value": 2,
+                "unit_field_name": "labs_pco2_kpa"
+            }
+        ],
+        "preferred_unit": "mmHg",
+        "conversion_rules": [
+            {
+                "from_unit": "kPa",
+                "to_unit": "mmHg",
+                "type": "linear",
+                "multiplier": 7.50061575846,
+                "offset": 0,
+                "note": "to_value = from_value / 0.133322387415"
+            }
+        ]
+    }  
 ]
