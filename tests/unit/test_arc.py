@@ -94,10 +94,18 @@ def test_arc_valid_form():
 
 
 @pytest.mark.all
+@pytest.mark.high
+def test_arc_unique_variable_name():
+    """Check that all variable names are unique."""
+    arc = pd.read_csv(ARC_PATH, dtype="object", usecols=["Variable"])
+    duplicate_vars = arc["Variable"][arc["Variable"].duplicated()].tolist()
+    if arc["Variable"].duplicated().any():
+        pytest.fail(f"ARC contains duplicate variable names: {duplicate_vars}")
+
+@pytest.mark.all
 @pytest.mark.medium
 def test_arc_valid_section():
     """TODO: Section should be a 1-1 match for the Variable prefix."""
-
 
 @pytest.mark.all
 @pytest.mark.critical
