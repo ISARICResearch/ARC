@@ -10,7 +10,12 @@ ISARIC ARC
    :height: 252.017
    :width:  304
 
-`ARC <https://github.com/ISARICResearch/ARC>`_ (Analysis and Research Compendium) is a comprehensive library of questions developed by `ISARIC <https://isaric.org/>`_ that can be used to rapidly build standardised Case Report Forms (CRF) for disease outbreaks. It covers a wide range of patient-related information, including demographics, comorbidities, signs and symptoms, medications, outcomes, and more. Each question in ARC has specific guidelines and relevant parameters, such as definitions, answer options, units, minimum and maximum limits, data types, skip logic, and more.
+.. role:: raw-html(raw)
+   :format: html
+
+`ARC <https://github.com/ISARICResearch/ARC>`_ (Analysis and Research Compendium) is a comprehensive library of questions developed by `ISARIC <https://isaric.org/>`_ that can be used to rapidly build standardised Case Report Forms (CRF) for disease outbreaks, and is a core component of the :raw-html:`<a href="https://docs.isaric.org" target="_blank">ISARIC Clinical Epidemiology Platform</a>`.
+
+It covers a wide range of patient-related information, including demographics, comorbidities, signs and symptoms, medications, outcomes, and more. Each question in ARC has specific guidelines and relevant parameters, such as definitions, answer options, units, minimum and maximum limits, data types, skip logic, and more.
 
 ARC is designed to serve as a resource for researchers and healthcare professionals involved in the study of outbreaks and emerging public health threats. Here's what you need to know:
 
