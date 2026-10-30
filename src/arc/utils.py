@@ -12,7 +12,7 @@ import typing
 from logging.handlers import TimedRotatingFileHandler
 
 
-# -- 3rd party libraries --
+# -- External libraries --
 
 # -- Internal libraries --
 

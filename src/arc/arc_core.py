@@ -17,7 +17,7 @@ __all__ = [
 # -- Standard libraries --
 from time import perf_counter
 
-# -- 3rd party libraries --
+# -- External libraries --
 import pandas as pd
 from packaging.version import parse
 
