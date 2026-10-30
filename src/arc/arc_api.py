@@ -43,6 +43,8 @@ class ArcApiClientError(Exception):
 
 
 class ArcApiClient:
+    """A simple `requests`-based API client for ARC data."""
+
     def __init__(self) -> None:
         if getenv("ENV") == "development":
             self.environment = "development"
@@ -53,6 +55,11 @@ class ArcApiClient:
         self.base_url_raw_content: str = (
             "https://raw.githubusercontent.com/ISARICResearch"
         )
+        cls = type(self)
+        self._repr_str = f'{cls.__module__}.{cls.__qualname__}(environment="{self.environment}", base_url_api="{self.base_url_api}")'
+
+    def __repr__(self) -> str:
+        return self._repr_str
 
     @staticmethod
     def _get_api_response(data_url: str) -> dict:
