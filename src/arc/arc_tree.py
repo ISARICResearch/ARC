@@ -12,7 +12,7 @@ __all__ = [
 import re
 from typing import Tuple
 
-# -- 3rd party libraries --
+# -- External libraries --
 import pandas as pd
 
 # -- Internal libraries --
