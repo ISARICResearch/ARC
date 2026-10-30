@@ -13,7 +13,7 @@ __all__ = [
 from os import getenv
 from time import monotonic
 
-# -- 3rd party libraries --
+# -- External libraries --
 import pandas as pd
 import requests
 from requests.exceptions import RequestException

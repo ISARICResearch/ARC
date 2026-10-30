@@ -4,7 +4,7 @@
 import os
 from unittest.mock import patch
 
-# -- 3rd party libraries --
+# -- External libraries --
 import pandas as pd
 import pytest
 
