@@ -141,7 +141,7 @@ class ArcApiClient:
                 version_sha = version_dict["commit"]["sha"]
             else:
                 # Get the latest commit as the code is not tagged
-                url = "/".join([self.base_url_api, "DataPlatform", "commits"])
+                url = "/".join([self.base_url_api, "ARC", "commits"])
                 tag_json = self._get_api_response(url)
                 version_dict = tag_json[0]
                 version_sha = version_dict["sha"]
