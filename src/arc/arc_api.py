@@ -43,6 +43,8 @@ class ArcApiClientError(Exception):
 
 
 class ArcApiClient:
+    """A simple `requests`-based API client for ARC data."""
+
     def __init__(self) -> None:
         if getenv("ENV") == "development":
             self.environment = "development"
@@ -53,6 +55,11 @@ class ArcApiClient:
         self.base_url_raw_content: str = (
             "https://raw.githubusercontent.com/ISARICResearch"
         )
+        cls = type(self)
+        self._repr_str = f'{cls.__module__}.{cls.__qualname__}(environment="{self.environment}", base_url_api="{self.base_url_api}")'
+
+    def __repr__(self) -> str:
+        return self._repr_str
 
     @staticmethod
     def _get_api_response(data_url: str) -> dict:
@@ -108,20 +115,20 @@ class ArcApiClient:
             release_json = self._get_api_response(url)
             version_list = [release_dict["tag_name"] for release_dict in release_json]
         else:
-            url = "/".join([self.base_url_api, "DataPlatform", "contents", "ARCH"])
-            release_json = self._get_api_response(url)
-            version_list = sorted(
-                [
-                    self.get_version_string(release_dict["name"])
-                    for release_dict in release_json
-                    if release_dict["name"].startswith("ARCH")
-                ],
-                reverse=True,
-            )
+            url = "/".join([self.base_url_api, "ARC", "branches"])
+            try:
+                arc_branch_records = self._get_api_response(url)
+            except ArcApiClientError:
+                arc_branch_records = [
+                    {"name": "main"},
+                ]
+            version_list = [rec["name"] for rec in arc_branch_records]
         _ARC_VERSION_LIST_CACHE[cache_key] = (list(version_list), monotonic())
         return version_list
 
-    def get_arc_version_sha(self, version: str) -> str:
+    def get_arc_version_sha(
+        self, version: str, branch_name: str | None = "main"
+    ) -> str:
         cache_key = (self.environment, version)
         if cache_key in _VERSION_SHA_CACHE:
             return _VERSION_SHA_CACHE[cache_key]
@@ -134,7 +141,7 @@ class ArcApiClient:
                 version_sha = version_dict["commit"]["sha"]
             else:
                 # Get the latest commit as the code is not tagged
-                url = "/".join([self.base_url_api, "DataPlatform", "commits"])
+                url = "/".join([self.base_url_api, "ARC", "commits"])
                 tag_json = self._get_api_response(url)
                 version_dict = tag_json[0]
                 version_sha = version_dict["sha"]
@@ -144,9 +151,13 @@ class ArcApiClient:
             logger.error(e)
             raise ArcApiClientError(
                 f"Unable to determine commit for version '{version}'"
+                if not branch_name
+                else f"Unable to determine commit for version '{version} '"
             )
 
-    def get_dataframe_arc_sha(self, sha: str, version: str) -> pd.DataFrame:
+    def get_dataframe_arc_sha(
+        self, sha: str, version: str, branch_name: str | None = "main"
+    ) -> pd.DataFrame:
         cache_key = (self.environment, sha, version)
         if cache_key in _ARC_DF_CACHE:
             return _ARC_DF_CACHE[cache_key].copy(deep=True)
@@ -157,8 +168,9 @@ class ArcApiClient:
             url = "/".join(
                 [
                     self.base_url_raw_content,
-                    "DataPlatform",
-                    sha,
+                    "ARC",
+                    "blob",
+                    branch_name,
                     "ARCH",
                     self.get_arch_version_string(version),
                     "ARCH.csv",
@@ -169,7 +181,7 @@ class ArcApiClient:
         return df.copy(deep=True)
 
     def get_dataframe_arc_version_language(
-        self, version: str, language: str
+        self, version: str, language: str, branch_name: str = "dev"
     ) -> pd.DataFrame:
         cache_key = (self.environment, version, language)
         if cache_key in _ARC_TRANSLATION_DF_CACHE:
@@ -190,8 +202,9 @@ class ArcApiClient:
             url = "/".join(
                 [
                     self.base_url_raw_content,
-                    "DataPlatform",
-                    "main",
+                    "ARC",
+                    "blob",
+                    branch_name,
                     "ARCH",
                     self.get_arch_version_string(version),
                     "ARCH.csv",
@@ -202,7 +215,7 @@ class ArcApiClient:
         return df.copy(deep=True)
 
     def get_dataframe_arc_list_version_language(
-        self, version: str, language: str, list_name: str
+        self, version: str, language: str, list_name: str, branch_name: str = "dev"
     ) -> pd.DataFrame:
         cache_key = (self.environment, version, language, list_name)
         if cache_key in _ARC_LIST_DF_CACHE:
@@ -224,8 +237,9 @@ class ArcApiClient:
             url = "/".join(
                 [
                     self.base_url_raw_content,
-                    "DataPlatform",
-                    "main",
+                    "ARC",
+                    "blob",
+                    branch_name,
                     "ARCH",
                     self.get_arch_version_string(version),
                     "Lists",
@@ -262,7 +276,7 @@ class ArcApiClient:
         return language_list
 
     def get_dataframe_paper_like_details(
-        self, version: str, language: str
+        self, version: str, language: str, branch_name: str = "dev"
     ) -> pd.DataFrame:
         try:
             if self.environment != "development":
@@ -280,8 +294,9 @@ class ArcApiClient:
                 url = "/".join(
                     [
                         self.base_url_raw_content,
-                        "DataPlatform",
-                        "main",
+                        "ARC",
+                        "blob",
+                        branch_name,
                         "ARCH",
                         self.get_arch_version_string(version),
                         "paper_like_details.csv",
@@ -297,7 +312,7 @@ class ArcApiClient:
             return df
 
     def get_dataframe_supplemental_phrases(
-        self, version: str, language: str
+        self, version: str, language: str, branch_name: str = "dev"
     ) -> pd.DataFrame:
         try:
             if self.environment != "development":
@@ -321,8 +336,9 @@ class ArcApiClient:
                 url = "/".join(
                     [
                         self.base_url_raw_content,
-                        "ARC-Translations",
-                        "main",
+                        "ARC",
+                        "blob",
+                        branch_name,
                         self.get_arch_version_string(max(version_list)),
                         language,
                         "supplemental_phrases.csv",
