@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  pre-commit:
+  doctest:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -19,6 +19,9 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Run pre-commit hooks
+      - name: Run doctests
         run: |
+          python3 -m pip install -U pip
+          python3 -m pip install -U uv
+          make sync-deps-exact
           make doctest
