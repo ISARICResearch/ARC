@@ -117,4 +117,4 @@ The following snippet shows how the latest ARC release version can be obtained, 
    >>> commit_sha
    'daa4daf97ab66edccfaac36d71c7d7c354ae9c17'
 
-A more detailed usage will be added at some point. Refer to the `ARC package source <https://github.com/ISARICResearch/ARC/tree/main/src/arc>`_ for more details on available libraries.
+A more detailed usage will be added at some point. There is a basic :doc:`API reference <api-reference>` that may also be useful.
