@@ -3,11 +3,11 @@
 ARC Python Package
 ==================
 
-ARC can also be installed and used as an importable Python package (also library) named ``isaric-arc``, provided you have a clone of the `GitHub repository <https://github.com/ISARICResearch/ARC>`_. The package source files exist in the :file:`src/arc` subfolder, relative to the root of the project.
+ARC can also be installed and used as an importable Python package (also library) named ``isaric-arc``, provided you have a clone of the `GitHub repository <https://github.com/ISARICResearch/ARC>`_.
 
 The only system-level requirement is a minimum of Python 3.12+, although Python 3.11 should also be generally fine on most platforms.
 
-Different methods of installation are described in more detail below, as well as a very basic usage guide.
+Different methods of installation are described in more detail below, as well as a very basic usage guide. There is also an :doc:`API reference <api-reference>`.
 
 .. _arc-python-install:
 

@@ -6,11 +6,14 @@ import sys
 
 sys.path.insert(0, os.path.abspath("."))
 sys.path.insert(0, os.path.dirname(os.path.abspath(".")))
+sys.path.insert(0, os.path.abspath(os.path.join("../src")))
 
 from datetime import datetime
 
 # -- 3rd party libraries --
+
 # -- Internal libraries --
+from arc import __version__
 
 # Configuration file for the Sphinx documentation builder.
 #
@@ -38,6 +41,7 @@ rtd_docs_url = "arc.docs.isaric.org"
 # pypi_project = ''
 project = "ARC"
 release = "v1.6.1"
+arc_py_version = __version__
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -67,6 +71,7 @@ rst_epilog = f"""
 .. |project|                replace:: **{project}**
 .. |project_description|    replace:: {description}
 .. |release|                replace:: **{release}**
+.. |arc_py_version|         replace:: **{arc_py_version}**
 .. |github_release_target|  replace:: https://github.com/ISARICResearch/ARC/releases/tag/{release}
 """
 
@@ -105,7 +110,7 @@ extensions = [
 #     For more on all available autodoc defaults see
 #         https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autodoc_default_options
 autodoc_default_options = {
-    "exclude-members": "",
+    "exclude-members": "get_arch_version_string, get_version_string",
     "member-order": "alphabetical",
     "private-members": False,
     "special-members": "",
@@ -124,9 +129,7 @@ numpydoc_attributes_as_param_list = False
 numpydoc_xref_param_type = False
 
 
-# Intersphinx mappings to reference external documentation domains - ATM
-# the only external references are to Plotly Go Figure class, but
-# potentially there could be many other external API references.
+# Intersphinx mappings for external documentation domains.
 intersphinx_mapping = {
     "isaric-bridge": ("https://bridge.docs.isaric.org/en/latest", None),
     "isaric-vertex": ("https://vertex.docs.isaric.org/en/latest", None),

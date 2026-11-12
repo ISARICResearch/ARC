@@ -19,7 +19,7 @@ import requests
 from requests.exceptions import RequestException
 
 # -- Internal libraries --
-from arc.utils import setup_logger
+from arc.utils import CONSTANTS, setup_logger
 
 
 logger = setup_logger(__name__)
@@ -39,20 +39,55 @@ ARC_METADATA_CACHE_TTL_SECONDS = int(getenv("ARC_METADATA_CACHE_TTL_SECONDS", "2
 
 
 class ArcApiClientError(Exception):
+    """Base ARC API client exception class."""
+
     pass
 
 
 class ArcApiClient:
+    """ARC API client.
+
+    The default client environment is ``"production"``. The development
+    environment (``"development"``) is meant for local development and testing.
+
+    Examples
+    --------
+    >>> from arc.arc_api import ArcApiClient
+    >>> client = ArcApiClient()
+    >>> client
+    arc.arc_api.ArcApiClient(environment="production")
+    """
+
     def __init__(self) -> None:
         if getenv("ENV") == "development":
-            self.environment = "development"
+            self._environment = "development"
         else:
-            self.environment = "production"
+            self._environment = "production"
 
-        self.base_url_api: str = "https://api.github.com/repos/ISARICResearch"
-        self.base_url_raw_content: str = (
-            "https://raw.githubusercontent.com/ISARICResearch"
+        self._base_url_api: str = CONSTANTS.API_BASE_URL.value
+        self._base_url_raw_content: str = CONSTANTS.API_BASE_URL_RAW.value
+        cls = type(self)
+        self._repr_str = (
+            f'{cls.__module__}.{cls.__qualname__}(environment="{self.environment}")'
         )
+
+    def __repr__(self) -> str:
+        return self._repr_str
+
+    @property
+    def environment(self) -> str:
+        """:py:class:`str` : The client environment."""
+        return self._environment
+
+    @property
+    def base_url_api(self) -> str:
+        """:py:class:`str` : The API base URL."""
+        return self._base_url_api
+
+    @property
+    def base_url_raw_content(self) -> str:
+        """:py:class:`str` : The API base URL for raw file content."""
+        return self._base_url_raw_content
 
     @staticmethod
     def _get_api_response(data_url: str) -> dict:
@@ -76,6 +111,7 @@ class ArcApiClient:
             logger.error(e)
             raise ArcApiClientError(f"Failed to fetch data: '{data_url}'")
         response_json = response.json()
+
         return response_json
 
     @staticmethod
@@ -93,9 +129,44 @@ class ArcApiClient:
         except Exception as e:
             logger.error(e)
             raise ArcApiClientError(f"Failed to read data: {data_path}")
+
         return df
 
-    def get_arc_version_list(self) -> list:
+    def get_arc_version_list(self) -> list[str]:
+        """:py:class:`list` : A list of ARC release version strings, sorted in descending order from the most recent release.
+
+        Returns
+        -------
+        list
+            A list of ARC release version strings, sorted in descending order
+            from the most recent release.
+
+        Examples
+        --------
+        >>> import os; os.environ.update({"ENV": "production"})
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_arc_version_list() # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        ['v1.6.1',
+         'v1.6.0',
+         'v1.5.0',
+         'v1.4.1',
+         'v1.4.0',
+         'v1.3.0',
+         'v1.2.2',
+         'v1.2.1',
+         'v1.2.0',
+         'v1.1.5',
+         'v1.1.4',
+         'v1.1.3',
+         'v1.1.2',
+         'v1.1.1',
+         'v1.1.0',
+         'v1.0.4',
+         'v1.0.3',
+         'v1.0.2',
+         'v1.0.1',
+         'v1.0.0']
+        """
         cache_key = (self.environment,)
         cache_entry = _ARC_VERSION_LIST_CACHE.get(cache_key)
         if cache_entry is not None:
@@ -119,9 +190,29 @@ class ArcApiClient:
                 reverse=True,
             )
         _ARC_VERSION_LIST_CACHE[cache_key] = (list(version_list), monotonic())
+
         return version_list
 
     def get_arc_version_sha(self, version: str) -> str:
+        """:py:class:`str` : The full commit SHA of the given ARC release version.
+
+        Parameters
+        ----------
+        version : str
+            An ARC release version string.
+
+        Returns
+        -------
+        str
+            The full commit SHA of the given ARC release version.
+
+        Examples
+        --------
+        >>> import os; os.environ.update({"ENV": "production"})
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_arc_version_sha('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        '8b6ccdd5cad0775b8b695a77f45a5cad41dabeed'
+        """
         cache_key = (self.environment, version)
         if cache_key in _VERSION_SHA_CACHE:
             return _VERSION_SHA_CACHE[cache_key]
@@ -146,7 +237,47 @@ class ArcApiClient:
                 f"Unable to determine commit for version '{version}'"
             )
 
-    def get_dataframe_arc_sha(self, sha: str, version: str) -> pd.DataFrame:
+    def get_dataframe_arc_sha(
+        self, sha: str, version: str | None = None
+    ) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The raw ARC schema for a given release version, as a Pandas dataframe.
+
+        Parameters
+        ----------
+        sha : str
+            Partial or full ARC commit SHA, usually one that is associated
+            with a release version. The SHA string should be at least the
+            first 8 characters of the full commit SHA.
+
+        version : str, default=None
+            Optional ARC release version for development mode, defaults to
+            ``None``.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The raw ARC schema for the given commit SHA.
+
+        Examples
+        --------
+        >>> import os; os.environ.update({"ENV": "production"})
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_dataframe_arc_sha('8b6ccdd5') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+                      Form             Section  ... preset_Populations_Paediatric preset_Populations_Pregnancy
+        0     presentation                 NaN  ...                           NaN                          NaN
+        1     presentation  INCLUSION CRITERIA  ...                           NaN                          NaN
+        2     presentation  INCLUSION CRITERIA  ...                           NaN                          NaN
+        3     presentation  INCLUSION CRITERIA  ...                           NaN                          NaN
+        4     presentation  INCLUSION CRITERIA  ...                           NaN                          NaN
+        ...            ...                 ...  ...                           ...                          ...
+        1752    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
+        1753    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
+        1754    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
+        1755    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
+        1756    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
+
+        [1757 rows x 35 columns]
+        """
         cache_key = (self.environment, sha, version)
         if cache_key in _ARC_DF_CACHE:
             return _ARC_DF_CACHE[cache_key].copy(deep=True)
@@ -166,11 +297,48 @@ class ArcApiClient:
             )
         df = self._write_to_dataframe(url)
         _ARC_DF_CACHE[cache_key] = df.copy(deep=True)
+
         return df.copy(deep=True)
 
     def get_dataframe_arc_version_language(
         self, version: str, language: str
     ) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The translated ARC schema for a given release version and language, as a Pandas dataframe.
+
+        Parameters
+        ----------
+        version : str
+            ARC release version.
+
+        language : str
+            The target translation language.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The translated ARC schema for the given release version and target
+            language.
+
+        Examples
+        --------
+        >>> import os; os.environ.update({"ENV": "production"})
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_dataframe_arc_version_language('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+                      Form               Section  ... Answer Options Translation Reviewers Score
+        0     présentation                   NaN  ...                                  NaN   0.0
+        1     présentation  CRITÈRES D'INCLUSION  ...                                  NaN   0.0
+        2     présentation  CRITÈRES D'INCLUSION  ...                                  0.0   0.0
+        3     présentation  CRITÈRES D'INCLUSION  ...                                  0.0   0.0
+        4     présentation  CRITÈRES D'INCLUSION  ...                                  0.0   0.0
+        ...            ...                   ...  ...                                  ...   ...
+        1752       retrait               RETRAIT  ...                                  NaN   0.0
+        1753       retrait               RETRAIT  ...                                  NaN   0.0
+        1754       retrait               RETRAIT  ...                                  0.0   0.0
+        1755       retrait               RETRAIT  ...                                  0.0   0.0
+        1756       retrait               RETRAIT  ...                                  0.0   0.0
+
+        [1757 rows x 14 columns]
+        """
         cache_key = (self.environment, version, language)
         if cache_key in _ARC_TRANSLATION_DF_CACHE:
             return _ARC_TRANSLATION_DF_CACHE[cache_key].copy(deep=True)
@@ -199,11 +367,57 @@ class ArcApiClient:
             )
         df = self._write_to_dataframe(url)
         _ARC_TRANSLATION_DF_CACHE[cache_key] = df.copy(deep=True)
+
         return df.copy(deep=True)
 
     def get_dataframe_arc_list_version_language(
         self, version: str, language: str, list_name: str
     ) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : A translated ARC schema options list for a given release version and target language, as a Pandas dataframe.
+
+        Parameters
+        ----------
+        version : str
+            ARC release version.
+
+        language : str
+            The target translation language.
+
+        list_name : str
+            The list name as a path string excluding the file suffix, e.g.
+            ::
+
+                conditions/Comorbidities
+                demographics/Country
+                drugs/Antibiotics
+
+            etc.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The translated ARC schema options list for a given release version
+            and target language, as a Pandas dataframe.
+
+        Examples
+        --------
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_dataframe_arc_list_version_language('v1.6.1', 'Spanish', 'drugs/Antibiotics') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+                                                         Drugs     Code Library  ...  Comment  Value  Translation Reviewers
+        0                 Amikacina (Amikin, Biodacin, Miacin)  J01GB06     ATC  ...      NaN      1                      0
+        1                Amoxicilina (Amoxil, Moxatag, Trimox)  J01CA04     ATC  ...      NaN      2                      0
+        2    Amoxicilina/Inhibidor de beta-lactamasa (Amoxi...  J01CR02     ATC  ...      NaN      3                      0
+        3                                Ampicilina (Polyflex)  J01CA01     ATC  ...      NaN      5                      0
+        4    Ampicilina/inhibidor de beta-lactamasa (ampici...  J01CR01     ATC  ...      NaN      6                      0
+        ..                                                 ...      ...     ...  ...      ...    ...                    ...
+        123      Vancomicina (Vancocin, Vancocin HCl, Firvanq)  J01XA01     ATC  ...      NaN    128                      0
+        124                                Voriconazol (Vfend)  J02AC03     ATC  ...      NaN    129                      0
+        125                                           Xibornol  J01XX02     ATC  ...      NaN    130                      0
+        126             Ácido nalidíxico (NegGram, Wintomylon)  J01MB02     ATC  ...      NaN     86                      0
+        127             Ácido nalidíxico (NegGram, Wintomylon)  J01CF06     ATC  ...      NaN     85                      0
+
+        [128 rows x 16 columns]
+        """
         cache_key = (self.environment, version, language, list_name)
         if cache_key in _ARC_LIST_DF_CACHE:
             return _ARC_LIST_DF_CACHE[cache_key].copy(deep=True)
@@ -235,9 +449,29 @@ class ArcApiClient:
         df = self._write_to_dataframe(url)
         df = df.sort_values(by=df.columns[0], ascending=True).reset_index(drop=True)
         _ARC_LIST_DF_CACHE[cache_key] = df.copy(deep=True)
+
         return df.copy(deep=True)
 
-    def get_arc_language_list_version(self, version: str | None) -> list:
+    def get_arc_language_list_version(self, version: str | None) -> list[str]:
+        """:py:class:`list` : A list of supported languages in which translations are available, for a given release version.
+
+        Parameters
+        ----------
+        version : str
+            ARC release version.
+
+        Returns
+        -------
+        list
+            A list of supported languages in which translations are available
+            for the given release.
+
+        Examples
+        --------
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_arc_language_list_version('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        ['English', 'French', 'Portuguese', 'Spanish']
+        """
         normalized_version = str(version)
         cache_key = (self.environment, normalized_version)
         cache_entry = _ARC_LANGUAGE_LIST_CACHE.get(cache_key)
@@ -259,11 +493,63 @@ class ArcApiClient:
         else:
             language_list = ["English"]
         _ARC_LANGUAGE_LIST_CACHE[cache_key] = list(language_list)
+
         return language_list
 
     def get_dataframe_paper_like_details(
         self, version: str, language: str
     ) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The paperlike CRF completion guide, for a given release version and target language, as a Pandas dataframe.
+
+        Parameters
+        ----------
+        version : str
+            ARC release version.
+
+        language : str
+            The target translation language.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The paperlike CRF completion guide, for a given release version and
+            target language.
+
+        Examples
+        --------
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_dataframe_paper_like_details('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+                               Paper-like section  ...                                   Text_translation
+        0                                   Title  ...                                 CRF DE BASE ISARIC
+        1   DESIGN OF THIS CASE REPORT FORM (CRF)  ...  Ce CRF est configuré en modules à utiliser pou...
+        2                       PRESENTATION FORM  ...  TOUJOURS compléter le premier jour de présenta...
+        3                       PRESENTATION FORM  ...  Calendrier/Événements : Admission à l’hôpital ...
+        4                              DAILY FORM  ...  TOUJOURS compléter le premier jour de présenta...
+        5                              DAILY FORM  ...  SI APPLICABLE, à compléter le jour de l'admiss...
+        6                              DAILY FORM  ...  OPTION à compléter les jours où des échantillo...
+        7                              DAILY FORM  ...  OPTION à compléter quotidiennement si cela pré...
+        8                              DAILY FORM  ...  Calendrier/Événements : Admission à l'hôpital ...
+        9                            OUTCOME FORM  ...  TOUJOURS compléter à la sortie ou au décès ou ...
+        10                           OUTCOME FORM  ...    Moment/Événements : Sortie/décès/fin des études
+        11                         FOLLOW-UP FORM  ...  Calendrier/événements : selon le protocole du ...
+        12                        WITHDRAWAL FORM  ...  Calendrier/événements : selon le protocole du ...
+        13                      Follow-up details  ...  Continuer à suivre les patients qui sont trans...
+        14                         PREGNANCY FORM  ...  OPTION à compléter pour une personne enceinte ...
+        15                         PREGNANCY FORM  ...  Calendrier/Événements : Personnes enceintes – ...
+        16                           NEONATE FORM  ...  OPTION à compléter pour les nouveau-nés OU si ...
+        17                           NEONATE FORM  ...  Calendrier/Événements : Nouveau-né – lors de l...
+        18                         Timing /Events  ...  Admission à l'hôpital / évaluation initiale | ...
+        19                       GENERAL GUIDANCE  ...  Contactez le centre de support mondial ISARIC ...
+        20                       GENERAL GUIDANCE  ...  Le CRF est conçu pour collecter des données ob...
+        21                       GENERAL GUIDANCE  ...  Veuillez vous référer aux lignes directrices p...
+        22                       GENERAL GUIDANCE  ...  Votre établissement peut capturer des données ...
+        23                       GENERAL GUIDANCE  ...  Les numéros d'identification des participants ...
+        24                       GENERAL GUIDANCE  ...  Pour les participants qui reviennent pour une ...
+        25                       GENERAL GUIDANCE  ...  Pour les participants qui effectuent un transf...
+        26                       GENERAL GUIDANCE  ...  Les sélections avec des cercles () sont des sé...
+
+        [27 rows x 4 columns]
+        """
         try:
             if self.environment != "development":
                 url = "/".join(
@@ -299,6 +585,39 @@ class ArcApiClient:
     def get_dataframe_supplemental_phrases(
         self, version: str, language: str
     ) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The supplemental phrases CSV for a given release version and target language, as a Pandas dataframe.
+
+        Parameters
+        ----------
+        version : str
+            ARC release version.
+
+        language : str
+            The target translation language.
+
+        Returns
+        -------
+        pandas.DataFrame
+            The supplemental phrases CSV, for a given release version and
+            target language.
+
+        Examples
+        --------
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_dataframe_supplemental_phrases('v1.6.1', 'English') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+                           variable                                               text
+        0                    select                                             Select
+        1                   specify                                            Specify
+        2             specify_other                                      Specify other
+        3   specify_other_infection  Specify other infection the individual is susp...
+        4               other_agent  other agents administered while hospitalised o...
+        5         select_additional                                  Select additional
+        6            any_additional                                     Any additional
+        7                     other                                              Other
+        8                     units                                              Units
+        9                        if                                                 If
+        10          if_completeForm                          If Yes, complete the form
+        """
         try:
             if self.environment != "development":
                 url = "/".join(
@@ -338,7 +657,9 @@ class ArcApiClient:
             return df
 
     def get_dataframe_crf_metadata(self, version: str) -> pd.DataFrame:
-        """:py:class:`pandas.DataFrame` : Returns the CRF metadata CSV as a dataframe.
+        """:py:class:`pandas.DataFrame` : The CRF metadata CSV, in English, as a Pandas dataframe.
+
+        Only an English language version is available.
 
         Parameters
         ----------
@@ -354,6 +675,16 @@ class ArcApiClient:
         ------
         bridge.arc.arc_api.ArcApiClientError
             In case of a non-matching ARC version or a request error.
+
+        Examples
+        --------
+        >>> from arc.api_client import ArcApiClient
+        >>> ArcApiClient().get_dataframe_crf_metadata('v1.6.1')
+                                Title of CRF  ...                                 Relevant resources
+        0  ARChetype Disease CRF_Chikungunya  ...  https://isaric.org/resources/data/case-report-...
+        1  ARChetype Syndromic CRF_Arbovirus  ...                                                NaN
+
+        [2 rows x 22 columns]
         """
         try:
             # Try to fetch the CSV from the given release refs:

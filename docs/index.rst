@@ -73,6 +73,7 @@ Key elements of ARC, including the schema itself, and other information, can be 
    :caption: ARC as a Python Package
 
    sources/arc-python
+   sources/api-reference
 
 .. toctree::
    :maxdepth: 1
