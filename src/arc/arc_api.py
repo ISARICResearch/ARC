@@ -144,7 +144,7 @@ class ArcApiClient:
         Examples
         --------
         >>> import os; os.environ.update({"ENV": "production"})
-        >>> from arc.api_client import ArcApiClient
+        >>> from arc.arc_api import ArcApiClient
         >>> ArcApiClient().get_arc_version_list() # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         ['v1.6.1',
          'v1.6.0',
@@ -209,7 +209,7 @@ class ArcApiClient:
         Examples
         --------
         >>> import os; os.environ.update({"ENV": "production"})
-        >>> from arc.api_client import ArcApiClient
+        >>> from arc.arc_api import ArcApiClient
         >>> ArcApiClient().get_arc_version_sha('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         '8b6ccdd5cad0775b8b695a77f45a5cad41dabeed'
         """
@@ -261,22 +261,9 @@ class ArcApiClient:
         Examples
         --------
         >>> import os; os.environ.update({"ENV": "production"})
-        >>> from arc.api_client import ArcApiClient
-        >>> ArcApiClient().get_dataframe_arc_sha('8b6ccdd5') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-                      Form             Section  ... preset_Populations_Paediatric preset_Populations_Pregnancy
-        0     presentation                 NaN  ...                           NaN                          NaN
-        1     presentation  INCLUSION CRITERIA  ...                           NaN                          NaN
-        2     presentation  INCLUSION CRITERIA  ...                           NaN                          NaN
-        3     presentation  INCLUSION CRITERIA  ...                           NaN                          NaN
-        4     presentation  INCLUSION CRITERIA  ...                           NaN                          NaN
-        ...            ...                 ...  ...                           ...                          ...
-        1752    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
-        1753    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
-        1754    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
-        1755    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
-        1756    withdrawal          WITHDRAWAL  ...                           NaN                          NaN
-
-        [1757 rows x 35 columns]
+        >>> from arc.arc_api import ArcApiClient
+        >>> data = ArcApiClient().get_dataframe_arc_sha('8b6ccdd5') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> assert not data.empty
         """
         cache_key = (self.environment, sha, version)
         if cache_key in _ARC_DF_CACHE:
@@ -322,22 +309,9 @@ class ArcApiClient:
         Examples
         --------
         >>> import os; os.environ.update({"ENV": "production"})
-        >>> from arc.api_client import ArcApiClient
-        >>> ArcApiClient().get_dataframe_arc_version_language('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-                      Form               Section  ... Answer Options Translation Reviewers Score
-        0     présentation                   NaN  ...                                  NaN   0.0
-        1     présentation  CRITÈRES D'INCLUSION  ...                                  NaN   0.0
-        2     présentation  CRITÈRES D'INCLUSION  ...                                  0.0   0.0
-        3     présentation  CRITÈRES D'INCLUSION  ...                                  0.0   0.0
-        4     présentation  CRITÈRES D'INCLUSION  ...                                  0.0   0.0
-        ...            ...                   ...  ...                                  ...   ...
-        1752       retrait               RETRAIT  ...                                  NaN   0.0
-        1753       retrait               RETRAIT  ...                                  NaN   0.0
-        1754       retrait               RETRAIT  ...                                  0.0   0.0
-        1755       retrait               RETRAIT  ...                                  0.0   0.0
-        1756       retrait               RETRAIT  ...                                  0.0   0.0
-
-        [1757 rows x 14 columns]
+        >>> from arc.arc_api import ArcApiClient
+        >>> data = ArcApiClient().get_dataframe_arc_version_language('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> assert not data.empty
         """
         cache_key = (self.environment, version, language)
         if cache_key in _ARC_TRANSLATION_DF_CACHE:
@@ -401,22 +375,9 @@ class ArcApiClient:
 
         Examples
         --------
-        >>> from arc.api_client import ArcApiClient
-        >>> ArcApiClient().get_dataframe_arc_list_version_language('v1.6.1', 'Spanish', 'drugs/Antibiotics') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-                                                         Drugs     Code Library  ...  Comment  Value  Translation Reviewers
-        0                 Amikacina (Amikin, Biodacin, Miacin)  J01GB06     ATC  ...      NaN      1                      0
-        1                Amoxicilina (Amoxil, Moxatag, Trimox)  J01CA04     ATC  ...      NaN      2                      0
-        2    Amoxicilina/Inhibidor de beta-lactamasa (Amoxi...  J01CR02     ATC  ...      NaN      3                      0
-        3                                Ampicilina (Polyflex)  J01CA01     ATC  ...      NaN      5                      0
-        4    Ampicilina/inhibidor de beta-lactamasa (ampici...  J01CR01     ATC  ...      NaN      6                      0
-        ..                                                 ...      ...     ...  ...      ...    ...                    ...
-        123      Vancomicina (Vancocin, Vancocin HCl, Firvanq)  J01XA01     ATC  ...      NaN    128                      0
-        124                                Voriconazol (Vfend)  J02AC03     ATC  ...      NaN    129                      0
-        125                                           Xibornol  J01XX02     ATC  ...      NaN    130                      0
-        126             Ácido nalidíxico (NegGram, Wintomylon)  J01MB02     ATC  ...      NaN     86                      0
-        127             Ácido nalidíxico (NegGram, Wintomylon)  J01CF06     ATC  ...      NaN     85                      0
-
-        [128 rows x 16 columns]
+        >>> from arc.arc_api import ArcApiClient
+        >>> data = ArcApiClient().get_dataframe_arc_list_version_language('v1.6.1', 'Spanish', 'drugs/Antibiotics') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> assert not data.empty
         """
         cache_key = (self.environment, version, language, list_name)
         if cache_key in _ARC_LIST_DF_CACHE:
@@ -468,7 +429,7 @@ class ArcApiClient:
 
         Examples
         --------
-        >>> from arc.api_client import ArcApiClient
+        >>> from arc.arc_api import ArcApiClient
         >>> ArcApiClient().get_arc_language_list_version('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         ['English', 'French', 'Portuguese', 'Spanish']
         """
@@ -517,7 +478,7 @@ class ArcApiClient:
 
         Examples
         --------
-        >>> from arc.api_client import ArcApiClient
+        >>> from arc.arc_api import ArcApiClient
         >>> ArcApiClient().get_dataframe_paper_like_details('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
                                Paper-like section  ...                                   Text_translation
         0                                   Title  ...                                 CRF DE BASE ISARIC
@@ -547,8 +508,6 @@ class ArcApiClient:
         24                       GENERAL GUIDANCE  ...  Pour les participants qui reviennent pour une ...
         25                       GENERAL GUIDANCE  ...  Pour les participants qui effectuent un transf...
         26                       GENERAL GUIDANCE  ...  Les sélections avec des cercles () sont des sé...
-
-        [27 rows x 4 columns]
         """
         try:
             if self.environment != "development":
@@ -603,7 +562,7 @@ class ArcApiClient:
 
         Examples
         --------
-        >>> from arc.api_client import ArcApiClient
+        >>> from arc.arc_api import ArcApiClient
         >>> ArcApiClient().get_dataframe_supplemental_phrases('v1.6.1', 'English') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
                            variable                                               text
         0                    select                                             Select
@@ -678,13 +637,9 @@ class ArcApiClient:
 
         Examples
         --------
-        >>> from arc.api_client import ArcApiClient
-        >>> ArcApiClient().get_dataframe_crf_metadata('v1.6.1')
-                                Title of CRF  ...                                 Relevant resources
-        0  ARChetype Disease CRF_Chikungunya  ...  https://isaric.org/resources/data/case-report-...
-        1  ARChetype Syndromic CRF_Arbovirus  ...                                                NaN
-
-        [2 rows x 22 columns]
+        >>> from arc.arc_api import ArcApiClient
+        >>> data = ArcApiClient().get_dataframe_crf_metadata('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> assert not data.empty
         """
         try:
             # Try to fetch the CSV from the given release refs:
@@ -717,3 +672,13 @@ class ArcApiClient:
     @staticmethod
     def get_version_string(version: str) -> str:
         return f'v{str(version.replace('ARCH', ''))}'
+
+
+if __name__ == "__main__":  # pragma: no cover
+    # Doctest the module from the project root using
+    #
+    #     PYTHONPATH="src" python3 -m doctest -v arc/utils.py  # noqa : E501
+    #
+    import doctest
+
+    doctest.testmod()

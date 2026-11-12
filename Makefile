@@ -131,6 +131,6 @@ test: clean
 
 # Doctests
 .PHONY: clean
-doctests: clean
-	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Running doctests in all core libraries"
+doctest: clean
+	@echo "$(PACKAGE_NAME)[$(BRANCH)@$(HEAD)]: Running doctests in all core libraries with example snippets"
 	PYTHONPATH="src" uv run --verbose --active python3 -m doctest -v src/arc/*.py
