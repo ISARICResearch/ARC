@@ -4,8 +4,8 @@ from __future__ import annotations
 __all__ = [
     "add_required_datadicc_columns",
     "add_transformed_rows",
-    "get_arc_versions",
     "get_arc",
+    "get_arc_versions",
     "get_dependencies",
     "get_dynamic_units_conversion_bool",
     "get_variable_order",
@@ -37,6 +37,55 @@ _ARC_VERSION_CACHE: dict[str, tuple[pd.DataFrame, list, str]] = {}
 
 
 def get_arc(version: str) -> tuple[pd.DataFrame, list, str]:
+    """:py:class:`tuple` : Returns a triple consisting of the raw ARC schema for the given release version, the presets list and the associated commit SHA.
+
+    Parameters
+    ----------
+    version : str
+        An ARC release version string.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The raw ARC schema for the given commit SHA.
+
+    Examples
+    --------
+    >>> from arc.arc_core import get_arc
+    >>> arc_schema, presets_list, commit_sha = get_arc('v1.6.1') # doctest: +SKIP
+    >>> arc_schema  # doctest: +SKIP
+                  Form             Section  ... Branch                                   Question_english
+    0     presentation                 NaN  ...                   Participant Identification Number (PIN)
+    1     presentation  INCLUSION CRITERIA  ...         Suspected or confirmed infection, condition, o...
+    2     presentation  INCLUSION CRITERIA  ...         Is the suspected or confirmed infection, condi...
+    3     presentation  INCLUSION CRITERIA  ...                                Case classification status
+    4     presentation  INCLUSION CRITERIA  ...                                        Reason for testing
+    ...            ...                 ...  ...    ...                                                ...
+    1752    withdrawal          WITHDRAWAL  ...                                        Date of withdrawal
+    1753    withdrawal          WITHDRAWAL  ...                                     Reason for withdrawal
+    1754    withdrawal          WITHDRAWAL  ...         Did the participant withdraw from active parti...
+    1755    withdrawal          WITHDRAWAL  ...         Did the participant withdraw consent to use da...
+    1756    withdrawal          WITHDRAWAL  ...         Did the participant withdraw consent to use sa...
+    >>> presets_list  # doctest: +SKIP
+    [['ARChetype Disease CRF', 'Covid'],
+     ['ARChetype Disease CRF', 'H5Nx'],
+     ['ARChetype Disease CRF', 'Dengue'],
+     ['ARChetype Disease CRF', 'Chikungunya'],
+     ['ARChetype Disease CRF', 'Mpox'],
+     ['ARChetype Disease CRF', 'Mpox Pregnancy and Paediatric'],
+     ['ARChetype Syndromic CRF', 'ARI'],
+     ['ARChetype Syndromic CRF', 'VHF'],
+     ['ARChetype Syndromic CRF', 'Encephalitis'],
+     ['ARChetype Syndromic CRF', 'Arbovirus'],
+     ['Score', 'CharlsonCI'],
+     ['Score', 'mSOFA'],
+     ['Score', 'mSOFA Dengue'],
+     ['Recommended Outcomes', 'Dengue'],
+     ['Populations', 'Paediatric'],
+     ['Populations', 'Pregnancy']]
+    >>> commit_sha  # doctest: +SKIP
+    '8b6ccdd5cad0775b8b695a77f45a5cad41dabeed'
+    """
     cache_start = perf_counter()
     if version in _ARC_VERSION_CACHE:
         cached_df, cached_presets, cached_commit = _ARC_VERSION_CACHE[version]
@@ -85,19 +134,75 @@ def get_arc(version: str) -> tuple[pd.DataFrame, list, str]:
             version,
             (perf_counter() - fetch_start) * 1000,
         )
+
         return df_datadicc, preset_list, commit_sha
     except Exception as e:
         logger.error(e)
         raise RuntimeError("Failed to format ARC data")
 
 
-def get_arc_versions() -> tuple[list, str]:
+def get_arc_versions() -> tuple[list[str], str]:
+    """:py:class:`tuple` : Returns a pair consisting of a list of all ARC release versions and a string of the most recent release version.
+
+    .. note::
+
+    ARC release versions are almost always linked to changes in the ARC
+    schema. They are **NOT** the same as the ARC Python package
+    versions.
+
+    Returns
+    -------
+    tuple
+        A pair consisting of a list of all ARC release versions, in descending
+        chronological order, and a string of the most recent release version.
+
+    Examples
+    --------
+    >>> from arc.arc_core import get_arc_versions
+    >>> versions, latest = get_arc_versions()  # doctest: +SKIP
+    >>> versions  # doctest: +SKIP
+    ['v1.6.1',
+     'v1.6.0',
+     'v1.5.0',
+     'v1.4.1',
+     'v1.4.0',
+     'v1.3.0',
+     'v1.2.2',
+     'v1.2.1',
+     'v1.2.0',
+     'v1.1.5',
+     'v1.1.4',
+     'v1.1.3',
+     'v1.1.2',
+     'v1.1.1',
+     'v1.1.0',
+     'v1.0.4',
+     'v1.0.3',
+     'v1.0.2',
+     'v1.0.1',
+     'v1.0.0']
+     >>> latest  # doctest: +SKIP
+     'v1.6.1'
+    """
     version_list = ArcApiClient().get_arc_version_list()
     logger.info(f"version_list: {version_list}")
+
     return version_list, max(version_list)
 
 
 def add_required_datadicc_columns(df_datadicc: pd.DataFrame) -> pd.DataFrame:
+    """:py:class:`pandas.DataFrame` : Adds additional required columns to the incoming ARC data dictionary.
+
+    Parameters
+    ----------
+    df_datadicc : pandas.DataFrame
+        The incoming ARC data dictionary.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The ARC data dictionary with the additional required columns added.
+    """
     df_datadicc[["Sec", "vari", "mod"]] = df_datadicc["Variable"].str.split(
         "_", n=2, expand=True
     )
@@ -264,3 +369,13 @@ def get_dynamic_units_conversion_bool(version: str) -> bool:
         # New versions: "Validation" == "units"
         dynamic_units_conversion = False
     return dynamic_units_conversion
+
+
+if __name__ == "__main__":  # pragma: no cover
+    # Doctest the module from the project root using
+    #
+    #     PYTHONPATH="src" python3 -m doctest -v arc/arc_core.py  # noqa : E501
+    #
+    import doctest
+
+    doctest.testmod()

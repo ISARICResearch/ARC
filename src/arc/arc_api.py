@@ -135,6 +135,12 @@ class ArcApiClient:
     def get_arc_version_list(self) -> list[str]:
         """:py:class:`list` : A list of ARC release version strings, sorted in descending order from the most recent release.
 
+        .. note::
+
+           ARC release versions are almost always linked to changes in the ARC
+           schema. They are **NOT** the same as the ARC Python package
+           versions.
+
         Returns
         -------
         list
@@ -195,6 +201,12 @@ class ArcApiClient:
 
     def get_arc_version_sha(self, version: str) -> str:
         """:py:class:`str` : The full commit SHA of the given ARC release version.
+
+        .. note::
+
+           ARC release versions are almost always linked to changes in the ARC
+           schema. They are **NOT** the same as the ARC Python package
+           versions.
 
         Parameters
         ----------
@@ -677,7 +689,7 @@ class ArcApiClient:
 if __name__ == "__main__":  # pragma: no cover
     # Doctest the module from the project root using
     #
-    #     PYTHONPATH="src" python3 -m doctest -v arc/utils.py  # noqa : E501
+    #     PYTHONPATH="src" python3 -m doctest -v arc/arc_api.py  # noqa : E501
     #
     import doctest
 

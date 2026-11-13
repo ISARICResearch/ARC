@@ -4,7 +4,7 @@
 API Reference
 =============
 
-ARC Python API reference. Currently this is limited to key public libraries/modules, such as the API client library. Others may be added over time.
+ARC Python API reference. Currently this is limited to only key public libraries/modules. Others may be added over time.
 
 .. toctree::
    :maxdepth: 1
@@ -12,3 +12,4 @@ ARC Python API reference. Currently this is limited to key public libraries/modu
    :caption: Contents:
 
    arc/arc-api
+   arc/arc-core
