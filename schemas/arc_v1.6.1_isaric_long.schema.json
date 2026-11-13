@@ -106,7 +106,8 @@
                 "UNK",
                 "NI",
                 "NASK",
-                "NA"
+                "NA",
+                "ND"
             ],
             "description": "Use to indicate missing data and the reason for missingness. 'VAL' indicates that the data was collected and is present in the 'value' or 'value_num' field."
         }
