@@ -11,7 +11,7 @@ __all__ = [
 # -- Standard libraries --
 from typing import List, Tuple
 
-# -- 3rd party libraries --
+# -- External libraries --
 import pandas as pd
 
 # -- Internal libraries --

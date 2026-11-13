@@ -1,4 +1,5 @@
 __all__ = [
+    "CONSTANTS",
     "setup_logger",
 ]
 
@@ -9,12 +10,20 @@ __all__ = [
 import logging
 import sys
 import typing
+from enum import Enum
 from logging.handlers import TimedRotatingFileHandler
 
 
-# -- 3rd party libraries --
+# -- External libraries --
 
 # -- Internal libraries --
+
+
+class CONSTANTS(Enum):
+    """A simple Enum defining API-level constants (NOT defaults)."""
+
+    API_BASE_URL = "https://api.github.com/repos/ISARICResearch"
+    API_BASE_URL_RAW = "https://raw.githubusercontent.com/ISARICResearch"
 
 
 def setup_logger(name: str, **kwargs: typing.Any) -> None:
