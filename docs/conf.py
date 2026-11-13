@@ -110,7 +110,21 @@ extensions = [
 #     For more on all available autodoc defaults see
 #         https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#confval-autodoc_default_options
 autodoc_default_options = {
-    "exclude-members": "get_arch_version_string, get_version_string",
+    "exclude-members": """add_required_datadicc_columns,
+                          get_arc,
+                          get_arc_language_list_version,
+                          get_arc_version_commit_sha,
+                          get_arc_version_list,
+                          get_arc_version_sha,
+                          get_arch_version_string,
+                          get_dataframe_arc_sha,
+                          get_dataframe_arc_list_version_language,
+                          get_dataframe_arc_version_language,
+                          get_dataframe_crf_metadata,
+                          get_dataframe_paper_like_details,
+                          get_dataframe_supplemental_phrases,
+                          get_dynamic_units_conversion_bool,
+                          get_version_string""",
     "member-order": "alphabetical",
     "private-members": False,
     "special-members": "",

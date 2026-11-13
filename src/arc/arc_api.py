@@ -10,6 +10,7 @@ __all__ = [
 # -- IMPORTS --
 
 # -- Standard libraries --
+import warnings
 from os import getenv
 from time import monotonic
 
@@ -133,6 +134,24 @@ class ArcApiClient:
         return df
 
     def get_arc_version_list(self) -> list[str]:
+        """:py:class:`list` : (Deprecated) A list of ARC release version strings, sorted in descending order from the most recent release.
+
+        .. warning::
+
+           This method is deprecated. Use the
+           :py:meth:`~arc.arc_api.ArcApiClient.get_arc_versions`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use "
+            "`add_required_dictionary_columns()` instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_arc_versions()
+
+    def get_arc_versions(self) -> list[str]:
         """:py:class:`list` : A list of ARC release version strings, sorted in descending order from the most recent release.
 
         .. note::
@@ -151,7 +170,7 @@ class ArcApiClient:
         --------
         >>> import os; os.environ.update({"ENV": "production"})
         >>> from arc.arc_api import ArcApiClient
-        >>> ArcApiClient().get_arc_version_list() # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> ArcApiClient().get_arc_versions() # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         ['v1.6.1',
          'v1.6.0',
          'v1.5.0',
@@ -173,6 +192,13 @@ class ArcApiClient:
          'v1.0.1',
          'v1.0.0']
         """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`add_required_dictionary_columns()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
         cache_key = (self.environment,)
         cache_entry = _ARC_VERSION_LIST_CACHE.get(cache_key)
         if cache_entry is not None:
@@ -202,6 +228,24 @@ class ArcApiClient:
     def get_arc_version_sha(self, version: str) -> str:
         """:py:class:`str` : The full commit SHA of the given ARC release version.
 
+        .. warning::
+
+           This method is deprecated. Use the
+           :py:meth:`~arc.arc_api.ArcApiClient.get_arc_version_commit_sha`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`get_arc_version_commit_sha()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_arc_version_commit_sha(version)
+
+    def get_arc_version_commit_sha(self, version: str) -> str:
+        """:py:class:`str` : The full commit SHA of the given ARC release version.
+
         .. note::
 
            ARC release versions are almost always linked to changes in the ARC
@@ -213,6 +257,11 @@ class ArcApiClient:
         version : str
             An ARC release version string.
 
+        Raises
+        ------
+        ArcApiClientError
+            If unable to find commit for the given release version.
+
         Returns
         -------
         str
@@ -222,7 +271,7 @@ class ArcApiClient:
         --------
         >>> import os; os.environ.update({"ENV": "production"})
         >>> from arc.arc_api import ArcApiClient
-        >>> ArcApiClient().get_arc_version_sha('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> ArcApiClient().get_arc_version_commit_sha('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         '8b6ccdd5cad0775b8b695a77f45a5cad41dabeed'
         """
         cache_key = (self.environment, version)
@@ -254,6 +303,26 @@ class ArcApiClient:
     ) -> pd.DataFrame:
         """:py:class:`pandas.DataFrame` : The raw ARC schema for a given release version, as a Pandas dataframe.
 
+        .. warning::
+
+           This method is deprecated. Use the
+           :py:meth:`~arc.arc_api.ArcApiClient.get_arc_schema_by_commit_sha`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`get_arc_schema_by_commit_sha()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_arc_schema_by_commit_sha(sha, version=version)
+
+    def get_arc_schema_by_commit_sha(
+        self, sha: str, version: str | None = None
+    ) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The raw ARC schema for a given release version, as a Pandas dataframe.
+
         Parameters
         ----------
         sha : str
@@ -274,7 +343,7 @@ class ArcApiClient:
         --------
         >>> import os; os.environ.update({"ENV": "production"})
         >>> from arc.arc_api import ArcApiClient
-        >>> data = ArcApiClient().get_dataframe_arc_sha('8b6ccdd5') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> data = ArcApiClient().get_arc_schema_by_commit_sha('8b6ccdd5') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         >>> assert not data.empty
         """
         cache_key = (self.environment, sha, version)
@@ -304,6 +373,26 @@ class ArcApiClient:
     ) -> pd.DataFrame:
         """:py:class:`pandas.DataFrame` : The translated ARC schema for a given release version and language, as a Pandas dataframe.
 
+        .. warning::
+
+           This method is deprecated. Use the
+           :py:meth:`~arc.arc_api.ArcApiClient.get_arc_schema_by_version_and_language`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`get_arc_schema_by_version_and_language()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_arc_schema_by_version_and_language(version, language)
+
+    def get_arc_schema_by_version_and_language(
+        self, version: str, language: str
+    ) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The translated ARC schema for a given release version and language, as a Pandas dataframe.
+
         Parameters
         ----------
         version : str
@@ -322,7 +411,7 @@ class ArcApiClient:
         --------
         >>> import os; os.environ.update({"ENV": "production"})
         >>> from arc.arc_api import ArcApiClient
-        >>> data = ArcApiClient().get_dataframe_arc_version_language('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> data = ArcApiClient().get_arc_schema_by_version_and_language('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         >>> assert not data.empty
         """
         cache_key = (self.environment, version, language)
@@ -361,6 +450,26 @@ class ArcApiClient:
     ) -> pd.DataFrame:
         """:py:class:`pandas.DataFrame` : A translated ARC schema options list for a given release version and target language, as a Pandas dataframe.
 
+        .. warning::
+
+           This method is deprecated. Use the
+           :py:meth:`~arc.arc_api.ArcApiClient.get_arc_schema_options_list`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`get_arc_schema_options_list()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_arc_schema_options_list(version, language, list_name)
+
+    def get_arc_schema_options_list(
+        self, version: str, language: str, list_name: str
+    ) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : A translated ARC schema options list for a given release version and target language, as a Pandas dataframe.
+
         Parameters
         ----------
         version : str
@@ -371,13 +480,8 @@ class ArcApiClient:
 
         list_name : str
             The list name as a path string excluding the file suffix, e.g.
-            ::
-
-                conditions/Comorbidities
-                demographics/Country
-                drugs/Antibiotics
-
-            etc.
+            ``"conditions/Comorbidities"``, ``"demographics/Country"``,
+            ``"drugs/Antibiotics"`` etc.
 
         Returns
         -------
@@ -388,7 +492,7 @@ class ArcApiClient:
         Examples
         --------
         >>> from arc.arc_api import ArcApiClient
-        >>> data = ArcApiClient().get_dataframe_arc_list_version_language('v1.6.1', 'Spanish', 'drugs/Antibiotics') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> data = ArcApiClient().get_arc_schema_options_list('v1.6.1', 'Spanish', 'drugs/Antibiotics') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         >>> assert not data.empty
         """
         cache_key = (self.environment, version, language, list_name)
@@ -428,6 +532,24 @@ class ArcApiClient:
     def get_arc_language_list_version(self, version: str | None) -> list[str]:
         """:py:class:`list` : A list of supported languages in which translations are available, for a given release version.
 
+        .. warning::
+
+           This method is deprecated. Use the
+           :py:meth:`~arc.arc_api.ArcApiClient.get_arc_languages`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`get_arc_languages()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_arc_languages(version=version)
+
+    def get_arc_languages(self, version: str | None) -> list[str]:
+        """:py:class:`list` : A list of supported languages in which translations are available, for a given release version.
+
         Parameters
         ----------
         version : str
@@ -442,7 +564,7 @@ class ArcApiClient:
         Examples
         --------
         >>> from arc.arc_api import ArcApiClient
-        >>> ArcApiClient().get_arc_language_list_version('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> ArcApiClient().get_arc_languages('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         ['English', 'French', 'Portuguese', 'Spanish']
         """
         normalized_version = str(version)
@@ -474,6 +596,24 @@ class ArcApiClient:
     ) -> pd.DataFrame:
         """:py:class:`pandas.DataFrame` : The paperlike CRF completion guide, for a given release version and target language, as a Pandas dataframe.
 
+        .. warning::
+
+           This method is deprecated. Use the
+           :py:meth:`~arc.arc_api.ArcApiClient.get_paperlike_crf_details`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`get_paperlike_crf_details()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_paperlike_crf_details(version, language)
+
+    def get_paperlike_crf_details(self, version: str, language: str) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The paperlike CRF completion guide, for a given release version and target language, as a Pandas dataframe.
+
         Parameters
         ----------
         version : str
@@ -491,7 +631,7 @@ class ArcApiClient:
         Examples
         --------
         >>> from arc.arc_api import ArcApiClient
-        >>> ArcApiClient().get_dataframe_paper_like_details('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> ArcApiClient().get_paperlike_crf_details('v1.6.1', 'French') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
                                Paper-like section  ...                                   Text_translation
         0                                   Title  ...                                 CRF DE BASE ISARIC
         1   DESIGN OF THIS CASE REPORT FORM (CRF)  ...  Ce CRF est configuré en modules à utiliser pou...
@@ -558,6 +698,24 @@ class ArcApiClient:
     ) -> pd.DataFrame:
         """:py:class:`pandas.DataFrame` : The supplemental phrases CSV for a given release version and target language, as a Pandas dataframe.
 
+        .. warning::
+
+           This method is deprecated. Use the
+           py:meth:`~arc.arc_api.ArcApiClient.get_supplemental_phrases`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`get_supplemental_phrases()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_paperlike_crf_details(version, language)
+
+    def get_supplemental_phrases(self, version: str, language: str) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The supplemental phrases CSV for a given release version and target language, as a Pandas dataframe.
+
         Parameters
         ----------
         version : str
@@ -575,7 +733,7 @@ class ArcApiClient:
         Examples
         --------
         >>> from arc.arc_api import ArcApiClient
-        >>> ArcApiClient().get_dataframe_supplemental_phrases('v1.6.1', 'English') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> ArcApiClient().get_supplemental_phrases('v1.6.1', 'English') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
                            variable                                               text
         0                    select                                             Select
         1                   specify                                            Specify
@@ -630,6 +788,24 @@ class ArcApiClient:
     def get_dataframe_crf_metadata(self, version: str) -> pd.DataFrame:
         """:py:class:`pandas.DataFrame` : The CRF metadata CSV, in English, as a Pandas dataframe.
 
+        .. warning::
+
+           This method is deprecated. Use the
+           py:meth:`~arc.arc_api.ArcApiClient.get_crf_metadata`
+           client method instead.
+        """
+        warnings.warn(
+            "This function is deprecated. Please use the "
+            "`get_crf_metadata()` client method instead.",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+
+        return self.get_crf_metadata(version)
+
+    def get_crf_metadata(self, version: str) -> pd.DataFrame:
+        """:py:class:`pandas.DataFrame` : The CRF metadata CSV, in English, as a Pandas dataframe.
+
         Only an English language version is available.
 
         Parameters
@@ -650,7 +826,7 @@ class ArcApiClient:
         Examples
         --------
         >>> from arc.arc_api import ArcApiClient
-        >>> data = ArcApiClient().get_dataframe_crf_metadata('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+        >>> data = ArcApiClient().get_crf_metadata('v1.6.1') # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
         >>> assert not data.empty
         """
         try:

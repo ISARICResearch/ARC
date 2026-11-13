@@ -2,19 +2,20 @@ from __future__ import annotations
 
 
 __all__ = [
-    "add_required_datadicc_columns",
+    "add_required_dictionary_columns",
     "add_transformed_rows",
-    "get_arc",
+    "get_arc_schema",
     "get_arc_versions",
-    "get_dependencies",
-    "get_dynamic_units_conversion_bool",
+    "get_variable_dependencies",
     "get_variable_order",
+    "use_dynamic_unit_conversion",
 ]
 
 
 # -- IMPORTS --
 
 # -- Standard libraries --
+import warnings
 from time import perf_counter
 
 # -- External libraries --
@@ -39,6 +40,24 @@ _ARC_VERSION_CACHE: dict[str, tuple[pd.DataFrame, list, str]] = {}
 def get_arc(version: str) -> tuple[pd.DataFrame, list, str]:
     """:py:class:`tuple` : Returns a triple consisting of the raw ARC schema for the given release version, the presets list and the associated commit SHA.
 
+    .. warning::
+
+       This method is deprecated. Use the
+       :py:func:`~arc.arc_core.get_arc_schema` function instead.
+    """
+    warnings.warn(
+        "This function is deprecated. Please use the "
+        "`get_arc_schema()` function instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
+    return get_arc_schema(version)
+
+
+def get_arc_schema(version: str) -> tuple[pd.DataFrame, list, str]:
+    """:py:class:`tuple` : Returns a triple consisting of the raw ARC schema for the given release version, the presets list and the associated commit SHA.
+
     Parameters
     ----------
     version : str
@@ -52,7 +71,7 @@ def get_arc(version: str) -> tuple[pd.DataFrame, list, str]:
     Examples
     --------
     >>> from arc.arc_core import get_arc
-    >>> arc_schema, presets_list, commit_sha = get_arc('v1.6.1') # doctest: +SKIP
+    >>> arc_schema, presets_list, commit_sha = get_arc_schema('v1.6.1') # doctest: +SKIP
     >>> arc_schema  # doctest: +SKIP
                   Form             Section  ... Branch                                   Question_english
     0     presentation                 NaN  ...                   Participant Identification Number (PIN)
@@ -184,7 +203,7 @@ def get_arc_versions() -> tuple[list[str], str]:
      >>> latest  # doctest: +SKIP
      'v1.6.1'
     """
-    version_list = ArcApiClient().get_arc_version_list()
+    version_list = ArcApiClient().get_arc_versions()
     logger.info(f"version_list: {version_list}")
 
     return version_list, max(version_list)
@@ -193,9 +212,32 @@ def get_arc_versions() -> tuple[list[str], str]:
 def add_required_datadicc_columns(df_datadicc: pd.DataFrame) -> pd.DataFrame:
     """:py:class:`pandas.DataFrame` : Adds additional required columns to the incoming ARC data dictionary.
 
+    .. warning::
+
+       This method is deprecated. Use the
+       :py:func:`~arc.arc_core.add_required_dictionary_columns` function instead.
+    """
+    warnings.warn(
+        "This function is deprecated. Please use the "
+        "`add_required_dictionary_columns()` function instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
+    return add_required_dictionary_columns(df_datadicc)
+
+
+def add_required_dictionary_columns(dictionary: pd.DataFrame) -> pd.DataFrame:
+    """:py:class:`pandas.DataFrame` : Adds additional required columns to the incoming ARC data dictionary.
+
+    .. warning::
+
+       This function modifies the incoming dictionary. If you want to have an
+       unmodified original, call this function with a (deep) copy instead.
+
     Parameters
     ----------
-    df_datadicc : pandas.DataFrame
+    dictionary : pandas.DataFrame
         The incoming ARC data dictionary.
 
     Returns
@@ -203,26 +245,76 @@ def add_required_datadicc_columns(df_datadicc: pd.DataFrame) -> pd.DataFrame:
     pandas.DataFrame
         The ARC data dictionary with the additional required columns added.
     """
-    df_datadicc[["Sec", "vari", "mod"]] = df_datadicc["Variable"].str.split(
+    dictionary[["Sec", "vari", "mod"]] = dictionary["Variable"].str.split(
         "_", n=2, expand=True
     )
-    df_datadicc[["Sec_name", "Expla"]] = df_datadicc["Section"].str.split(
+    dictionary[["Sec_name", "Expla"]] = dictionary["Section"].str.split(
         r"[(|:]", n=1, expand=True
     )
-    return df_datadicc
+
+    return dictionary
 
 
-def get_variable_order(df_datadicc: pd.DataFrame) -> list:
-    df_datadicc["Sec_vari"] = df_datadicc["Sec"] + "_" + df_datadicc["vari"]
-    order = df_datadicc[["Sec_vari"]]
+def get_variable_order(dictionary: pd.DataFrame) -> list[str]:
+    """:py:class:`list` : Returns an (ordered) list of variables in the ARC data dictionary that has the additional required columns.
+
+    Parameters
+    ----------
+    pandas.DataFrame
+        The incoming ARC data dictionary with the additional required
+        columns.
+
+    Returns
+    -------
+    list
+        An (ordered) list of variables in the ARC data dictionary.
+    """
+    dictionary["Sec_vari"] = dictionary["Sec"] + "_" + dictionary["vari"]
+    order = dictionary[["Sec_vari"]]
     order = order.drop_duplicates().reset_index()
+
     return list(order["Sec_vari"])
 
 
 def get_dependencies(df_datadicc: pd.DataFrame) -> pd.DataFrame:
+    """
+    .. warning::
+
+       This method is deprecated. Use the
+       :py:func:`~arc.arc_core.get_variable_dependencies` function instead.
+    """
+    warnings.warn(
+        "This function is deprecated. Please use the "
+        "`get_variable_dependencies()` function instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
+    return get_variable_dependencies(df_datadicc)
+
+
+def get_variable_dependencies(dictionary: pd.DataFrame) -> pd.DataFrame:
+    """:py:class:`pandas.DataFrame` : Returns a dataframe of ARC variable dependencies.
+
+    .. warning::
+
+       This function modifies the incoming dictionary. If you want to have an
+       unmodified original, call this function with a (deep) copy instead.
+
+    Parameters
+    ----------
+    pandas.DataFrame
+        The incoming ARC data dictionary with the additional required
+        columns.
+
+    Returns
+    -------
+    pandas.DataFrame
+        ARC variable dependencies.
+    """
     mandatory = ["subjid"]
 
-    df_dependencies = df_datadicc[["Variable", "Skip Logic"]]
+    df_dependencies = dictionary[["Variable", "Skip Logic"]]
     field_dependencies = []
     for skip_logic_str in df_dependencies["Skip Logic"]:
         cont = 0
@@ -276,8 +368,27 @@ def get_dependencies(df_datadicc: pd.DataFrame) -> pd.DataFrame:
 def add_transformed_rows(
     df_selected: pd.DataFrame,
     df_selected_units: pd.DataFrame,
-    variable_order: list,
+    variable_order: list[str],
 ) -> pd.DataFrame:
+    """:py:class:`pandas.DataFrame` : Adds variable transformation rows to an incoming dataframe of selected ARC variables.
+
+    Parameters
+    ----------
+    df_selected : pandas.DataFrame
+        A dataframe of selected ARC variables.
+
+    df_selected_units : pandas.DataFrame
+        A dataframe of units for the selected ARC variables.
+
+    variable_order : list
+        Variable ordering.
+
+    Returns
+    -------
+    pandas.DataFrame
+        The selected ARC variables with the variable transformation rows
+        added.
+    """
     df_output = df_selected.copy().reset_index(drop=True)
 
     df_selected_units["Sec_vari"] = (
@@ -360,15 +471,42 @@ def add_transformed_rows(
 
 
 def get_dynamic_units_conversion_bool(version: str) -> bool:
+    """
+    .. warning::
+
+       This method is deprecated. Use the
+       :py:func:`~arc.arc_core.use_dynamic_units_conversion` function instead.
+    """
+    warnings.warn(
+        "This function is deprecated. Please use the "
+        "`use_dynamic_units_conversion()` function instead.",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+
+    return use_dynamic_unit_conversion(version)
+
+
+def use_dynamic_unit_conversion(version: str) -> bool:
+    """:py:class:`bool` : Whether to use dynamic unit conversion.
+
+    Parameters
+    ----------
+    version : str
+        ARC release version.
+
+    Returns
+    -------
+    bool
+        Whether to use dynamic unit version.
+    """
     if parse(version.replace("v", "")) < parse(
         ARC_UNIT_CHANGE_VERSION.replace("v", "")
     ):
         # Old versions: "Question" contains "(select units)"
-        dynamic_units_conversion = True
-    else:
-        # New versions: "Validation" == "units"
-        dynamic_units_conversion = False
-    return dynamic_units_conversion
+        return True
+    # New versions: "Validation" == "units"
+    return False
 
 
 if __name__ == "__main__":  # pragma: no cover
