@@ -711,7 +711,7 @@ class ArcApiClient:
             stacklevel=2,
         )
 
-        return self.get_paperlike_crf_details(version, language)
+        return self.get_supplemental_phrases(version, language)
 
     def get_supplemental_phrases(self, version: str, language: str) -> pd.DataFrame:
         """:py:class:`pandas.DataFrame` : The supplemental phrases CSV for a given release version and target language, as a Pandas dataframe.
