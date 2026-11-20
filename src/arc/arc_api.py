@@ -10,6 +10,7 @@ __all__ = [
 # -- IMPORTS --
 
 # -- Standard libraries --
+import json
 import warnings
 from os import getenv
 from time import monotonic
@@ -17,6 +18,8 @@ from time import monotonic
 # -- External libraries --
 import pandas as pd
 import requests
+from requests import Session
+from requests.models import Response
 from requests.exceptions import RequestException
 
 # -- Internal libraries --
@@ -45,35 +48,123 @@ class ArcApiClientError(Exception):
     pass
 
 
+class ArcApiResponse(requests.models.Response):
+    """A simple [`requests.models.Response`][requests.models.Response] based wrapper for ARC API responses.
+
+    Examples
+    --------
+    >>> client = ArcApiClient(api_version="v1.6.1")
+
+    """
+
+    __attrs__ = Response.__attrs__
+
+    def __init__(self, response: requests.Response) -> None:
+        """Initialiser requiring a [`requests.models.Response`][requests.models.Response] object.
+
+        Parameters
+        ----------
+        response : requests.models.Response
+            The response from the original request.
+        """
+        self.__dict__.update(**response.__dict__)
+
+    @property
+    def json(self) -> dict:
+        """The API response data as JSON, if such data exists.
+
+        Returns
+        -------
+        dict
+            The data in the API response as JSON, if this exists. No data
+            produces empty JSON.
+        """
+        try:
+            return super().json()
+        except (AttributeError, json.JSONDecodeError):
+            return {}
+
+
 class ArcApiClient:
     """ARC API client.
 
+    The default API version is the latest.
+
     The default client environment is ``"production"``. The development
     environment (``"development"``) is meant for local development and testing.
+
+    Requests are made via :py:class:`~arc.arc_api.ArcApiSession` objects.
 
     Examples
     --------
     >>> from arc.arc_api import ArcApiClient
     >>> client = ArcApiClient()
     >>> client
-    arc.arc_api.ArcApiClient(environment="production")
+    arc.arc_api.ArcApiClient(api_version="v1.6.1")
     """
 
-    def __init__(self) -> None:
+    def __init__(self, /, *, api_version: str | None = None) -> None:
+        """Initialiser.
+
+        Parameters
+        ----------
+        api_version : str, default=None
+            Optional ARC API version, defaults to null but in the latter case
+            is overridden with the latest version.
+        """
         if getenv("ENV") == "development":
             self._environment = "development"
         else:
             self._environment = "production"
 
-        self._base_url_api: str = CONSTANTS.API_BASE_URL.value
-        self._base_url_raw_content: str = CONSTANTS.API_BASE_URL_RAW.value
+        self._base_url_api = CONSTANTS.API_BASE_URL.value
+        self._base_url_raw_content = CONSTANTS.API_BASE_URL_RAW.value
+
+        # Set the API version from the caller or directly from GitHub ARC
+        # releases - if GitHub errors then raise as further requests
+        # are also likely to fail.
+        try:
+            self._api_version = (
+                api_version
+                or Session()
+                .get(f"{self._base_url_api}/ARC/releases")
+                .json()[0]["tag_name"]
+            )
+        except ArcApiClientError:
+            raise
+
+        # Create an API session attribute for making requests.
+        self._api_session = Session()
+        self._api_session.headers.update(
+            {
+                "Accept": "application/json",
+            }
+        )
+        github_token = getenv("GITHUB_TOKEN")
+        if github_token:
+            self._api_session.headers.update(
+                {"Authorization": f'token {getenv("GITHUB_TOKEN")}'}
+            )
+
+        self._request_timeout = 10
+
         cls = type(self)
         self._repr_str = (
-            f'{cls.__module__}.{cls.__qualname__}(environment="{self.environment}")'
+            f'{cls.__module__}.{cls.__qualname__}(api_version="{self._api_version}")'
         )
 
     def __repr__(self) -> str:
         return self._repr_str
+
+    @property
+    def api_version(self) -> str:
+        """:py:class:`str` : The ARC API version."""
+        return self._api_version
+
+    @property
+    def api_session(self) -> Session:
+        """:py:class:`requests.Session` : An ARC API session object."""
+        return self._api_session
 
     @property
     def environment(self) -> str:
@@ -90,28 +181,22 @@ class ArcApiClient:
         """:py:class:`str` : The API base URL for raw file content."""
         return self._base_url_raw_content
 
-    @staticmethod
-    def _get_api_response(data_url: str) -> dict:
+    def _get_api_response(self, data_url: str) -> dict:
         logger.debug(
-            "GITHUB_TOKEN is set"
+            "Making authenticated request"
             if getenv("GITHUB_TOKEN")
             else "GITHUB_TOKEN is not set. Making unauthenticated request"
         )
 
-        # Use GITHUB_TOKEN if it exists; otherwise, make unauthenticated request
-        # Unauthenticated requests are limited to 60 requests per hour
-        github_token = getenv("GITHUB_TOKEN")
-        headers = {"Authorization": f"token {github_token}"} if github_token else {}
-
         try:
-            if github_token:
-                logger.debug("Making authenticated request to GitHub API")
-            response = requests.get(data_url, headers=headers)
+            response = ArcApiResponse(
+                self.api_session.get(data_url, timeout=self._request_timeout)
+            )
             response.raise_for_status()
         except RequestException as e:
             logger.error(e)
             raise ArcApiClientError(f"Failed to fetch data: '{data_url}'")
-        response_json = response.json()
+        response_json = response.json
 
         return response_json
 
