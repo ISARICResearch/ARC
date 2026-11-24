@@ -16,14 +16,14 @@ from arc.arc_api import ArcApiClient
 def client_production():
     os.environ["ENV"] = "production"
     os.environ["GITHUB_TOKEN"] = "abc123"
-    return ArcApiClient()
+    return ArcApiClient(api_version="test_version")
 
 
 @pytest.fixture(scope="session")
 def client_development():
     os.environ["ENV"] = "development"
     os.environ["GITHUB_TOKEN"] = "def456"
-    return ArcApiClient()
+    return ArcApiClient(api_version="test_version")
 
 
 @pytest.fixture()

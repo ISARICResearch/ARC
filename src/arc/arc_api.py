@@ -10,16 +10,13 @@ __all__ = [
 # -- IMPORTS --
 
 # -- Standard libraries --
-import json
 import warnings
 from os import getenv
 from time import monotonic
 
 # -- External libraries --
 import pandas as pd
-import requests
 from requests import Session
-from requests.models import Response
 from requests.exceptions import RequestException
 
 # -- Internal libraries --
@@ -48,43 +45,6 @@ class ArcApiClientError(Exception):
     pass
 
 
-class ArcApiResponse(requests.models.Response):
-    """A simple [`requests.models.Response`][requests.models.Response] based wrapper for ARC API responses.
-
-    Examples
-    --------
-    >>> client = ArcApiClient(api_version="v1.6.1")
-
-    """
-
-    __attrs__ = Response.__attrs__
-
-    def __init__(self, response: requests.Response) -> None:
-        """Initialiser requiring a [`requests.models.Response`][requests.models.Response] object.
-
-        Parameters
-        ----------
-        response : requests.models.Response
-            The response from the original request.
-        """
-        self.__dict__.update(**response.__dict__)
-
-    @property
-    def json(self) -> dict:
-        """The API response data as JSON, if such data exists.
-
-        Returns
-        -------
-        dict
-            The data in the API response as JSON, if this exists. No data
-            produces empty JSON.
-        """
-        try:
-            return super().json()
-        except (AttributeError, json.JSONDecodeError):
-            return {}
-
-
 class ArcApiClient:
     """ARC API client.
 
@@ -103,7 +63,7 @@ class ArcApiClient:
     arc.arc_api.ArcApiClient(api_version="v1.6.1")
     """
 
-    def __init__(self, /, *, api_version: str | None = None) -> None:
+    def __init__(self, api_version: str | None = None) -> None:
         """Initialiser.
 
         Parameters
@@ -189,16 +149,13 @@ class ArcApiClient:
         )
 
         try:
-            response = ArcApiResponse(
-                self.api_session.get(data_url, timeout=self._request_timeout)
-            )
+            response = self.api_session.get(data_url, timeout=self._request_timeout)
             response.raise_for_status()
         except RequestException as e:
             logger.error(e)
             raise ArcApiClientError(f"Failed to fetch data: '{data_url}'")
-        response_json = response.json
 
-        return response_json
+        return response.json()
 
     @staticmethod
     def _write_to_dataframe(data_path: str, json: bool = False) -> pd.DataFrame:
