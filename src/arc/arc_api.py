@@ -72,6 +72,8 @@ class ArcApiClient:
             Optional ARC API version, defaults to null but in the latter case
             is overridden with the latest version.
         """
+        self._api_version = api_version or ""
+
         if getenv("ENV") == "development":
             self._environment = "development"
         else:
@@ -79,19 +81,6 @@ class ArcApiClient:
 
         self._base_url_api = CONSTANTS.API_BASE_URL.value
         self._base_url_raw_content = CONSTANTS.API_BASE_URL_RAW.value
-
-        # Set the API version from the caller or directly from GitHub ARC
-        # releases - if GitHub errors then raise as further requests
-        # are also likely to fail.
-        try:
-            self._api_version = (
-                api_version
-                or Session()
-                .get(f"{self._base_url_api}/ARC/releases")
-                .json()[0]["tag_name"]
-            )
-        except ArcApiClientError:
-            raise
 
         # Create an API session attribute for making requests.
         self._api_session = Session()
