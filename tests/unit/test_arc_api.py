@@ -17,7 +17,7 @@ def test_get_api_response_exception(_mock_logger, client_production):
         def raise_for_status(self):
             raise RequestException
 
-    with mock.patch("arc.arc_api.requests.get", return_value=FakeResponse()):
+    with mock.patch("arc.arc_api.Session.get", return_value=FakeResponse()):
         with pytest.raises(ArcApiClientError):
             client_production._get_api_response("test_url")
 
@@ -34,7 +34,7 @@ def test_get_api_response(_mock_logger, mock_language_json, client_production):
         def json():
             return mock_language_json
 
-    with mock.patch("arc.arc_api.requests.get", return_value=FakeResponse()):
+    with mock.patch("arc.arc_api.Session.get", return_value=FakeResponse()):
         output = client_production._get_api_response("test_url")
         assert output == mock_language_json
 

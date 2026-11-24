@@ -16,7 +16,7 @@ from time import monotonic
 
 # -- External libraries --
 import pandas as pd
-import requests
+from requests import Session
 from requests.exceptions import RequestException
 
 # -- Internal libraries --
@@ -48,32 +48,72 @@ class ArcApiClientError(Exception):
 class ArcApiClient:
     """ARC API client.
 
+    The default API version is the latest.
+
     The default client environment is ``"production"``. The development
     environment (``"development"``) is meant for local development and testing.
+
+    Requests are made via :py:class:`~arc.arc_api.ArcApiSession` objects.
 
     Examples
     --------
     >>> from arc.arc_api import ArcApiClient
     >>> client = ArcApiClient()
     >>> client
-    arc.arc_api.ArcApiClient(environment="production")
+    arc.arc_api.ArcApiClient(api_version="v1.6.1")
     """
 
-    def __init__(self) -> None:
+    def __init__(self, api_version: str | None = None) -> None:
+        """Initialiser.
+
+        Parameters
+        ----------
+        api_version : str, default=None
+            Optional ARC API version, defaults to null but in the latter case
+            is overridden with the latest version.
+        """
+        self._api_version = api_version or ""
+
         if getenv("ENV") == "development":
             self._environment = "development"
         else:
             self._environment = "production"
 
-        self._base_url_api: str = CONSTANTS.API_BASE_URL.value
-        self._base_url_raw_content: str = CONSTANTS.API_BASE_URL_RAW.value
+        self._base_url_api = CONSTANTS.API_BASE_URL.value
+        self._base_url_raw_content = CONSTANTS.API_BASE_URL_RAW.value
+
+        # Create an API session attribute for making requests.
+        self._api_session = Session()
+        self._api_session.headers.update(
+            {
+                "Accept": "application/json",
+            }
+        )
+        github_token = getenv("GITHUB_TOKEN")
+        if github_token:
+            self._api_session.headers.update(
+                {"Authorization": f'token {getenv("GITHUB_TOKEN")}'}
+            )
+
+        self._request_timeout = 10
+
         cls = type(self)
         self._repr_str = (
-            f'{cls.__module__}.{cls.__qualname__}(environment="{self.environment}")'
+            f'{cls.__module__}.{cls.__qualname__}(api_version="{self._api_version}")'
         )
 
     def __repr__(self) -> str:
         return self._repr_str
+
+    @property
+    def api_version(self) -> str:
+        """:py:class:`str` : The ARC API version."""
+        return self._api_version
+
+    @property
+    def api_session(self) -> Session:
+        """:py:class:`requests.Session` : An ARC API session object."""
+        return self._api_session
 
     @property
     def environment(self) -> str:
@@ -90,30 +130,21 @@ class ArcApiClient:
         """:py:class:`str` : The API base URL for raw file content."""
         return self._base_url_raw_content
 
-    @staticmethod
-    def _get_api_response(data_url: str) -> dict:
+    def _get_api_response(self, data_url: str) -> dict:
         logger.debug(
-            "GITHUB_TOKEN is set"
+            "Making authenticated request"
             if getenv("GITHUB_TOKEN")
             else "GITHUB_TOKEN is not set. Making unauthenticated request"
         )
 
-        # Use GITHUB_TOKEN if it exists; otherwise, make unauthenticated request
-        # Unauthenticated requests are limited to 60 requests per hour
-        github_token = getenv("GITHUB_TOKEN")
-        headers = {"Authorization": f"token {github_token}"} if github_token else {}
-
         try:
-            if github_token:
-                logger.debug("Making authenticated request to GitHub API")
-            response = requests.get(data_url, headers=headers)
+            response = self.api_session.get(data_url, timeout=self._request_timeout)
             response.raise_for_status()
         except RequestException as e:
             logger.error(e)
             raise ArcApiClientError(f"Failed to fetch data: '{data_url}'")
-        response_json = response.json()
 
-        return response_json
+        return response.json()
 
     @staticmethod
     def _write_to_dataframe(data_path: str, json: bool = False) -> pd.DataFrame:
